@@ -1,0 +1,13 @@
+record_id: QA-002
+title: Committee Candidate Baseline Verification
+date: 2026-09-20
+category: Software Validation Evidence
+source_commit: f3b7b1d7af61fb5a606ae769df1102775faf269b
+source_branch: main
+source_remote: https://github.com/Meshaal-Mouawad/AI-Powered_KPI_Extractor_Committee_Candidate_2026_07_17.git
+python_version: 3.12.7
+os: macOS 27.0
+architecture: arm64
+execution_mode: deterministic_only
+archive_status: complete
+publication_use: qualified_current_software_baseline

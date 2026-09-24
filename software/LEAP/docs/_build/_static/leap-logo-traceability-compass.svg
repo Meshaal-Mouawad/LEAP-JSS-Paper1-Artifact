@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">LEAP Traceability Compass</title>
+  <desc id="desc">A geometric compass-like LEAP mark showing technical and business evidence nodes connected through traceability loops.</desc>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="#0D9488" stroke-width="4"/>
+  <circle cx="32" cy="32" r="12" fill="none" stroke="#0D9488" stroke-width="3"/>
+  <path d="M18 46l13-31 15 33-14-8-14 6z" fill="none" stroke="#1C1D20" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="32" cy="15" r="4" fill="#0D9488"/>
+  <circle cx="46" cy="48" r="4" fill="#0D9488"/>
+  <circle cx="18" cy="46" r="4" fill="#0D9488"/>
+  <circle cx="32" cy="32" r="3" fill="#1C1D20"/>
+</svg>

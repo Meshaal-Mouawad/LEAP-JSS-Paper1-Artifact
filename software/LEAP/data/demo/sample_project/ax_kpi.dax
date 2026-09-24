@@ -1,0 +1,6 @@
+-- KPI: Overall Equipment Effectiveness (OEE)
+DEFINE MEASURE 'KPI'[OEE %] =
+VAR Availability = 0.95
+VAR Performance  = 0.98
+VAR Quality      = 0.99
+RETURN (Availability * Performance * Quality) * 100

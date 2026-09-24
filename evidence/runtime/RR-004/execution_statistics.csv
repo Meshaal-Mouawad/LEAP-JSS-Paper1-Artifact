@@ -1,0 +1,5 @@
+Run_ID,Filesystem_Files,Files_After_Exclusions,Source_Files_Selected,Lines_Analyzed,KPIs_Detected,KPIs_Extracted,Average_Extraction_Evidence_Score_Percent,Legacy_Optional_Stage_Report_s,Total_Wall_Time_s,Execution_Mode,Build_Status
+RUN-001,3255,84,65,527,62,62,93.2,0.0,0.93,deterministic-only,Successful
+RUN-002,3358,84,65,527,62,62,93.2,0.0,1.14,deterministic-only,Successful
+RUN-003,3357,84,65,527,62,62,93.2,0.0,0.95,deterministic-only,Successful
+RUN-004,3357,84,65,527,62,62,93.2,0.01,1.16,deterministic-only,Successful

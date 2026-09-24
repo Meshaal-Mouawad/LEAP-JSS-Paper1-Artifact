@@ -1,0 +1,16 @@
+record_id: QA-003
+title: JSS MATE and ISO 22400 Traceability Verification
+date: 2026-09-20
+software_root: software/LEAP
+source_baseline_commit: f3b7b1d7af61fb5a606ae769df1102775faf269b
+execution_mode: deterministic
+ai_enabled: false
+status: complete
+scope:
+  - MATE implementation traceability
+  - ISO-22400-RE-1 narrow detector
+  - ISO-22400-UE-2 narrow detector
+boundaries:
+  - no formula-accuracy metric
+  - no certification claim
+  - no exhaustive ISO 22400 coverage claim

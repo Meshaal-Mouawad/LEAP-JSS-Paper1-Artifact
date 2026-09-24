@@ -1,0 +1,8 @@
+verification_item,status,details
+Application tests,PASSED,"14 passed; 0 failed"
+Controlled scenarios,PASSED,"38 passed; 0 failed"
+Sample generation,PASSED,"28 governed KPI dossiers; 32 pages; 91.1% internal confidence"
+Static routes,PASSED,"6 of 6 returned HTTP 200"
+Repository integrity,PASSED,"Commit unchanged; source working tree clean; git diff --check clean"
+JSS deterministic terminal wording,PASSED,"Worker count absent when AI is disabled; AI-enabled wording covered by regression test"
+JSS application tests,PASSED,"15 passed; 0 failed after bounded wording correction"

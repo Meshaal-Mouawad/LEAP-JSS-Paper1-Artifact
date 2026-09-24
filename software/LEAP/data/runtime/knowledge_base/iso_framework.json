@@ -1,0 +1,143 @@
+{
+  "iso_standard_reference": "ISO-22400-2:2014",
+  "framework_name": "LEAP-AXIS-UNIVERSAL-METRICS",
+  "saudi_national_compliance": {
+    "privacy_framework": "SDAIA-PDPL-2026",
+    "cybersecurity_framework": "NCA-ECC-1:2018",
+    "digital_government": "DGA-NGA-AMAL"
+  },
+  "international_compliance": {
+    "data_protection": "GDPR-2018",
+    "assurance_engagement": "ISAE-3402-SOC2-TypeII",
+    "information_security": "ISO-27001:2022"
+  },
+  "base_primitives": {
+    "time_elements": [
+      "planned_operation_time",
+      "actual_production_time",
+      "maintenance_down_time",
+      "unplanned_down_time"
+    ],
+    "material_elements": [
+      "raw_input_mass",
+      "good_output_mass",
+      "scrap_mass",
+      "waste_mass"
+    ],
+    "energy_elements": [
+      "consumed_electricity_kwh",
+      "thermal_energy_gj",
+      "cooling_water_flow_m3"
+    ],
+    "financial_elements": [
+      "invoice_amount",
+      "contract_amount",
+      "accounts_receivable",
+      "credit_sales"
+    ],
+    "quality_elements": [
+      "accepted_units",
+      "rejected_units",
+      "rework_units",
+      "lab_pass_count"
+    ]
+  },
+  "universal_metric_templates": {
+    "yield_efficiency": {
+      "iso_id": "ISO-22400-RE-1",
+      "abstract_formula": "LaTeX: \\\\frac{\\\\text{good_output_mass}}{\\\\text{raw_input_mass}} \\\\times 100",
+      "governance_constraints": {
+        "allow_negative": false,
+        "maximum_threshold": 100.0
+      }
+    },
+    "asset_utilization": {
+      "iso_id": "ISO-22400-UE-2",
+      "abstract_formula": "LaTeX: \\\\frac{\\\\text{actual_production_time}}{\\\\text{planned_operation_time}}",
+      "governance_constraints": {
+        "exclude_planned_maintenance": true
+      }
+    },
+    "loss_rate": {
+      "iso_id": "LEAP-LOSS-1",
+      "abstract_formula": "LaTeX: \\\\frac{\\\\text{loss_quantity}}{\\\\text{reference_quantity}} \\\\times 100",
+      "governance_constraints": {
+        "allow_negative": false,
+        "maximum_threshold": 100.0
+      }
+    },
+    "financial_leakage": {
+      "iso_id": "LEAP-FIN-1",
+      "abstract_formula": "LaTeX: \\\\frac{\\\\text{uncontrolled_spend}}{\\\\text{total_spend}} \\\\times 100",
+      "governance_constraints": {
+        "allow_negative": false,
+        "requires_period_boundary": true
+      }
+    }
+  },
+  "governance_conflict_rules": [
+    {
+      "rule_id": "GOV-ERR-01",
+      "target_template": "yield_efficiency",
+      "condition": "if code_formula contains '+' instead of '/'",
+      "severity": "CRITICAL",
+      "log_message": "Governance Conflict: Mass balance calculation error. Division expected."
+    },
+    {
+      "rule_id": "GOV-ERR-02",
+      "target_template": "asset_utilization",
+      "condition": "if code_formula includes 'maintenance_down_time' in numerator",
+      "severity": "HIGH_CONFLICT",
+      "log_message": "Governance Conflict: Code tracks maintenance time inside production uptime slots."
+    },
+    {
+      "rule_id": "GOV-ERR-03",
+      "target_template": "financial_leakage",
+      "condition": "if code_formula lacks explicit fiscal period filter",
+      "severity": "HIGH_CONFLICT",
+      "log_message": "Governance Conflict: Financial leakage KPI must be bounded to an approved reporting period."
+    }
+  ],
+  "local_governance_rules": [
+    {
+      "rule_id": "KSA-PDPL-REG-01",
+      "target_layer": "metadata_extraction",
+      "compliance_framework": "SDAIA-PDPL",
+      "condition": "if source_code_variables contain ['national_id', 'iqama', 'phone_num', 'employee_record', 'contractor_details', 'customer_identifier']",
+      "severity": "CRITICAL_PRIVACY_ALERT",
+      "log_message": "SDAIA governance alert: PII data signature detected in raw formula variables without explicit masking or encryption."
+    },
+    {
+      "rule_id": "KSA-NCA-ECC-SEC-04",
+      "target_layer": "no_code_ide_engine",
+      "compliance_framework": "NCA-ECC",
+      "condition": "if ast_rewrite_input contains ['os.system', 'eval', '__import__', 'exec', 'compile', 'open_file_write']",
+      "severity": "SECURITY_VULNERABILITY",
+      "log_message": "NCA control alert: Restricted operational syntax detected in user input form block. No code injection permitted."
+    },
+    {
+      "rule_id": "KSA-NCA-ECC-AUD-02",
+      "target_layer": "audit_logging",
+      "compliance_framework": "NCA-ECC",
+      "condition": "if no_code_modification_audit_entry lacks complete before/after diff and timestamp",
+      "severity": "COMPLIANCE_AUDIT_GAP",
+      "log_message": "NCA audit alert: No-Code IDE modifications must be recorded with immutable lineage tracking and operational ledger entry."
+    },
+    {
+      "rule_id": "GDPR-DATA-PROC-01",
+      "target_layer": "data_processing",
+      "compliance_framework": "GDPR",
+      "condition": "if international_data_flow lacks explicit processing agreement or consent",
+      "severity": "REGULATORY_RISK",
+      "log_message": "GDPR processing alert: Cross-border data processing requires explicit consent and processing agreement documentation."
+    },
+    {
+      "rule_id": "SOC2-LINEAGE-AUDIT-01",
+      "target_layer": "code_lineage",
+      "compliance_framework": "SOC2-TypeII",
+      "condition": "if lineage_trace lacks immutable cryptographic signature or audit trail",
+      "severity": "AUDIT_INCOMPLETE",
+      "log_message": "SOC 2 lineage alert: Code lineage must be cryptographically signed and immutable for financial audit."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Statistic,Value,Unit
+Run count,4,runs
+Minimum total wall time,0.930,seconds
+Maximum total wall time,1.160,seconds
+Mean total wall time,1.045,seconds
+Sample standard deviation,0.122,seconds
+Stable KPI count,62,KPIs
+Stable extraction evidence score,93.2,percent score

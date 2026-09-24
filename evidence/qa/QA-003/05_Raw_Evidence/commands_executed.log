@@ -1,0 +1,17 @@
+2026-09-20 QA-003 deterministic execution
+Working directory: software/LEAP
+
+Command: python -m pytest -q
+Result: 19 passed in 0.16s
+
+Command: python data/validation/test_scenario_fixtures.py
+Result: 38 of 38 scenario fixtures passed
+
+Command: python run_generation.py sample_project
+Result: 28 governed KPI dossiers; 32 generated pages; 2 weak candidates routed to Extraction Review; 91.1% average confidence; total wall time 1.07s
+
+Command: python data/validation/verify_generated_bluebook.py
+Result: 32 generated HTML pages checked; 0 errors; 0 warnings
+
+Command: Flask test-client route check
+Result: 6 of 6 routes returned HTTP 200

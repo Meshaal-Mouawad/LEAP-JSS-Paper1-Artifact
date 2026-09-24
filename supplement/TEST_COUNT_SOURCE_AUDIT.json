@@ -1,0 +1,112 @@
+{
+  "method": "Static AST inspection; tests were not executed. The archived pytest report states 19 passed. Supplied sources contain 18 application test functions and 1 suite-level scenario test.",
+  "sources": {
+    "test_app.py": {
+      "sha256": "dc520e9285590e16f3ab6a4d182379a382bf0621c8cc549e762a0fa2d7b29e93",
+      "test_function_count": 18,
+      "functions": [
+        {
+          "name": "test_control_plane_routes_are_available",
+          "line": 14,
+          "end_line": 17
+        },
+        {
+          "name": "test_worker_count_is_reported_only_for_ai_enrichment",
+          "line": 20,
+          "end_line": 24
+        },
+        {
+          "name": "test_workspace_stats_payload_shape",
+          "line": 27,
+          "end_line": 35
+        },
+        {
+          "name": "test_committed_bluebook_pages_are_served",
+          "line": 38,
+          "end_line": 50
+        },
+        {
+          "name": "test_bluebook_static_assets_are_served",
+          "line": 53,
+          "end_line": 63
+        },
+        {
+          "name": "test_enterprise_workspace_assets_are_present",
+          "line": 66,
+          "end_line": 78
+        },
+        {
+          "name": "test_compliance_alarms_pdpl_pii",
+          "line": 81,
+          "end_line": 99
+        },
+        {
+          "name": "test_compliance_alarms_nca_sec",
+          "line": 102,
+          "end_line": 121
+        },
+        {
+          "name": "test_compliance_alarms_nca_aud",
+          "line": 124,
+          "end_line": 141
+        },
+        {
+          "name": "test_compliance_alarms_gdpr_proc",
+          "line": 144,
+          "end_line": 161
+        },
+        {
+          "name": "test_compliance_alarms_soc2_lineage",
+          "line": 164,
+          "end_line": 181
+        },
+        {
+          "name": "test_review_queue_signal_separation",
+          "line": 184,
+          "end_line": 240
+        },
+        {
+          "name": "test_candidate_promotion_gate_quarantines_helper_and_register_noise",
+          "line": 243,
+          "end_line": 276
+        },
+        {
+          "name": "test_candidate_promotion_gate_promotes_explicit_formula_kpi",
+          "line": 279,
+          "end_line": 295
+        },
+        {
+          "name": "test_mate_preserves_explicit_latex_and_formula_annotations",
+          "line": 298,
+          "end_line": 322
+        },
+        {
+          "name": "test_mate_generated_dossier_contains_annotated_formula_lineage",
+          "line": 325,
+          "end_line": 334
+        },
+        {
+          "name": "test_iso_22400_yield_rule_detection_and_clean_control",
+          "line": 337,
+          "end_line": 375
+        },
+        {
+          "name": "test_iso_22400_asset_utilization_rule_detection_and_clean_control",
+          "line": 378,
+          "end_line": 404
+        }
+      ]
+    },
+    "data/validation/test_scenario_fixtures.py": {
+      "sha256": "64a44430e41e8664912a38ab6fc9555b430a6716f6ccb21ef234a2765e9f69c5",
+      "test_function_count": 1,
+      "functions": [
+        {
+          "name": "test_all_scenario_fixtures",
+          "line": 149,
+          "end_line": 265
+        }
+      ]
+    }
+  }
+}

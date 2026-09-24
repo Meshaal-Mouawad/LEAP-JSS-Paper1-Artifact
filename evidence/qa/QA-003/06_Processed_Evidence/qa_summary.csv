@@ -1,0 +1,10 @@
+Check_ID,Category,Command_or_Test,Result,Status,Boundary
+QA003-01,MATE,test_mate_preserves_explicit_latex_and_formula_annotations,Passed,PASS,Implementation behavior only
+QA003-02,MATE,test_mate_generated_dossier_contains_annotated_formula_lineage,Passed,PASS,Generated dossier contract only
+QA003-03,ISO 22400,test_iso_22400_yield_rule_detection_and_clean_control,Passed,PASS,Narrow ISO-22400-RE-1 rule mapping
+QA003-04,ISO 22400,test_iso_22400_asset_utilization_rule_detection_and_clean_control,Passed,PASS,Narrow ISO-22400-UE-2 rule mapping
+QA003-05,Regression,python -m pytest -q,19 passed,PASS,Current frozen JSS snapshot
+QA003-06,Controlled scenarios,python data/validation/test_scenario_fixtures.py,38 of 38 passed,PASS,Behavioral fixtures not precision or recall evidence
+QA003-07,Generation,python run_generation.py sample_project,28 dossiers and 32 pages,PASS,Sample-project output
+QA003-08,Generated HTML validation,python data/validation/verify_generated_bluebook.py,0 errors and 0 warnings,PASS,32 generated pages
+QA003-09,Routes,Flask test client,6 of 6 HTTP 200,PASS,Local route availability

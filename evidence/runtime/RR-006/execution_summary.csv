@@ -1,0 +1,19 @@
+metric,value
+workspace_items_inventoried,"4,488"
+workspace_files_inventoried,"4,084"
+workspace_directories_inventoried,404
+eligible_files_after_exclusions,454
+implementation_files_evaluated,195
+binary_image_files_ignored,38
+unsupported_files_ignored,196
+non_metric_routines_ignored,7
+configured_ignored_files,25
+configured_ignored_directories,17
+implementation_lines_evaluated,"4,539"
+enterprise_kpis,148
+governed_metrics,148
+average_confidence,88.3%
+business_definition_wall_time,0.02s for 148 KPIs with 4 deterministic detail workers.
+deterministic_latency_summary,Deterministic detail preparation latency (sum across KPIs): 0.02s; avg per KPI latency: 0.00s; avg wall time per KPI (wall/num): 0.00s
+total_wall_time,2.73s
+prepared_dossier_count,148

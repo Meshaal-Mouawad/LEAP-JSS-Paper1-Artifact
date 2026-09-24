@@ -1,0 +1,77 @@
+test_file,test_name,behavior_tested,deterministic_or_agent_path,current_status,fixture_used,expected_result,actual_result,jss_claim_supported,evidence_record
+test_app.py,test_control_plane_routes_are_available,Flask route availability,deterministic,PASSED,N/A,"HTTP 200 on /,/status,/api/stats",HTTP 200 returned,system availability,
+test_app.py,test_workspace_stats_payload_shape,API payload structure,deterministic,PASSED,N/A,"Valid JSON with total_kpis,validated_kpis,review_items,avg_confidence,workspace_state",Valid JSON structure returned,API reliability,
+test_app.py,test_committed_bluebook_pages_are_served,HTML page serving,deterministic,PASSED,N/A,HTTP 200 on Bluebook pages,HTTP 200 returned,documentation generation,
+test_app.py,test_bluebook_static_assets_are_served,Static asset serving,deterministic,PASSED,N/A,HTTP 200 on CSS/SVG assets,HTTP 200 returned,asset delivery,
+test_app.py,test_enterprise_workspace_assets_are_present,Build artifact verification,deterministic,PASSED,N/A,Required files exist in docs/_build,All files exist,build integrity,
+test_app.py,test_compliance_alarms_pdpl_pii,KSA-PDPL-REG-01 PII detection,deterministic,PASSED,Positive: PII without masking,Alarm triggered,Alarm triggered,compliance detection,
+test_app.py,test_compliance_alarms_pdpl_pii,KSA-PDPL-REG-01 clean control,deterministic,PASSED,Clean: PII with masking,No alarm,No alarm,PDPL clean-control behavior,
+test_app.py,test_compliance_alarms_nca_sec,KSA-NCA-ECC-SEC-04 security detection,deterministic,PASSED,Positive: os.system/eval,Alarm triggered,Alarm triggered,security detection,
+test_app.py,test_compliance_alarms_nca_sec,KSA-NCA-ECC-SEC-04 clean control,deterministic,PASSED,Clean: safe code,No alarm,No alarm,NCA security clean-control behavior,
+test_app.py,test_compliance_alarms_nca_aud,KSA-NCA-ECC-AUD-02 audit gap detection,deterministic,PASSED,Positive: update without audit,Alarm triggered,Alarm triggered,audit detection,
+test_app.py,test_compliance_alarms_nca_aud,KSA-NCA-ECC-AUD-02 clean control,deterministic,PASSED,Clean: update with audit,No alarm,No alarm,NCA audit clean-control behavior,
+test_app.py,test_compliance_alarms_gdpr_proc,GDPR-DATA-PROC-01 data transfer detection,deterministic,PASSED,Positive: cross_border without consent,Alarm triggered,Alarm triggered,regulatory detection,
+test_app.py,test_compliance_alarms_gdpr_proc,GDPR-DATA-PROC-01 clean control,deterministic,PASSED,Clean: transfer with agreement,No alarm,No alarm,GDPR clean-control behavior,
+test_app.py,test_compliance_alarms_soc2_lineage,SOC2-LINEAGE-AUDIT-01 signature detection,deterministic,PASSED,Positive: lineage without signature,Alarm triggered,Alarm triggered,audit detection,
+test_app.py,test_compliance_alarms_soc2_lineage,SOC2-LINEAGE-AUDIT-01 clean control,deterministic,PASSED,Clean: lineage with signature,No alarm,No alarm,SOC 2 clean-control behavior,
+test_app.py,test_review_queue_signal_separation,Clean KPI no conflicts,deterministic,PASSED,Clean KPI with formula,No conflicts/notes/alarms,No conflicts/notes/alarms,signal separation,
+test_app.py,test_review_queue_signal_separation,Missing formula medium note,deterministic,PASSED,KPI without formula comment,Medium audit note,Medium audit note,signal separation,
+test_app.py,test_review_queue_signal_separation,TODO/FIXME technical note,deterministic,PASSED,KPI with TODO comment,Medium audit note,Medium audit note,signal separation,
+test_app.py,test_review_queue_signal_separation,Governance conflict high severity,deterministic,PASSED,HSE KPI with finance tables,High conflict,High conflict,signal separation,
+phase3/test_scenario_fixtures.py,01_clean_python_kpi.py,Clean Python KPI,deterministic,PASS,Clean Python KPI,Validated,Validated,governance validation,
+phase3/test_scenario_fixtures.py,02_clean_sql_kpi.sql,Clean SQL KPI,deterministic,PASS,Clean SQL KPI,Validated,Validated,governance validation,
+phase3/test_scenario_fixtures.py,03_clean_abap_kpi.abap,Clean ABAP KPI,deterministic,PASS,Clean ABAP KPI,Validated,Validated,governance validation,
+phase3/test_scenario_fixtures.py,04_wrong_operator.sql,Wrong operator detection,deterministic,PASS,Yield with addition instead of division,Needs Review,Needs Review,conflict detection,
+phase3/test_scenario_fixtures.py,05_wrong_numerator.sql,Wrong numerator detection,deterministic,PASS,Yield with wrong numerator,Needs Review,Needs Review,conflict detection,
+phase3/test_scenario_fixtures.py,06_wrong_denominator.sql,Wrong denominator detection,deterministic,PASS,Yield with wrong denominator,Needs Review,Needs Review,conflict detection,
+phase3/test_scenario_fixtures.py,07_missing_formula_comment.sql,Missing formula detection,deterministic,PASS,KPI without formula comment,Needs Review,Needs Review,evidence completeness,
+phase3/test_scenario_fixtures.py,08_missing_implementation.py,Missing implementation detection,deterministic,PASS,KPI without implementation,Needs Review,Needs Review,evidence completeness,
+phase3/test_scenario_fixtures.py,09_todo_kpi.py,TODO detection,deterministic,PASS,KPI with TODO comment,Needs Review,Needs Review,technical review,
+phase3/test_scenario_fixtures.py,10_fixme_kpi.py,FIXME detection,deterministic,PASS,KPI with FIXME comment,Needs Review,Needs Review,technical review,
+phase3/test_scenario_fixtures.py,11_bug_kpi.py,BUG detection,deterministic,PASS,KPI with BUG comment,Needs Review,Needs Review,technical review,
+phase3/test_scenario_fixtures.py,12_suspicious_fallback.py,Suspicious fallback handling,deterministic,PASS,Edge case fallback,Validated,Validated,robustness,
+phase3/test_scenario_fixtures.py,13_pdpl_pii_violation.py,KSA-PDPL-REG-01 detection,deterministic,PASS,PII without masking,Needs Review,Needs Review,compliance detection,
+phase3/test_scenario_fixtures.py,14_nca_restricted_exec.py,KSA-NCA-ECC-SEC-04 detection,deterministic,PASS,Restricted execution patterns,Needs Review,Needs Review,security detection,
+phase3/test_scenario_fixtures.py,15_nca_audit_gap.py,KSA-NCA-ECC-AUD-02 detection,deterministic,PASS,Audit gap,Needs Review,Needs Review,audit detection,
+phase3/test_scenario_fixtures.py,16_gdpr_data_export_violation.py,GDPR-DATA-PROC-01 detection,deterministic,PASS,GDPR violation,Needs Review,Needs Review,regulatory detection,
+phase3/test_scenario_fixtures.py,17_soc2_unsigned_lineage.py,SOC2-LINEAGE-AUD-01 detection,deterministic,PASS,Unsigned lineage,Needs Review,Needs Review,audit detection,
+phase3/test_scenario_fixtures.py,18_pdpl_clean_control.py,KSA-PDPL-REG-01 clean control,deterministic,PASS,PII with masking,Validated,Validated,PDPL clean-control behavior,
+phase3/test_scenario_fixtures.py,19_nca_restricted_clean_control.py,KSA-NCA-ECC-SEC-04 clean control,deterministic,PASS,Safe execution,Validated,Validated,NCA security clean-control behavior,
+phase3/test_scenario_fixtures.py,20_audit_clean_control.py,KSA-NCA-ECC-AUD-02 clean control,deterministic,PASS,Complete audit trail,Validated,Validated,NCA audit clean-control behavior,
+phase3/test_scenario_fixtures.py,21_gdpr_clean_control.py,GDPR-DATA-PROC-01 clean control,deterministic,PASS,Data with consent,Validated,Validated,GDPR clean-control behavior,
+phase3/test_scenario_fixtures.py,22_soc2_clean_control.py,SOC2-LINEAGE-AUD-01 clean control,deterministic,PASS,Signed lineage,Validated,Validated,SOC 2 clean-control behavior,
+phase3/test_scenario_fixtures.py,23_formula_conflict_and_todo.sql,Combined signals,deterministic,PASS,Formula conflict + TODO,Needs Review,Needs Review,signal composition,
+phase3/test_scenario_fixtures.py,24_compliance_and_formula_conflict.sql,Combined signals,deterministic,PASS,Compliance + formula conflict,Needs Review,Needs Review,signal composition,
+phase3/test_scenario_fixtures.py,25_compliance_alarm_only.py,Compliance only,deterministic,PASS,Compliance alarm only,Needs Review,Needs Review,signal isolation,
+phase3/test_scenario_fixtures.py,26_technical_review_only.py,Technical review only,deterministic,PASS,Technical note only,Needs Review,Needs Review,signal isolation,
+phase3/test_scenario_fixtures.py,27_owner_confirmation_required.py,Owner confirmation,deterministic,PASS,Missing business context,Needs Review,Needs Review,governance workflow,
+phase3/test_scenario_fixtures.py,28_validated_clean.sql,Validated clean SQL,deterministic,PASS,Clean SQL with formula,Validated,Validated,governance validation,
+phase3/test_scenario_fixtures.py,29_simple_ratio.sql,Simple ratio formula,deterministic,PASS,Simple division formula,Validated,Validated,formula rendering,
+phase3/test_scenario_fixtures.py,30_percentage_ratio.sql,Percentage ratio formula,deterministic,PASS,Percentage formula,Validated,Validated,formula rendering,
+phase3/test_scenario_fixtures.py,31_multiplication_formula.sql,Multiplication formula,deterministic,PASS,Multiplication formula,Validated,Validated,formula rendering,
+phase3/test_scenario_fixtures.py,32_subtraction_formula.sql,Subtraction formula,deterministic,PASS,Subtraction formula,Validated,Validated,formula rendering,
+phase3/test_scenario_fixtures.py,33_nullif_denominator.sql,NULLIF denominator,deterministic,PASS,NULLIF in denominator,Validated,Validated,SQL normalization,
+phase3/test_scenario_fixtures.py,34_case_sum_count.sql,CASE with SUM/COUNT,deterministic,PASS,CASE aggregation,Validated,Validated,SQL normalization,
+phase3/test_scenario_fixtures.py,35_explicit_latex.py,Explicit LaTeX formula,deterministic,PASS,Explicit LaTeX in comments,Validated,Validated,LaTeX preservation,
+phase3/test_scenario_fixtures.py,36_formula_with_underscores.sql,Formula with underscores,deterministic,PASS,Underscores in formula,Validated,Validated,formula normalization,
+phase3/test_scenario_fixtures.py,37_formula_with_units.sql,Formula with units,deterministic,PASS,Units in formula,Validated,Validated,formula normalization,
+phase3/test_scenario_fixtures.py,38_greek_symbols.py,Greek symbols in formula,deterministic,PASS,Greek symbols in formula,Validated,Validated,LaTeX rendering,
+test_app.py,test_governed_python_rewrite_previews_then_applies_one_literal,Python AST rewrite preview and apply,deterministic,PASSED,Python function with numeric literal,"Preview generated, then applied with approval",Preview and apply successful,governed rewriting,RR-009
+test_app.py,test_governed_rewrite_requires_preview_approval_and_python_source,Preview approval requirement,deterministic,PASSED,Apply without preview,Error: preview required,Error: preview required,safety controls,RR-009
+test_app.py,test_governed_rewrite_rolls_back_when_audit_persistence_fails,Byte rollback on audit failure,deterministic,PASSED,Simulated audit write failure,Source bytes unchanged,Source bytes unchanged,atomic rollback,RR-009
+test_app.py,test_governed_rewrite_preserves_utf8_crlf_decorator_and_reuses_lineage_header,Lineage header reuse,deterministic,PASSED,UTF-8 CRLF with decorator,Lineage header reused,Lineage header reused,lineage deduplication,RR-009
+test_app.py,test_sql_construct_policy_ordinary_select_writable,SQL SELECT writable,deterministic,PASSED,Ordinary SELECT with numeric literal,WRITABLE with targets,WRITABLE with targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_construct_policy_ordinary_select_writable,SQL SELECT with WHERE writable,deterministic,PASSED,SELECT WHERE with numeric literal,WRITABLE with targets,WRITABLE with targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_construct_policy_ordinary_select_writable,T-SQL SELECT TOP writable,deterministic,PASSED,T-SQL SELECT TOP with numeric literal,WRITABLE with targets,WRITABLE with targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_construct_policy_ordinary_select_writable,Oracle SELECT INTO writable,deterministic,PASSED,Oracle SELECT INTO with numeric literal,WRITABLE with targets,WRITABLE with targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_allowlist_set_use_copy_values_pragma_blocked,SQL allowlist blocking,deterministic,PASSED,SET/USE/COPY/VALUES/PRAGMA,READ_ONLY with zero targets,READ_ONLY with zero targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_allowlist_dml_and_transactions_blocked,SQL DML blocking,deterministic,PASSED,INSERT/UPDATE/DELETE/MERGE/TRANSACTION,READ_ONLY with zero targets,READ_ONLY with zero targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_allowlist_mixed_select_and_unsupported_statements_blocked,Mixed script blocking,deterministic,PASSED,SELECT + SET,READ_ONLY with zero targets,READ_ONLY with zero targets,SQL default-deny allowlist,RR-009
+test_app.py,test_sql_allowlist_union_intersect_except_writable,SQL set operations writable,deterministic,PASSED,UNION/INTERSECT/EXCEPT,WRITABLE with targets,WRITABLE with targets,SQL default-deny allowlist,RR-009
+QA_GATE_REPORT.md,qa_001_full_live_product_suite,Unqualified live product regression suite,deterministic,PASSED,Current live repository tests,117 passed with zero failures,117 passed,Current software validation,QA-001
+QA_GATE_REPORT.md,qa_001_generation_regression,Sample project generation regression,deterministic,PASSED,sample_project,Generation and representative output checks pass,28 KPIs; 2 Needs Review; 91.1% confidence; 32 HTML files,Current generation behavior,QA-001
+HUMAN_VISUAL_DISPOSITION.md,qa_001_human_visual_condition,Human visual acceptance condition,human review,PASSED,Accepted generated interface,Human condition satisfied,COMPLETE / HUMAN CONDITION SATISFIED,Current visual disposition,QA-001
+test_app.py,test_mate_preserves_explicit_latex_and_formula_annotations,MATE explicit LaTeX normalization and annotations,deterministic,PASSED,Explicit yield formula,Canonical normalized LaTeX with numerator denominator and scale annotations,Expected formula expression and HTML annotations,MATE implementation,QA-003
+test_app.py,test_mate_generated_dossier_contains_annotated_formula_lineage,MATE generated dossier lineage,deterministic,PASSED,Ethylene Production Yield dossier,Formal and annotated formula with business and developer mappings,Generated lineage mappings present,MATE implementation,QA-003
+test_app.py,test_iso_22400_yield_rule_detection_and_clean_control,ISO 22400 yield rule positive and clean controls,deterministic,PASSED,Yield operator and variable conflicts plus clean ratio,ISO-22400-RE-1 on conflicts and no conflict on clean control,Expected rule behavior,ISO 22400 bounded mapping,QA-003
+test_app.py,test_iso_22400_asset_utilization_rule_detection_and_clean_control,ISO 22400 utilization rule positive and clean controls,deterministic,PASSED,Maintenance numerator conflict plus clean utilization ratio,ISO-22400-UE-2 on conflict and no conflict on clean control,Expected rule behavior,ISO 22400 bounded mapping,QA-003

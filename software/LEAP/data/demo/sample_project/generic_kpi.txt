@@ -1,0 +1,3 @@
+# KPI: Maintenance to Operating Cost Ratio
+This file simulates a generic text source. The extractor will still pick up the KPI marker.
+Maintenance to Operating Cost Ratio = 100 * (on_spec / total)

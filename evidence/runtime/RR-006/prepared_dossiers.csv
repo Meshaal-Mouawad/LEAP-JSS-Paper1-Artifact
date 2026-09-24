@@ -1,0 +1,149 @@
+index,kpi_title
+1,normalize kpi name
+2,generate last Figs
+3,meeting duration log
+4,SOURCE PACKAGE CHECKSUMS
+5,historical claim map
+6,start generation
+7,count generated kpis
+8,claim audit
+9,"Customer Activity Index\ndef calculate(national id, phone num): pass"
+10,Energy Intensity (BTU/lb)
+11,RAW EVIDENCE CHECKSUMS
+12,current architecture
+13,bluebook completeness
+14,ARCHIVE MANIFEST
+15,CLAIM STATUS REGISTER
+16,INCONSISTENCY REGISTER
+17,RESEARCH RECORD REGISTER
+18,yield percentage
+19,verify scenario rendered alarms
+20,yield rate
+21,wrong yield
+22,Asset Utilization (Wrong)
+23,Yield Rate (Wrong Operator)
+24,Customer Growth Rate
+25,Yield Rate (Correct)
+26,Asset Utilization (Correct)
+27,Yield Rate (Wrong Variables)
+28,CO2 Emissions Intensity
+29,Permit To Work Closure Compliance
+30,Emergency Shutdown Demand Rate
+31,Net Plant Availability
+32,Adjusted Feedstock Yield
+33,Critical Spare Readiness
+34,Weighted Energy Intensity Index
+35,Rolling 30 Day On-Spec Rate
+36,Asset Utilization
+37,Yield Rate
+38,Clean Python KPI
+39,PDPL PII Violation
+40,Percentage Ratio
+41,Owner Confirmation Required
+42,SOC2 Unsigned Lineage
+43,NCA Restricted Clean Control
+44,NCA Restricted Execution
+45,GDPR Alarm Only
+46,Units Formula
+47,Explicit LaTeX
+48,Audit Clean Control
+49,Nullif Denominator Formula
+50,GDPR Clean Control
+51,Multiplication Formula
+52,Clean ABAP KPI
+53,Technical Review Only
+54,GDPR Data Export Violation
+55,Greek Symbols Formula
+56,Clean SQL KPI
+57,Validated Clean
+58,PDPL Clean Control
+59,NPS Pattern Formula
+60,NCA Audit Gap
+61,SOC2 Clean Control
+62,Underscores Formula
+63,Simple Ratio
+64,Subtraction Formula
+65,Furnace OEE Composite
+66,Benzene Purity Pct
+67,Spend Leakage Pct
+68,Procurement Contract Risk Score
+69,Complaint Reopen Rate Pct
+70,Aromatics Release Readiness Index
+71,Furnace Energy Efficiency Pct
+72,CO2e Emissions Intensity
+73,# Days Inventory On Hand (DIOH)
+74,% Service Factor
+75,% Working Capital / Sales Revenue
+76,Distillation Column Efficiency %
+77,Furnace OEE %
+78,$ Manufacturing Fixed Cash Cost Normalized (to TA)
+79,Reactor Selectivity %
+80,Furnace Efficiency %
+81,% Maintenance Man Hours Estimation Accuracy
+82,# Days To Cash (DTC)
+83,kpi flare recovery pct
+84,% Customer Churn Rate
+85,# Days of Working Inventory
+86,# Days To Payables (DTP)
+87,Propylene to Ethylene (P/E) Ratio
+88,Cooling Water Delta-T (°C)
+89,Benzene Purity %
+90,# Days of Working Capital
+91,% Net Promoter Score (NPS)
+92,Steam-to-Ethylene Ratio
+93,$ Operating Cash Flow
+94,# Total Customer Complaints
+95,# Justified Customer Complaints
+96,TRANSFORMATION LOG
+97,% Benchmark Capability Utilization
+98,Maintenance to Operating Cost Ratio
+99,# Complaints Response Time (avg in days)
+100,% Emergency Maintenance Cost
+101,# Non-Justified Customer Complaints
+102,Reactor Conversion %
+103,# Open Customer Complaints
+104,OEE %
+105,Aromatics Recovery %
+106,Hydrogen Utilization %
+107,Dehydrogenation Selectivity %
+108,Flare Reduction %
+109,Catalyst Activity Index
+110,$ Variable Cost / Total Production
+111,Polymerization Conversion %
+112,Compressor Availability %
+113,# Production Loss
+114,Propylene Yield %
+115,$ Fixed Cash Cost / Total Production
+116,% On-Stream Factor
+117,% Overall Equipment Effectiveness
+118,Ethylene Yield %
+119,% Capacity Utilization
+120,generate figures
+121,webp to svg
+122,Gross Margin Percentage
+123,HSE Safety Incident Rate
+124,Signed Lineage Audit Trail
+125,Compressor Vibration Index
+126,Ethylene Production Yield
+127,SOx Emissions Concentration (kg/m3)
+128,Flare Emission Recovery Rate
+129,Yield Percentage (%)
+130,Inventory Modification Gap
+131,Mean Time Between Failures (MTBF)
+132,Safe Execution Latency
+133,Catalyst Replacement Frequency
+134,On-Spec Rate (%)
+135,EU Data Export Volume
+136,Polymer Melt Flow Index (MFI) Variance
+137,Governed Inventory Modification
+138,Procurement Contract Compliance Rate
+139,Daily Feedstock Throughput (tons/day)
+140,Runtime Execution Latency
+141,Audit Trail Completeness
+142,Customer Activity Index
+143,Masked Customer Activity Index
+144,Governed EU Data Export
+145,Specific Catalyst Cost ($/ton)
+146,source note inventory
+147,language support
+148,# Number of New Customers

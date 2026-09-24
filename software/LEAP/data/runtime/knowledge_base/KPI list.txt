@@ -1,0 +1,99 @@
+KEY PERFORMANCE INDICATORS.
+17
+17
+KPI FIELDS..
+18
+Customer
+
+KPI001
+18
+% Net Promoter Score (NPS)
+KP1002
+19
+# Total Customer Complaints
+KPI003
+20
+# Justified Customer Complaints..
+21
+KP1004
+# Non-Justified Customer Complaints
+22
+KPI005
+# Open Customer Complaints
+23
+KPI006
+# Complaints Response Time.
+KP1007
+24
+# Number of New Customers.
+KPI008
+25
+% Customer Churn Rate.
+26
+KPI009
+% Market Share.
+27
+KPI010
+# Global Media Share of Voice..
+28
+KPI011
+% E-Business Penetration (Transactions) •
+KPI012
+29
+% E-Business Penetration (Volume) ..
+30
+
+Environment, Health, Safety & Compliance..
+. 30
+KPI013
+% SHER EHSS Incidence Rate.
+31
+KPI014
+% SQAS Compliance..•.•.
+KPI015
+32
+% SABIC Code of Ethics Acknowledgement.
+33
+KPI016
+% High Risk Entity Coverage
+34
+KPI017
+% Customer Satisfaction.
+35
+KPI018
+# SHEM..
+KPI019
+36
+% Process Safety Incident Severity Rate (PSISR)
+37
+KPI020
+% Process Safety Total Severity Rate (PSTIR)
+38
+KPI159
+# Regulatory Non-Compliances.
+39
+Financial
+39
+KPI021
+$ Operating Cash Flow
+40
+KPI022
+# Days of Working Capital (Period End Basis) ..
+41
+KPI182
+# Days To Cash (DTC) ...
+42
+KPI183
+# Days Inventory On Hand (DIOH)..
+43
+KPI184
+# Days To Payables (DTP) -
+44
+KPI160
+% Working Capital / Sales Revenue.
+45
+KPI023
+# Days Sales Outstanding (DSO) .
+46
+# Days Inventory Outstanding (DIO)
+KPI024

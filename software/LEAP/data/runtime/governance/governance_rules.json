@@ -1,0 +1,96 @@
+{
+  "path_rules": [
+    {
+      "label": "Finance and SAP reporting",
+      "match": "finance|sap|hana|cash|cost|revenue|working.capital|payables|inventory",
+      "responsible": "Finance Data Engineering Team",
+      "accountable": "Finance Data Owner",
+      "consulted": "Finance BI Team",
+      "informed": "CFO Office",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Production, refinery, and process operations",
+      "match": "production|operations|refinery|process|yield|oee|furnace|reactor|distillation|polymer|ethylene|propylene",
+      "responsible": "Operations Data Engineering Team",
+      "accountable": "Operations Data Owner",
+      "consulted": "Process Engineering Team",
+      "informed": "Plant Management",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Maintenance and reliability",
+      "match": "maintenance|reliability|mtbf|mttr|availability|failure|repair|compressor",
+      "responsible": "Reliability Data Engineering Team",
+      "accountable": "Maintenance Data Owner",
+      "consulted": "Reliability Engineering Team",
+      "informed": "Maintenance Leadership",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Customer and commercial analytics",
+      "match": "customer|complaint|churn|nps|sales|service",
+      "responsible": "Commercial Analytics Team",
+      "accountable": "Customer Experience Data Owner",
+      "consulted": "Sales and Service Teams",
+      "informed": "Commercial Leadership",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Environmental and emissions reporting",
+      "match": "emission|flare|sox|nox|environment|sustainability",
+      "responsible": "Environmental Data Engineering Team",
+      "accountable": "HSE Data Owner",
+      "consulted": "Environmental Compliance Team",
+      "informed": "HSE Leadership",
+      "confidence": "Medium"
+    }
+  ],
+  "name_rules": [
+    {
+      "label": "Financial KPI name",
+      "match": "cash|cost|revenue|payables|working capital|inventory|recovery",
+      "responsible": "Finance Data Engineering Team",
+      "accountable": "Finance Data Owner",
+      "consulted": "Finance BI Team",
+      "informed": "CFO Office",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Operations KPI name",
+      "match": "yield|oee|efficiency|conversion|selectivity|throughput|utilization|on-stream|capacity",
+      "responsible": "Operations Data Engineering Team",
+      "accountable": "Operations Data Owner",
+      "consulted": "Process Engineering Team",
+      "informed": "Plant Management",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Maintenance KPI name",
+      "match": "maintenance|availability|mtbf|failure|repair|compressor",
+      "responsible": "Reliability Data Engineering Team",
+      "accountable": "Maintenance Data Owner",
+      "consulted": "Reliability Engineering Team",
+      "informed": "Maintenance Leadership",
+      "confidence": "Medium"
+    },
+    {
+      "label": "Customer KPI name",
+      "match": "customer|complaint|churn|promoter|nps|service",
+      "responsible": "Commercial Analytics Team",
+      "accountable": "Customer Experience Data Owner",
+      "consulted": "Sales and Service Teams",
+      "informed": "Commercial Leadership",
+      "confidence": "Medium"
+    },
+    {
+      "label": "HSE KPI name",
+      "match": "emission|flare|sox|environment|safety",
+      "responsible": "Environmental Data Engineering Team",
+      "accountable": "HSE Data Owner",
+      "consulted": "Environmental Compliance Team",
+      "informed": "HSE Leadership",
+      "confidence": "Medium"
+    }
+  ]
+}

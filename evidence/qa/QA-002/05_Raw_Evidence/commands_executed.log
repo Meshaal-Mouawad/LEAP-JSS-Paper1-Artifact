@@ -1,0 +1,49 @@
+Verification date: 2026-09-20
+Source commit: f3b7b1d7af61fb5a606ae769df1102775faf269b
+Source branch: main
+Source state before and after verification: clean
+Execution location: isolated temporary copy
+
+COMMAND: python -m pytest -q
+EXIT: 0
+RESULT: 14 passed in 0.26s
+
+COMMAND: python data/validation/test_scenario_fixtures.py
+EXIT: 0
+RESULT: 38 of 38 controlled scenarios passed
+
+COMMAND: python run_generation.py sample_project
+EXIT: 0
+RESULT: 28 governed metrics; 32 generated pages; 91.1% average internal confidence; 1.53s total wall time
+
+COMMAND: Flask test-client route verification
+EXIT: 0
+RESULTS:
+200 /
+200 /bluebook/index.html
+200 /bluebook/discovery_report.html
+200 /bluebook/search.html
+200 /bluebook/_static/custom.css
+200 /bluebook/_static/leap-axis-logo.svg
+
+COMMAND: git diff --check
+EXIT: 0
+RESULT: no output
+
+JSS SNAPSHOT FOLLOW-ON
+
+COMMAND: python -m pytest -q
+EXIT: 0
+RESULT: 15 passed in 0.26s
+
+COMMAND: python data/validation/test_scenario_fixtures.py
+EXIT: 0
+RESULT: 38 of 38 controlled scenarios passed
+
+COMMAND: LEAP_ENABLE_AI=0 python run_generation.py sample_project
+EXIT: 0
+RESULT: 28 governed metrics; 32 generated pages; deterministic worker count absent
+
+COMMAND: Flask test-client route verification
+EXIT: 0
+RESULT: 6 of 6 routes returned HTTP 200

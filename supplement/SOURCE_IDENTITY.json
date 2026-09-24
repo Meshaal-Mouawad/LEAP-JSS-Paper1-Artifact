@@ -1,0 +1,13 @@
+{
+  "inspection": "static source inspection; no tests rerun",
+  "files": {
+    "bluebook_generator/kpi_extractor.py": "c1f0fd72d19e99acb31fc135106838951a650b093a5caca6e488cd8b8d6c0fb7",
+    "bluebook_generator/main.py": "e4a26797c6c7dccb49603745720e4dce7b85bd27e2c2c86f8292183b4b2188c5",
+    "bluebook_generator/parser.py": "13f011bb47b6e08fa54024b84d97b564a7e796d4d7168710b0549359be3ec429",
+    "bluebook_generator/ai_generator.py": "09b2ed8faa493b6969ab41e7d26cc36e22153642db1601332d55f1a2f7b8321a",
+    "bluebook_generator/governance.py": "37c5f82a4131264628f0f2193404baa98d34832dee2cfa4923939fd6f52424ef",
+    "data/validation/test_scenario_fixtures.py": "64a44430e41e8664912a38ab6fc9555b430a6716f6ccb21ef234a2765e9f69c5",
+    "test_app.py": "dc520e9285590e16f3ab6a4d182379a382bf0621c8cc549e762a0fa2d7b29e93"
+  },
+  "manuscript_baseline_pdf_sha256": "93555b3d434e3a2d0092ca0090cc7fd1acc7e1359f123ebd28acc1cbe2e4351e"
+}

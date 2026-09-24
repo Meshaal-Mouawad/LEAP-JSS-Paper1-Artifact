@@ -1,0 +1,5 @@
+-- KPI: Specific Catalyst Cost ($/ton)
+-- Formula: \mathrm{Catalyst\,Cost\,per\,Ton} = \frac{\mathrm{Catalyst\,Cost}}{\mathrm{Product\,Tons}}
+
+-- T-SQL example KPI calculation
+SELECT CAST(catalyst_cost / NULLIF(product_tons, 0) AS DECIMAL(18,6)) AS kpi_specific_catalyst_cost;

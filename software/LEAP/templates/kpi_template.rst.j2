@@ -1,0 +1,702 @@
+{{ kpi.display_name }}
+==================================================
+
+.. raw:: html
+
+
+
+   <a class="leap-skip-link" href="#leap-main-content">Skip to dossier content</a>
+   <div class="leap-workspace kpi-dossier-workspace">
+      <aside class="leap-sidebar-nav">
+         <nav class="leap-nav-rail-inner">
+            <div class="leap-nav-section">
+               <div class="leap-nav-section-title">Workspace</div>
+                <a href="/" data-nav-key="main" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 15h.01"/><path d="M12 15h4"/></svg></span> Main
+                </a>
+                <a href="index.html" data-nav-key="dashboard" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Dashboard
+                </a>
+             </div>
+             <div class="leap-nav-section">
+                <div class="leap-nav-section-title">KPI Portfolio</div>
+                <a href="discovery_report.html#metric-portfolio" data-nav-key="discovery" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Discovery Workspace
+                </a>
+                <a href="discovery_report.html#kpi-inventory" data-nav-key="enterprise-kpis" class="leap-nav-item active">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></span> Enterprise KPIs
+                </a>
+             </div>
+             <div class="leap-nav-section">
+                <div class="leap-nav-section-title">Governance</div>
+                <a href="raci_directory.html" data-nav-key="raci" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> RACI Directory
+                </a>
+                <a href="discovery_report.html#governance-summary" data-nav-key="governance" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg></span> Governance State
+                </a>
+             </div>
+             <div class="leap-nav-section">
+                <div class="leap-nav-section-title">Evidence</div>
+                <a href="#source-evidence" onclick="openLeapSourceEvidence(event)" data-nav-key="evidence" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="13" r="2"/><path d="m20 17-1.45-1.45"/></svg></span> Evidence &amp; Lineage
+                </a>
+             </div>
+             <div class="leap-nav-section">
+                <div class="leap-nav-section-title">Utilities</div>
+                <a href="search.html" data-nav-key="search" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Search
+                </a>
+                <a href="genindex.html" data-nav-key="index" class="leap-nav-item">
+                   <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Index
+                </a>
+             </div>
+             <div class="leap-nav-status-card">
+               <span>Workspace Mode</span>
+               <strong>Offline Governance</strong>
+               <small>Certified metric dossier</small>
+            </div>
+         </nav>
+      </aside>
+
+      <div class="leap-workspace-main">
+         <header class="leap-topbar">
+            <div class="leap-topbar-inner">
+               <div class="leap-topbar-left">
+                  <a class="leap-brand-home" href="/" aria-label="Open LEAP main page">
+                     <div class="leap-brand-mark">
+                        <img src="_static/leap-axis-logo.svg?v=20260629_01" alt="LEAP AXIS KPI Intelligence System">
+                     </div>
+                  </a>
+                  <div class="leap-workspace-title">KPI Intelligence Workspace</div>
+               </div>
+               <div class="leap-topbar-controls" aria-label="Workspace display controls">
+                  <span class="leap-clock" data-leap-clock>--</span>
+                  <select class="leap-theme-select" data-leap-theme-select aria-label="Theme">
+                     <option value="light-teal">Light Teal</option>
+                     <option value="dark">Dark</option>
+                     <option value="classic">Classic</option>
+                  </select>
+               </div>
+               <div class="leap-topbar-right">
+                  <div class="leap-status-item">
+                     <span class="leap-confidence-dot"></span>
+                     <span class="leap-status-label">Confidence</span>
+                     <strong>{{ kpi.confidence_display }}</strong>
+                  </div>
+                  <div class="leap-status-item">
+                     <span class="leap-status-label">Source</span>
+                     <strong>{{ kpi.source_language_display }}</strong>
+                  </div>
+                  <div class="leap-status-item">
+                     <span class="leap-status-label">Owner</span>
+                     <strong>{{ kpi.governance_accountable }}</strong>
+                  </div>
+                  <div class="leap-environment-badge">Offline</div>
+               </div>
+            </div>
+         </header>
+
+         <!-- PHASE 2: ZONE A - Executive Summary Hero (Enterprise Authority Signals) -->
+         <section class="leap-page-header kpi-dossier-page-header kpi-zone-a-hero" data-zone="a" data-confidence="{{ kpi.confidence_level }}" data-governance-status="{{ kpi.governance_status }}">
+            <div class="kpi-hero-eyebrow">Enterprise KPI Dossier</div>
+            <h1>{{ kpi.display_name }}</h1>
+            <p>{{ kpi.governance_domain_display }} intelligence record connecting business definition, certified formula, ownership, and operational evidence.</p>
+            <div class="kpi-decision-signal" aria-label="Executive decision signal">
+               <span class="kpi-decision-status">{{ kpi.governance_status_display }}</span>
+               {% if kpi.governance_status == 'Validated' %}
+               <strong>Ready for governed operational use.</strong>
+               <span>Owner accountability confirmed through {{ kpi.governance_accountable }} with {{ kpi.confidence_display }} formula confidence.</span>
+               {% else %}
+               <strong>Owner confirmation required before executive use.</strong>
+               <span>{{ kpi.governance_accountable }} remains accountable while governance review is resolved.</span>
+               {% endif %}
+            </div>
+            <div class="kpi-hero-metrics" aria-label="KPI executive summary">
+               <div class="kpi-hero-metric kpi-hero-domain">
+                  <span>Business Domain</span>
+                  <strong>{{ kpi.governance_domain_display }}</strong>
+               </div>
+               <div class="kpi-hero-metric kpi-hero-primary" data-metric="confidence">
+                  <span>Confidence</span>
+                  <strong data-confidence-level="{{ kpi.confidence_level }}">{{ kpi.confidence_display }}</strong>
+               </div>
+               <div class="kpi-hero-metric kpi-hero-primary" data-metric="governance">
+                  <span>Governance Status</span>
+                  <strong data-governance-status="{{ kpi.governance_status }}">{{ kpi.governance_status_display }}</strong>
+               </div>
+               <div class="kpi-hero-metric kpi-hero-secondary">
+                  <span>Owner</span>
+                  <strong>{{ kpi.governance_accountable }}</strong>
+               </div>
+               <div class="kpi-hero-metric kpi-hero-secondary">
+                  <span>Source</span>
+                  <strong>{{ kpi.source_language_display }}</strong>
+               </div>
+               <div class="kpi-hero-metric kpi-hero-secondary">
+                  <span>Last Validation</span>
+                  <strong>{{ details.validation_date_display }}</strong>
+               </div>
+            </div>
+            <div class="leap-breadcrumb">
+               <span class="leap-breadcrumb-item">LEAP</span>
+               <span class="leap-breadcrumb-separator">/</span>
+               <span class="leap-breadcrumb-item">KPI Catalog</span>
+               <span class="leap-breadcrumb-separator">/</span>
+               <span class="leap-breadcrumb-item active">{{ kpi.display_name }}</span>
+            </div>
+         </section>
+
+         <main class="leap-main kpi-dossier-main" id="leap-main-content">
+            <div class="dossier-grid leap-dossier-grid">
+               <section class="kpi-zone-b-business kpi-dossier-left" data-zone="b">
+                  <section class="dossier-card leap-card-primary business-reading-card">
+                     <h3 class="leap-card-title">Executive Briefing</h3>
+                     <div class="owner-logic-block">
+                        <div class="micro-label">Executive Summary</div>
+                        <div class="business-copy">{{ details.business_owner_logic }}</div>
+                     </div>
+                     <div class="business-reading-grid">
+                        <div class="business-info-card plain-meaning-card">
+                           <div class="card-header">
+                              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                              <span class="card-title">Business Meaning</span>
+                           </div>
+                           <div class="card-body">{{ details.business_plain_meaning }}</div>
+                        </div>
+
+                        <div class="business-info-card decision-support-card">
+                           <div class="card-header">
+                              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                              <span class="card-title">Decision</span>
+                           </div>
+                           <div class="card-body">{{ details.business_decision_support }}</div>
+                        </div>
+
+                        <div class="business-info-card trust-posture-card">
+                           <div class="card-header">
+                              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 11l2 2 4-4"></path></svg>
+                              <span class="card-title">Trust</span>
+                           </div>
+                           <div class="card-body">
+                              {% if kpi.governance_status == 'Validated' %}
+                              Governed metric ready for operational decision support.
+                              {% else %}
+                              Decision use requires owner confirmation.
+                              {% endif %}
+                           </div>
+                        </div>
+
+                        <div class="business-info-card business-risk-card">
+                           <div class="card-header">
+                              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                              <span class="card-title">Risk</span>
+                           </div>
+                           <div class="card-body">Incorrect interpretation may affect {{ kpi.governance_domain_display }} planning, accountability, or exception response.</div>
+                        </div>
+
+                        <div class="business-info-card next-action-card">
+                           <div class="card-header">
+                              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                              <span class="card-title">Action</span>
+                           </div>
+                           <div class="card-body">{{ kpi.governance_accountable }} should monitor movement and confirm context when the metric changes materially.</div>
+                        </div>
+                     </div>
+                  </section>
+
+                  <section class="dossier-card leap-card-primary formula-dossier-card">
+                     <div class="card-title-row">
+                        <h3 class="leap-card-title">Mathematical Formulation</h3>
+                     </div>
+                     <div class="formula-panel">
+                        <div class="micro-label">Formal Formula</div>
+                        {% if details.formula_html %}
+                        {{ details.formula_html | safe }}
+                        {% else %}
+                        <div class="leap-business-formula-math" data-raw-formula="{{ details.business_formula | e }}"><span class="leap-formula-fallback">{{ details.business_formula }}</span></div>
+                        {% endif %}
+                        {% if kpi.formula_tokens or details.annotated_equation_html %}
+                        <div class="micro-label">Annotated Formula</div>
+                        <div class="leap-toggle-container" role="group" aria-label="Formula annotation perspective">
+                           <button type="button" class="leap-toggle-btn active" data-perspective="business">Business Interpretation</button>
+                           <button type="button" class="leap-toggle-btn" data-perspective="developer">Developer Lineage</button>
+                        </div>
+                        {% if kpi.formula_tokens %}
+                        <div class="leap-annotated-formula-wrapper leap-annotated-equation" data-perspective="business">
+                           {% for token in kpi.formula_tokens %}
+                           <div class="leap-formula-node{% if token.is_operator %} operator-node{% endif %}">
+                              <span class="leap-math-lbl{% if token.long_label %} long-line{% endif %}" data-biz="{{ token.business_label | e }}" data-dev="{{ (token.developer_mapping or token.developer_label) | e }}">{{ token.business_label | e }}</span>
+                              <div class="leap-math-pointer"></div>
+                              <span class="leap-math-render">{{ (token.math_symbol or token.symbol) | e }}</span>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ details.annotated_equation_html | safe }}
+                        {% endif %}
+                        {{ details.developer_lineage_html | safe }}
+                        {% endif %}
+                     </div>
+
+                     <details id="source-evidence" class="evidence-lineage-panel kpi-zone-d-evidence" data-zone="d">
+                        <summary>Evidence &amp; Lineage</summary>
+                        <div class="evidence-tabs" data-evidence-tabs>
+                           <div class="evidence-tab-list" role="tablist" aria-label="Evidence and lineage views">
+                              <button type="button" class="evidence-tab active" data-evidence-tab="source">Operational Logic</button>
+                              <button type="button" class="evidence-tab" data-evidence-tab="formula">Formula Lineage</button>
+                              <button type="button" class="evidence-tab" data-evidence-tab="provenance">Provenance</button>
+                              <button type="button" class="evidence-tab" data-evidence-tab="inputs">Inputs</button>
+                           </div>
+                           <div class="evidence-tab-panel active" data-evidence-panel="source">
+                              <div class="source-evidence-console">
+                                 <pre class="font-mono">{{ kpi.code_context | e | replace('\n', '&#10;') }}</pre>
+                              </div>
+                              <details class="nested-evidence-detail">
+                                 <summary>Inline evidence snippet</summary>
+                                 <pre class="font-mono">{{ details.evidence_snippet | e | replace('\n', '&#10;') }}</pre>
+                              </details>
+                           </div>
+                           <div class="evidence-tab-panel" data-evidence-panel="formula">
+                              {{ details.developer_lineage_html | safe }}
+                              <div class="evidence-detail-grid">
+                                 <div>
+                                    <div class="micro-label">Operational Intent</div>
+                                    <div>{{ details.walkthrough_operational_intent }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Verified Logic Mapping</div>
+                                    <div>{{ details.walkthrough_recipe_html | safe }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Logic Safeguards</div>
+                                    <div>{{ details.walkthrough_safeguards_html | safe }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Executive Alignment</div>
+                                    <div>{{ details.walkthrough_signoff }}</div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="evidence-tab-panel" data-evidence-panel="provenance">
+                              <div class="evidence-detail-grid">
+                                 <div><span class="micro-label">Business Data System</span><strong>{{ details.reporting_source }}</strong></div>
+                                 <div><span class="micro-label">Source File</span><strong class="font-mono">{{ kpi.source_file_display }}</strong></div>
+                                 <div><span class="micro-label">Source Line</span><strong>{{ kpi.source_line_number }}</strong></div>
+                                 <div><span class="micro-label">Definition Pattern</span><strong>{{ kpi.detection_kind_display }}</strong></div>
+                                 <div><span class="micro-label">Governance Domain</span><strong>{{ kpi.governance_domain_display }}</strong></div>
+                                 <div><span class="micro-label">KPI ID</span><strong class="font-mono">{{ kpi.kpi_identity_display }}</strong></div>
+                              </div>
+                           </div>
+                           <div class="evidence-tab-panel" data-evidence-panel="inputs">
+                              <div class="evidence-detail-grid">
+                                 <div>
+                                    <div class="micro-label">Business Usage</div>
+                                    <div>{{ details.used_in_kpis_html | safe }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Input Evidence</div>
+                                    <div>{{ details.input_measure_html | safe }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Definition</div>
+                                    <div>{{ details.description_html }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Business Context</div>
+                                    <div>{{ details.objective_html }}</div>
+                                 </div>
+                                 <div>
+                                    <div class="micro-label">Edge Cases / Comments</div>
+                                    <p class="font-mono">{{ details.comments }}</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </details>
+                  </section>
+               </section>
+
+               <aside class="leap-metadata-sidebar kpi-dossier-right kpi-zone-c-governance" data-zone="c" data-governance-status="{{ kpi.governance_status }}">
+                  <!-- PHASE 2: Right Rail - Governance Panel (ZONE C) -->
+               <div class="sidebar-card leap-card-secondary governance-card">
+                  <h3>Governance</h3>
+                  <div class="sidebar-status-badge {% if kpi.governance_status == 'Flagged' %}state-flagged{% elif kpi.governance_status == 'Validated' %}state-validated{% else %}state-needs-review{% endif %}" data-status="{{ kpi.governance_status }}">
+                     <span class="status-dot"></span>
+                     {{ kpi.governance_status_display }}
+                  </div>
+                  <div class="sidebar-meta-row"><span class="meta-label">Confidence:</span><span class="meta-value" data-confidence="{{ kpi.confidence_level }}">{{ kpi.confidence_display }}</span></div>
+                  <div class="sidebar-meta-row"><span class="meta-label">Accountable:</span><span class="meta-value">{{ kpi.governance_accountable }}</span></div>
+                  {% if kpi.governance.conflicts %}
+                  <div class="gov-conflict-subpanel">
+                     <span>GOVERNANCE CONFLICT</span>
+                     <p>
+                        Conflict detected. See Review Queue for details.
+                     </p>
+                  </div>
+                  {% endif %}
+               </div>
+
+               <div class="sidebar-card leap-card-secondary raci-card">
+                  <h3>RACI</h3>
+                  <div class="sidebar-meta-row">
+                     <span class="meta-label">Responsible:</span>
+                     <span class="meta-value">{{ kpi.governance_responsible }}</span>
+                  </div>
+                  <div class="sidebar-meta-row">
+                     <span class="meta-label">Accountable:</span>
+                     <span class="meta-value">{{ kpi.governance_accountable }}</span>
+                  </div>
+                  <div class="sidebar-meta-row">
+                     <span class="meta-label">Consulted:</span>
+                     <span class="meta-value">{{ kpi.governance_consulted }}</span>
+                  </div>
+                  <div class="sidebar-meta-row">
+                     <span class="meta-label">Informed:</span>
+                     <span class="meta-value">{{ kpi.governance_informed }}</span>
+                  </div>
+               </div>
+
+                <details class="sidebar-card leap-card-tertiary metadata-card">
+                   <summary><h3>Metadata</h3></summary>
+                   <div class="card-row"><span class="label">KPI_ID:</span><span class="value font-mono">{{ kpi.kpi_identity_display }}</span></div>
+                   {% if kpi.name_was_normalized %}
+                   <div class="card-row"><span class="label">Source Name:</span><span class="value code-font">{{ kpi.raw_name }}</span></div>
+                   {% endif %}
+                   <div class="card-row"><span class="label">Fingerprint:</span><span class="value code-font">{{ kpi.code_hash[:8] }}</span></div>
+                   <div class="card-row"><span class="label">Validated:</span><span class="value font-mono">{{ details.validation_date_display }}</span></div>
+                   <div class="card-row"><span class="label">Type:</span><span class="value">{{ kpi.source_language_display }} operational definition</span></div>
+                   <div class="card-row"><span class="label">Runtime:</span><span class="value code-font">Offline</span></div>
+                   <div class="card-row"><span class="label">Frequency:</span><span class="value code-font">On Demand</span></div>
+                </details>
+
+                <details class="sidebar-card leap-card-tertiary action-card">
+                   <summary><h3>Operational Actions</h3></summary>
+                   <button class="sidebar-btn btn-primary" type="button" onclick="window.print()">Print Certified Dossier</button>
+                   {% if kpi.has_source_link %}
+                   <a class="sidebar-btn btn-secondary" href="{{ kpi.vscode_url }}">Open in VS Code</a>
+                   <a class="sidebar-btn btn-secondary" href="{{ kpi.pycharm_url }}">Open in PyCharm</a>
+                   {% endif %}
+                   <a class="sidebar-btn btn-secondary" href="/edit?kpi={{ kpi.name | urlencode }}" target="_blank">Edit Dossier</a>
+                   <a class="sidebar-btn btn-secondary" href="discovery_report.html">Open Discovery Workspace</a>
+                   <a class="sidebar-btn btn-secondary" href="raci_directory.html">Open RACI Directory</a>
+                </details>
+
+               {% if kpi.governance.conflicts or kpi.compliance_alarms or kpi.governance.audit_notes %}
+               <div class="sidebar-card leap-card-secondary review-queue-card" id="governance-review-note">
+                  <h3>Review Queue</h3>
+                  <div class="review-status-header">
+                     <div class="sidebar-status-badge state-{{ kpi.governance_status | lower | replace(' ', '-') }}" style="margin-bottom: 0;">
+                        <span class="status-dot"></span>{{ kpi.governance_status }}
+                     </div>
+                  </div>
+                  <div class="review-message-body">
+{# 1. Compliance Alarms (Compliance review required) #}
+{% if kpi.compliance_alarms %}
+{% for alarm in kpi.compliance_alarms %}
+{% set std = alarm.framework %}
+{% if alarm.framework == 'SDAIA-PDPL' %}{% set std = 'KSA PDPL' %}
+{% elif alarm.framework == 'NCA-ECC' %}{% set std = 'KSA NCA ECC' %}
+{% elif alarm.framework == 'SOC2-TypeII' %}{% set std = 'SOC2' %}
+{% endif %}
+                        <div class="compliance-alarm-card">
+                           <div class="compliance-alarm-header">
+                              <span class="compliance-alarm-rule-id">Alert detected: {{ alarm.rule_id }}</span>
+                              <span class="compliance-alarm-status">Compliance review required</span>
+                           </div>
+                           <div class="compliance-alarm-meta">
+                              <strong>Mapped Standard:</strong> {{ std }}<br/>
+                              <strong>Category:</strong> {{ alarm.category }}<br/>
+{% if alarm.severity %}                               <strong>Severity:</strong> {{ alarm.severity }}<br/>{% endif %}
+                           </div>
+                           <div class="compliance-alarm-message">{{ alarm.message }}</div>
+{% if alarm.evidence %}                           <div class="compliance-alarm-evidence"><strong>Evidence:</strong> {{ alarm.evidence | join(', ') if alarm.evidence is iterable and alarm.evidence is not string else alarm.evidence }}</div>{% endif %}
+{% if alarm.recommended_action %}                           <div class="compliance-alarm-action"><strong>Recommended Action:</strong> {{ alarm.recommended_action }}</div>{% endif %}
+                        </div>
+{% endfor %}
+{% endif %}
+{# 2. Governance Conflicts (Governance review required) #}
+{% if kpi.governance.conflicts %}
+{% for conflict in kpi.governance.conflicts %}
+{% set reason = conflict.reason %}
+{% if "ISO Compliance & Governance Conflict" in reason %}
+{% set reason = reason | replace("ISO Compliance & Governance Conflict: ", "") %}
+{% endif %}
+                        <div class="review-signal-card signal-governance">
+                           <div class="signal-header">
+                              <span class="signal-badge">Governance Review Required</span>
+                           </div>
+                           <div class="signal-title">Governance conflict detected</div>
+                           <div class="signal-subtitle">Business rule and implementation require review</div>
+                           <div class="signal-message">{{ reason }}</div>
+                        </div>
+{% endfor %}
+{% endif %}
+{# 3. Technical Review Required #}
+{% if kpi.governance.audit_notes %}
+{% set ns_tech = namespace(rendered=[]) %}
+{% for note in kpi.governance.audit_notes %}
+{% if "BUG/TODO/FIXME" in note.reason or "potential development issues" in note.reason %}
+{% if note.reason not in ns_tech.rendered %}
+{% set ns_tech.rendered = ns_tech.rendered + [note.reason] %}
+                              <div class="review-signal-card signal-technical">
+                                 <div class="signal-header">
+                                    <span class="signal-badge">Technical Review Required</span>
+                                 </div>
+                                 <div class="signal-title">Potential Development Issues</div>
+                                 <div class="signal-message">{{ note.reason }}</div>
+                              </div>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{# 4. Owner Confirmation Required #}
+{% if kpi.governance.audit_notes %}
+{% set ns_owner = namespace(rendered=[]) %}
+{% for note in kpi.governance.audit_notes %}
+{% if "business formula comment not declared" in note.reason or "missing/incomplete formula" in note.reason %}
+{% if note.reason not in ns_owner.rendered %}
+{% set ns_owner.rendered = ns_owner.rendered + [note.reason] %}
+                              <div class="review-signal-card signal-owner">
+                                 <div class="signal-header">
+                                    <span class="signal-badge">Owner Confirmation Required</span>
+                                 </div>
+                                 <div class="signal-title">Business Evidence Confirmation</div>
+                                 <div class="signal-message">{{ note.reason }}</div>
+                              </div>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+                  </div>
+                  <textarea class="review-queue-text" readonly>{{ details.review_body_textarea | safe }}</textarea>
+
+                  <div class="review-actions-instruction">
+                     Send or copy this review request to the accountable owner or domain subject matter expert (SME).
+                  </div>
+                  <a id="open-email-draft-btn" class="sidebar-btn btn-secondary" href="{{ details.review_mailto }}">Open Email Draft</a>
+                  <button class="sidebar-btn btn-secondary" type="button" onclick="copyLeapReviewText(this)">Copy Review Text</button>
+               </div>
+               {% endif %}
+            </aside>
+         </div>
+         </main>
+
+    <footer class="leap-footer compact-enterprise-footer">
+      <div class="compact-footer-inner">
+        <div class="compact-footer-brand">
+          <strong>LEAP AXIS KPI Intelligence Workspace</strong>
+          <span>AI: Offline Mode · Deterministic AST Engine</span>
+        </div>
+        <div class="compact-footer-links">
+          <a href="index.html">Workspace</a>
+          <a href="discovery_report.html">Discovery</a>
+          <a href="raci_directory.html">RACI</a>
+        </div>
+        <div class="compact-footer-certifications">
+          <span>SDAIA PDPL</span>
+          <span>NCA ECC</span>
+          <span>ISO 22400</span>
+        </div>
+      </div>
+    </footer>
+	   <script>
+	      (function () {
+	         function runLeapMathJax(target) {
+	            if (!window.MathJax) return;
+	            if (window.MathJax.typesetPromise) {
+	               window.MathJax.typesetPromise(target ? [target] : undefined).catch(function () {});
+	               return;
+	            }
+	            if (window.MathJax.typeset) {
+	               try {
+	                  window.MathJax.typeset(target ? [target] : undefined);
+	               } catch (error) {}
+	            }
+	         }
+	         function stripOuterParens(value) {
+            var text = (value || "").trim();
+            while (text.charAt(0) === "(" && text.charAt(text.length - 1) === ")") {
+               var depth = 0;
+               var balanced = true;
+               for (var i = 0; i < text.length; i += 1) {
+                  if (text.charAt(i) === "(") depth += 1;
+                  if (text.charAt(i) === ")") depth -= 1;
+                  if (depth === 0 && i < text.length - 1) {
+                     balanced = false;
+                     break;
+                  }
+               }
+               if (!balanced) break;
+               text = text.slice(1, -1).trim();
+            }
+            return text;
+         }
+         function splitTopLevel(value, operators) {
+            var text = value || "";
+            var depth = 0;
+            for (var i = text.length - 1; i >= 0; i -= 1) {
+               var ch = text.charAt(i);
+               if (ch === ")") depth += 1;
+               else if (ch === "(") depth -= 1;
+               else if (depth === 0 && operators.indexOf(ch) >= 0) {
+                  if (ch === "-" && i === 0) continue;
+                  return [text.slice(0, i), ch, text.slice(i + 1)];
+               }
+            }
+            return null;
+         }
+         function texVariable(value) {
+            var text = stripOuterParens(value || "")
+               .replace(/`/g, "")
+               .replace(/["']/g, "")
+               .replace(/\s+/g, " ")
+               .trim();
+            if (!text) return "";
+            if (/^\d+(?:\.\d+)?$/.test(text)) return text;
+            return "\\text{" + text.replace(/_/g, " ") + "}";
+         }
+         function cleanExpression(value) {
+            return (value || "")
+               .replace(/&amp;/g, "&")
+               .replace(/×/g, "*")
+               .replace(/÷/g, "/")
+               .replace(/\breturn\b\s*/gi, "")
+               .replace(/\bNULLIF\s*\(\s*([^,()]+)\s*,\s*0(?:\.0)?\s*\)/gi, "$1")
+               .replace(/\bSUM\s*\(\s*([^()]+)\s*\)/gi, "$1")
+               .replace(/\bAVG\s*\(\s*([^()]+)\s*\)/gi, "$1")
+               .replace(/\bCOUNT\s*\(\s*([^()]+)\s*\)/gi, "$1")
+               .trim();
+         }
+         function expressionToTex(value) {
+            var expr = stripOuterParens(cleanExpression(value));
+            var split = splitTopLevel(expr, ["+", "-"]);
+            if (split) return expressionToTex(split[0]) + " " + split[1] + " " + expressionToTex(split[2]);
+            split = splitTopLevel(expr, ["*"]);
+            if (split) return expressionToTex(split[0]) + " \\times " + expressionToTex(split[2]);
+            split = splitTopLevel(expr, ["/"]);
+            if (split) return "\\frac{" + expressionToTex(split[0]) + "}{" + expressionToTex(split[2]) + "}";
+            return texVariable(expr);
+         }
+         function renderBusinessFormula(container) {
+            var raw = container.getAttribute("data-raw-formula") || "";
+            if (!/[+\-*/×÷]/.test(raw)) return;
+            var tex = expressionToTex(raw);
+            if (!tex) return;
+	            container.innerHTML = "\\[" + tex + "\\]";
+	            runLeapMathJax(container);
+	         }
+	         window.switchLeapMath = function (panel, perspective) {
+	            var equation = panel.querySelector(".leap-annotated-equation, .leap-annotated-formula-wrapper");
+	            if (!equation) return;
+	            equation.setAttribute("data-perspective", perspective);
+            var lineage = panel.querySelector(".leap-code-lineage");
+            if (lineage) lineage.hidden = perspective !== "developer";
+            equation.querySelectorAll(".leap-math-lbl").forEach(function (annotation) {
+		               var label = annotation.getAttribute(perspective === "developer" ? "data-dev" : "data-biz");
+		               if (label) annotation.textContent = label;
+               annotation.style.removeProperty("color");
+               annotation.style.removeProperty("background-color");
+               annotation.style.removeProperty("border-color");
+		            });
+	            runLeapMathJax(panel);
+	         };
+         document.querySelectorAll(".formula-panel").forEach(function (panel) {
+            var equation = panel.querySelector(".leap-annotated-equation, .leap-annotated-formula-wrapper");
+            var buttons = panel.querySelectorAll(".leap-toggle-btn");
+            if (!equation || !buttons.length) return;
+            buttons.forEach(function (button) {
+               button.addEventListener("click", function () {
+                  var perspective = button.getAttribute("data-perspective") || "business";
+                  window.switchLeapMath(panel, perspective);
+                  buttons.forEach(function (tabButton) {
+                     tabButton.classList.toggle("active", tabButton === button);
+                  });
+               });
+            });
+	         });
+	         document.querySelectorAll("[data-evidence-tabs]").forEach(function (tabs) {
+	            var buttons = tabs.querySelectorAll("[data-evidence-tab]");
+	            var panels = tabs.querySelectorAll("[data-evidence-panel]");
+	            buttons.forEach(function (button) {
+	               button.addEventListener("click", function () {
+	                  var target = button.getAttribute("data-evidence-tab");
+	                  buttons.forEach(function (tabButton) {
+	                     tabButton.classList.toggle("active", tabButton === button);
+	                  });
+	                  panels.forEach(function (panel) {
+	                     panel.classList.toggle("active", panel.getAttribute("data-evidence-panel") === target);
+	                  });
+	               });
+	            });
+	         });
+	         document.querySelectorAll(".leap-business-formula-math").forEach(renderBusinessFormula);
+            function syncLeapThemeControls() {
+               var currentTheme = localStorage.getItem("leap-theme") || "light-teal";
+               document.documentElement.setAttribute("data-theme", currentTheme);
+               document.body.setAttribute("data-theme", currentTheme);
+               document.querySelectorAll("[data-leap-theme-select]").forEach(function (select) {
+                  select.value = currentTheme;
+                  select.addEventListener("change", function () {
+                     localStorage.setItem("leap-theme", select.value);
+                     document.documentElement.setAttribute("data-theme", select.value);
+                     document.body.setAttribute("data-theme", select.value);
+                     document.querySelectorAll("[data-leap-theme-select]").forEach(function (peer) {
+                        if (peer !== select) peer.value = select.value;
+                     });
+                  });
+               });
+            }
+            function updateLeapClock() {
+               var now = new Date();
+               var zone = "";
+               try {
+                  zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+               } catch (err) {
+                  zone = "";
+               }
+               var dateText = now.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+               var timeText = now.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+               document.querySelectorAll("[data-leap-clock]").forEach(function (clock) {
+                  clock.textContent = zone ? dateText + " · " + timeText + " · " + zone : dateText + " · " + timeText;
+               });
+            }
+	         window.addEventListener("DOMContentLoaded", function () {
+               syncLeapThemeControls();
+               updateLeapClock();
+               window.setInterval(updateLeapClock, 60000);
+	            runLeapMathJax();
+	         });
+	         window.copyLeapReviewText = function (button) {
+	            var card = button.closest(".review-queue-card");
+	            var text = card ? card.querySelector(".review-queue-text") : null;
+	            if (!text) return;
+	            text.select();
+	            var value = text.value || "";
+	            var done = function () {
+	               var previous = button.textContent;
+	               button.textContent = "Copied";
+	               setTimeout(function () { button.textContent = previous; }, 1400);
+	            };
+	            if (navigator.clipboard && navigator.clipboard.writeText) {
+	               navigator.clipboard.writeText(value).then(done).catch(function () {
+	                  document.execCommand("copy");
+	                  done();
+	               });
+	            } else {
+	               document.execCommand("copy");
+	               done();
+	            }
+	         };
+	         window.openLeapSourceEvidence = function (event) {
+	            if (event) event.preventDefault();
+	            var section = document.getElementById("source-evidence");
+	            if (!section) return;
+	            var details = section.matches("details") ? section : section.querySelector("details");
+	            if (details) details.open = true;
+	            section.scrollIntoView({ behavior: "smooth", block: "start" });
+	         };
+	      })();
+   </script>
+      </div>
+   </div>

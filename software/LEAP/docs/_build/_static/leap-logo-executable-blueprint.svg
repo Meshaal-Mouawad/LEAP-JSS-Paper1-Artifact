@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">LEAP Executable Blueprint</title>
+  <desc id="desc">A restrained LEAP mark showing three executable evidence layers and a teal code fingerprint dot.</desc>
+  <rect x="12" y="15" width="40" height="8" rx="2" fill="#1C1D20"/>
+  <rect x="12" y="28" width="32" height="8" rx="2" fill="#1C1D20"/>
+  <rect x="12" y="41" width="25" height="8" rx="2" fill="#1C1D20"/>
+  <circle cx="48" cy="45" r="5" fill="#0D9488"/>
+  <path d="M14 12h7v40h-7z" fill="#1C1D20"/>
+</svg>

@@ -1,0 +1,50 @@
+[
+  {
+    "kpi_name": "yield",
+    "roles": {
+      "Business Owner": "good_units / total_units",
+      "Data Owner": "good_units / total_units",
+      "Developer": "good_units / total_units"
+    }
+  },
+  {
+    "kpi_name": "throughput",
+    "roles": {
+      "Business Owner": "output_units / input_units",
+      "Data Owner": "input_units / output_units",
+      "Developer": "output_units / input_units"
+    }
+  },
+  {
+    "kpi_name": "yield_rate",
+    "roles": {
+      "Business Owner": "good_units / total_units",
+      "Data Owner": "good_units / total_units",
+      "Developer": "good_units / total_units"
+    }
+  },
+  {
+    "kpi_name": "Yield Rate (Correct)",
+    "roles": {
+      "Business Owner": "good_output_mass / raw_input_mass",
+      "Data Owner": "good_output_mass / raw_input_mass",
+      "Developer": "good_output_mass / raw_input_mass"
+    }
+  },
+  {
+    "kpi_name": "profit_margin",
+    "roles": {
+      "Business Owner": "(revenue - cost) / revenue",
+      "Data Owner": "revenue - cost",
+      "Developer": "revenue - cost"
+    }
+  },
+  {
+    "kpi_name": "production_yield",
+    "roles": {
+      "Business Owner": "output / input",
+      "Data Owner": "good_units / total_units",
+      "Developer": "good / total"
+    }
+  }
+]

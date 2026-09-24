@@ -1,0 +1,106 @@
+/* ECDS Foundation Tokens */
+:root {
+  /* Border Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 4px 18px rgba(15, 23, 42, 0.05);
+
+  /* Motion */
+  --transition-default: 200ms ease-in-out;
+}
+
+/* Theme: Enterprise Mission Control (Dark) */
+[data-theme='dark'] {
+  --charcoal: #F8FAFC;
+  --business-teal: #2DD4BF;
+  --technical-slate: #94A3B8;
+  --slate-bg: #0F172A;
+  --container-bg: #1E293B;
+  --surface: #1E293B;
+  --surface-soft: #334155;
+  --platinum-border: #475569;
+  --text-muted: #94A3B8;
+  --success: #2DD4BF;
+
+  /* Semantic state tokens — dark variants */
+  --warning-surface: #422006;
+  --warning-border: #854D0E;
+  --warning-text: #FDE68A;
+  --danger-surface: #450A0A;
+  --danger-border: #7F1D1D;
+  --danger-text: #FCA5A5;
+  --info-surface: #0C1A35;
+  --info-border: #1E40AF;
+  --info-text: #93C5FD;
+  --success-tint: #022C22;
+  --success-border: #065F46;
+  --code-panel-border: #334155;
+}
+
+/* Theme: Current LEAP Evolution (Classic) */
+[data-theme='classic'] {
+  --charcoal: #1C1D20;
+  --business-teal: #059669;
+  --technical-slate: #4B5563;
+  --slate-bg: #FFFFFF;
+  --container-bg: #F9FAFB;
+  --surface: #FFFFFF;
+  --surface-soft: #F3F4F6;
+  --platinum-border: #D1D5DB;
+  --text-muted: #6B7280;
+  --success: #059669;
+
+  /* Semantic state tokens — classic light variants */
+  --warning-surface: #FFFBEB;
+  --warning-border: #FDE68A;
+  --warning-text: #B45309;
+  --danger-surface: #FFF5F5;
+  --danger-border: #FEB2B2;
+  --danger-text: #9B2C2C;
+  --info-surface: #EFF6FF;
+  --info-border: #BFDBFE;
+  --info-text: #2563EB;
+  --success-tint: #F0FDFA;
+  --success-border: #CCFBF1;
+  --code-panel-border: #D1D5DB;
+}
+
+/* Base Theme: Enterprise Cognitive Workspace (Light Teal - Default) */
+[data-theme='light-teal'] {
+  --charcoal: #1C1D20;
+  --business-teal: #004E5A;
+  --technical-slate: #2C3E50;
+  --slate-bg: #F6F7F9;
+  --container-bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --surface-soft: #F8FAFC;
+  --platinum-border: #E1E8ED;
+  --text-muted: #64748B;
+  --success: #004E5A;
+
+  /* Semantic state tokens — light-teal variants */
+  --warning-surface: #FFFBEB;
+  --warning-border: #FDE68A;
+  --warning-text: #B45309;
+  --danger-surface: #FFF5F5;
+  --danger-border: #FEB2B2;
+  --danger-text: #9B2C2C;
+  --info-surface: #EFF6FF;
+  --info-border: #BFDBFE;
+  --info-text: #2563EB;
+  --success-tint: #F0FDFA;
+  --success-border: #CCFBF1;
+  --code-panel-border: #E1E8ED;
+}
+
+/* Base body/shell variables to apply to UI */
+body {
+  background-color: var(--slate-bg);
+  color: var(--charcoal);
+  transition: background-color var(--transition-default), color var(--transition-default);
+}

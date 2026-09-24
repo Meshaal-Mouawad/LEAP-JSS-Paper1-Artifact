@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, cite the accompanying manuscript and this artifact."
+type: software
+title: "LEAP JSS Paper 1 Research Artifact"
+authors:
+  - family-names: Mouawad
+    given-names: Meshaal Obaid
+  - family-names: Jones
+    given-names: Bryan A.
+version: "1.0"
+license: MIT
+repository-code: "https://github.com/Meshaal-Mouawad/LEAP-JSS-Paper1-Artifact"
+# Clean publication repository; access remains private until author approval.

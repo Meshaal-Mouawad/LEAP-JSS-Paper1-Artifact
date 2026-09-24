@@ -1,0 +1,104 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+
+\usepackage[margin=18mm,includeheadfoot]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\definecolor{LeapCharcoal}{HTML}{1C1D20}
+\definecolor{LeapTeal}{HTML}{0D9488}
+\definecolor{LeapBorder}{HTML}{CBD5E1}
+\definecolor{LeapMuted}{HTML}{64748B}
+\definecolor{LeapPanel}{HTML}{F8FAFC}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LeapCharcoal,
+  urlcolor=LeapTeal,
+  citecolor=LeapTeal,
+  pdfauthor={LEAP Platform},
+  pdftitle={Certified KPI Bluebook}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{LeapCharcoal}{\textbf{LEAP Platform}}}
+\chead{\textcolor{LeapMuted}{Certified KPI Bluebook}}
+\rhead{\textcolor{LeapTeal}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{LeapBorder}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\section}
+  {\large\bfseries\color{LeapCharcoal}}
+  {\thesection}{0.6em}{}
+  [\vspace{2pt}{\color{LeapTeal}\titlerule[0.7pt]}]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{LeapCharcoal}}
+  {\thesubsection}{0.6em}{}
+
+\setlist[itemize]{leftmargin=*,nosep}
+\setlist[enumerate]{leftmargin=*,nosep}
+\setlength{\columnsep}{8mm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\newcommand{\LeapTitle}[3]{
+  \twocolumn[
+    \begin{center}
+      {\Huge\bfseries\color{LeapCharcoal} #1}\\[4pt]
+      {\large\color{LeapMuted} #2}\\[8pt]
+      {\small\color{LeapTeal}\textbf{#3}}
+    \end{center}
+    \vspace{8pt}
+  ]
+}
+
+\newcommand{\KpiDossierHeader}[4]{
+  \section*{#1}
+  \begin{tabularx}{\linewidth}{@{}lX@{}}
+    \textcolor{LeapMuted}{KPI ID} & \texttt{#2} \\
+    \textcolor{LeapMuted}{Owner} & #3 \\
+    \textcolor{LeapMuted}{Source} & \texttt{#4} \\
+  \end{tabularx}
+  \vspace{4pt}
+}
+
+\newenvironment{LeapEvidenceBox}[1]{
+  \vspace{4pt}
+  \noindent\begin{tabularx}{\linewidth}{@{}X@{}}
+  \toprule
+  \textbf{\textcolor{LeapCharcoal}{#1}}\\
+  \midrule
+}{
+  \\
+  \bottomrule
+  \end{tabularx}
+  \vspace{6pt}
+}
+
+\newcommand{\RaciBadge}[2]{
+  \fcolorbox{LeapBorder}{LeapPanel}{\textbf{#1}}\hspace{4pt}#2
+}
+
+\begin{document}
+
+\LeapTitle
+  {Certified KPI Bluebook}
+  {LEAP PLATFORM: Full enterprise-grade KPI intelligence platform}
+  {Offline KPI Discovery, Governance Lineage, and Executable Evidence}
+
+% The generator should inject KPI dossier sections below this marker.
+% {{ KPI_DOSSIER_CONTENT }}
+
+\end{document}

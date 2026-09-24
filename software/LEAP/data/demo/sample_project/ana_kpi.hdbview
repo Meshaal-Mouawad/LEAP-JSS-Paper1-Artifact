@@ -1,0 +1,10 @@
+{
+  "viewDefinition": {
+    "columns": [
+      {
+        "name": "kpi_flare_recovery_pct",
+        "expression": "(recovered_gas_m3 / NULLIF(total_gas_m3,0)) * 100"
+      }
+    ]
+  }
+}

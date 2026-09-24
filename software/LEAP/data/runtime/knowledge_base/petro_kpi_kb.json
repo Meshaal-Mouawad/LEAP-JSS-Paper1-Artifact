@@ -1,0 +1,137 @@
+[
+  {
+    "name": "Ethylene Yield Percentage",
+    "description": "Proportion of ethylene produced relative to feedstock input, indicating conversion efficiency.",
+    "objective": "Maximize conversion while minimizing losses and off-spec product.",
+    "input_measure": "Ethylene produced (tons) and feedstock volume (tons) for the period.",
+    "unit_of_measure": "%",
+    "reporting_source": "Process historian and production execution logs.",
+    "comments": ""
+  },
+  {
+    "name": "Propylene to Ethylene (P/E) Ratio",
+    "description": "Ratio of propylene production to ethylene production used to assess product slate balance.",
+    "objective": "Align product mix with market demand and margin objectives.",
+    "input_measure": "Propylene produced (tons) and ethylene produced (tons).",
+    "unit_of_measure": "ratio (dimensionless)",
+    "reporting_source": "Process historian (e.g., AVEVA PI System) and control system archives.",
+    "comments": ""
+  },
+  {
+    "name": "Daily Feedstock Throughput (tons/day)",
+    "description": "Average processing rate of feedstock normalized to a per-day basis.",
+    "objective": "Maximize utilization within equipment, energy, and safety constraints.",
+    "input_measure": "Total feedstock processed (tons) and hours online in the period.",
+    "unit_of_measure": "tons/day",
+    "reporting_source": "Process historian and shift reports.",
+    "comments": ""
+  },
+  {
+    "name": "Polymer Melt Flow Index (MFI) Variance",
+    "description": "Variance of MFI results across polymer samples, indicating consistency of flow characteristics.",
+    "objective": "Maintain product quality and process stability by minimizing variability.",
+    "input_measure": "MFI test results from production or lab samples.",
+    "unit_of_measure": "dimensionless",
+    "reporting_source": "Laboratory information system (LIMS) and QA records.",
+    "comments": ""
+  },
+  {
+    "name": "Overall Equipment Effectiveness (OEE)",
+    "description": "Composite KPI of Availability, Performance, and Quality expressed as a percentage.",
+    "objective": "Increase effective productive time by reducing downtime, speed losses, and quality losses.",
+    "input_measure": "Availability, performance, and quality factors for the asset or line.",
+    "unit_of_measure": "%",
+    "reporting_source": "MES/production systems and equipment runtime counters.",
+    "comments": ""
+  },
+  {
+    "name": "Energy Intensity Index (EII)",
+    "description": "Index comparing actual energy consumption to a reference baseline for similar units.",
+    "objective": "Improve energy efficiency and reduce operating costs while meeting production targets.",
+    "input_measure": "Total energy consumed by unit, production volume, and reference baseline.",
+    "unit_of_measure": "index (dimensionless)",
+    "reporting_source": "Energy meters, historian, and energy accounting systems.",
+    "comments": ""
+  },
+  {
+    "name": "Specific Steam Consumption (ton/ton)",
+    "description": "Steam usage normalized by product mass.",
+    "objective": "Optimize steam distribution and reduce utility costs without affecting quality.",
+    "input_measure": "Total steam used (tons) and product produced (tons).",
+    "unit_of_measure": "ton/ton",
+    "reporting_source": "Utility meters and historian.",
+    "comments": ""
+  },
+  {
+    "name": "Cooling Water Delta-T (°C)",
+    "description": "Temperature rise across cooling water circuits, indicating heat removal performance.",
+    "objective": "Maintain proper heat exchange to protect equipment and ensure product quality.",
+    "input_measure": "Cooling water outlet and inlet temperatures.",
+    "unit_of_measure": "°C",
+    "reporting_source": "Process historian and DCS sensors.",
+    "comments": ""
+  },
+  {
+    "name": "Mean Time Between Failures (MTBF)",
+    "description": "Average operating time between equipment failures.",
+    "objective": "Improve reliability and reduce unplanned downtime.",
+    "input_measure": "Operating hours and number of failures for the asset.",
+    "unit_of_measure": "hours per failure",
+    "reporting_source": "CMMS and historian runtime counters.",
+    "comments": ""
+  },
+  {
+    "name": "Pump Vibration Anomaly Rate",
+    "description": "Frequency of vibration anomalies above control limits across monitored pumps.",
+    "objective": "Detect early signs of mechanical degradation to prevent failures.",
+    "input_measure": "Count of vibration events and monitoring intervals per pump.",
+    "unit_of_measure": "events per period",
+    "reporting_source": "Condition monitoring system and historian.",
+    "comments": ""
+  },
+  {
+    "name": "SOx Emissions Concentration (kg/m³)",
+    "description": "Measured concentration of sulfur oxides in flue gas.",
+    "objective": "Ensure environmental compliance and minimize emissions.",
+    "input_measure": "SOx concentration readings from CEMS or stack analyzers.",
+    "unit_of_measure": "kg/m³",
+    "reporting_source": "CEMS and environmental reporting systems.",
+    "comments": ""
+  },
+  {
+    "name": "Flare Gas Recovery Rate",
+    "description": "Percentage of total gas recovered instead of flared.",
+    "objective": "Reduce flaring and emissions through effective recovery operations.",
+    "input_measure": "Gas flared (m³) and gas recovered (m³) over the period.",
+    "unit_of_measure": "%",
+    "reporting_source": "Flare meters and recovery system flow meters via historian.",
+    "comments": ""
+  },
+  {
+    "name": "On‑Spec Production Percentage",
+    "description": "Share of total production that meets all specification limits.",
+    "objective": "Increase first-pass quality and reduce rework or scrap.",
+    "input_measure": "Counts of on-spec batches and total batches.",
+    "unit_of_measure": "%",
+    "reporting_source": "Quality/MES systems and batch records.",
+    "comments": ""
+  },
+  {
+    "name": "Specific Catalyst Cost ($/ton)",
+    "description": "Catalyst cost normalized by product mass.",
+    "objective": "Control catalyst spend while maintaining performance.",
+    "input_measure": "Catalyst cost and product quantity for the period.",
+    "unit_of_measure": "currency per ton",
+    "reporting_source": "ERP/finance system and production totals from historian or MES.",
+    "comments": ""
+  },
+  {
+    "name": "Maintenance to Operating Cost Ratio",
+    "description": "Share of maintenance cost relative to total operating cost.",
+    "objective": "Balance maintenance investment against reliability and throughput.",
+    "input_measure": "Maintenance costs and total operating costs for the period.",
+    "unit_of_measure": "ratio (dimensionless)",
+    "reporting_source": "ERP/finance system and cost reporting.",
+    "comments": ""
+  }
+]

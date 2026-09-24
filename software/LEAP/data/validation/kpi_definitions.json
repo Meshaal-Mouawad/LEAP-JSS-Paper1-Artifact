@@ -1,0 +1,27 @@
+[
+  {
+    "kpi_name": "yield",
+    "definition": "Yield = good_units / total_units",
+    "expected_flag": "none"
+  },
+  {
+    "kpi_name": "throughput",
+    "definition": "Throughput = output_units / input_units",
+    "expected_flag": "gov_conflict"
+  },
+  {
+    "kpi_name": "yield_rate",
+    "definition": "Yield Rate = good_units / total_units",
+    "expected_flag": "definition_mismatch"
+  },
+  {
+    "kpi_name": "profit_margin",
+    "definition": "Profit Margin = (revenue - cost) / revenue",
+    "expected_flag": "both"
+  },
+  {
+    "kpi_name": "production_yield",
+    "definition": "Production Yield = output / input",
+    "expected_flag": "none_semantic"
+  }
+]
