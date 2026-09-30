@@ -1,5 +1,0 @@
-- LEAP links executable KPI evidence, formulas, business context, and review state.
-- Literate-programming principles guide a source-linked KPI knowledge record.
-- A worked example connects source annotations to a generated KPI dossier.
-- Verification separates discovery, prepared-record scenarios, and MATE checks.
-- Optional AI-assisted authoring remains separate from source-derived evidence.

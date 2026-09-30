@@ -1,0 +1,309 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./LEAP_JSS_sprint7_method_revision.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+(./cas-dc.cls
+Document Class: cas-dc 2024/05/04, 2.4: Formatting class for CAS double column 
+articles
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/fleqn.clo)
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/preprint/balance.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/makecell/makecell.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx)))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/dcolumn.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/sttools/stfloats.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/xstring/xstring.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xstring/xstring.tex))
+(/usr/share/texlive/texmf-dist/tex/latex/footmisc/footmisc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/svgnam.def)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/share/texlive/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))
+(./cas-common.sty
+(/usr/share/texlive/texmf-dist/tex/latex/moreverb/moreverb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/stix.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/inconsolata.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex))))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstpatch.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/placeins/placeins.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.sty
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-pdftex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/xurl/xurl.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/t1stix.fd)
+(./LEAP_JSS_sprint7_method_revision.aux)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls1stix.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls2stix.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(./LEAP_JSS_sprint7_method_revision.out)
+(./LEAP_JSS_sprint7_method_revision.out)
+(/usr/share/texlive/texmf-dist/tex/latex/upquote/upquote.sty)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictio
+nary-english.trsl)
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-ptm.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ts1stix.fd)
+[0{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
+dist/fonts/enc/dvips/stix/stix-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/
+dvips/stix/stix-ts1.enc}]
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls1stixscr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls2stixex.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls1stixfrak.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls1stixbb.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls2stixcal.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls1stixsf.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/stix/ls2stixtt.fd)
+Overfull \hbox (123.62721pt too wide) detected at line 120
+[]
+(./LEAP_JSS_sprint7_method_revision.abs)
+
+Package hyperref Warning: Ignoring empty anchor on input line 120.
+
+
+Package hyperref Warning: Ignoring empty anchor on input line 120.
+
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+
+Package hyperref Warning: Ignoring empty anchor on input line 120.
+
+
+
+[1{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}{/usr/
+share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc} </usr/share/texlive/texmf
+-dist/tex/latex/els-cas-templates/thumbnails/cas-email.jpeg>]
+Underfull \hbox (badness 1478) in paragraph at lines 149--150
+   [] \T1/stix/m/n/10 (+20) What ex-e-cu-tion char-ac-ter-is-tics are ob-served
+ in
+
+
+Underfull \hbox (badness 1043) in paragraph at lines 182--183
+\T1/stix/m/n/10 (+20) anal-y-sis, code nat-u-ral-ness, learned rep-re-sen-ta-ti
+ons, and
+
+Underfull \hbox (badness 7081) in paragraph at lines 182--183
+\T1/stix/m/n/10 (+20) natural-language sum-maries [][]Al-la-ma-nis et al.[][] (
+[][]2018[][]).
+
+Underfull \hbox (badness 1237) in paragraph at lines 182--183
+\T1/stix/m/n/10 (+20) Transformer-based mod-els fur-ther ex-panded the abil-ity
+
+
+[2]
+Underfull \hbox (badness 4254) in paragraph at lines 194--195
+[]\T1/stix/m/n/10 (+20) The \T1/stix/m/it/10 (+20) In-ter-ac-tive Blue-book \T1
+/stix/m/n/10 (+20) is de-signed around the
+
+Underfull \hbox (badness 1205) in paragraph at lines 202--203
+[]\T1/stix/m/n/10 (+20) The rel-e-vant re-search tra-di-tions are com-ple-men-t
+ary
+
+Underfull \hbox (badness 1590) in paragraph at lines 202--203
+\T1/stix/m/n/10 (+20) het-ero-ge-neous en-gi-neer-ing en-ti-ties and re-la-tion
+s [][]Wang
+
+
+[3]
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 319--319
+[]|\T1/cmss/bx/n/9 (+20) Source/formula
+
+Underfull \hbox (badness 1668) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) 15 sce-nario files; 4
+
+Underfull \hbox (badness 10000) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) SQL-shaped con-text,
+
+Underfull \hbox (badness 2351) in paragraph at lines 319--319
+\T1/cmss/m/n/9 (+20) not com-plete di-alect
+
+Underfull \hbox (badness 1577) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) One \T1/zi4/m/n/9 .tsql \T1/cmss/m/n/9 (+20) and one
+
+Underfull \hbox (badness 3396) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) One \T1/zi4/m/n/9 .hdbview \T1/cmss/m/n/9 (+20) demo
+
+Underfull \hbox (badness 6944) in paragraph at lines 319--319
+\T1/cmss/m/n/9 (+20) plicit for-mula meta-
+
+Underfull \hbox (badness 2591) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) Widened con-text for
+
+Underfull \hbox (badness 1484) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) DAX / Struc-tured
+
+Underfull \hbox (badness 10000) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) Supported tex-tual
+
+Underfull \hbox (badness 10000) in paragraph at lines 319--319
+\T1/cmss/m/n/9 (+20) forms and lo-cal
+
+Underfull \hbox (badness 1509) in paragraph at lines 319--319
+[]|\T1/cmss/m/n/9 (+20) Explicit meta-data re-
+
+Underfull \hbox (badness 1540) in paragraph at lines 325--326
+[]\T1/stix/m/n/10 (+20) The Math-e-mat-i-cal An-no-ta-tion and Tag-ging En-gine
+
+
+Underfull \hbox (badness 1755) in paragraph at lines 325--326
+\T1/stix/m/n/10 (+20) ex-plicit La-TeX, ren-der-ing sup-ported ex-pres-sion for
+ms,
+
+Underfull \hbox (badness 1509) in paragraph at lines 325--326
+\T1/stix/m/n/10 (+20) and link-ing for-mula to-kens to busi-ness and de-vel-ope
+r
+
+
+[5 <./figs/fig04_architecture_overview.pdf>]
+Underfull \hbox (badness 4366) in paragraph at lines 364--364
+\T1/cmss/m/n/9 (+20) age man-i-fest iden-ti-fies the
+
+Underfull \hbox (badness 10000) in paragraph at lines 364--364
+[]|\T1/cmss/m/n/9 (+20) Declared/supported ex-pres-sion,
+
+Underfull \hbox (badness 7168) in paragraph at lines 364--364
+[]|\T1/cmss/m/n/9 (+20) Dossier, for-mula per-spec-tives,
+
+Underfull \hbox (badness 10000) in paragraph at lines 364--364
+[]|\T1/cmss/m/n/9 (+20) Templates and gen-er-ated
+
+Underfull \hbox (badness 10000) in paragraph at lines 364--364
+\T1/cmss/m/n/9 (+20) HTML over the pre-pared
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty)
+[6]
+
+[7 <./figs/fig42_formula_extraction_engine.pdf>]
+
+Underfull \hbox (badness 10000) in paragraph at lines 459--459
+[]|\T1/cmss/m/n/9 (+20) Frozen source and
+
+Underfull \hbox (badness 1661) in paragraph at lines 459--459
+[]|\T1/cmss/m/n/9 (+20) 28 dossiers; 32 HTML
+
+Underfull \hbox (badness 2418) in paragraph at lines 462--463
+[]\T1/stix/m/n/10 (+20) The frozen research-artifact snap-shot de-rives from
+
+Underfull \hbox (badness 1496) in paragraph at lines 462--463
+\T1/stix/m/n/10 (+20) fi-nal archived ver-i-fi-ca-tion record, QA-003, re-ports
+ the
+
+[8 <./figs/fig_dev_review_workflow.pdf>]
+Underfull \hbox (badness 1377) in paragraph at lines 468--469
+\T1/stix/m/n/10 (+20) Candidate-promotion tests call the repository-discovery
+
+
+[9 <./figs/fig39_literate_programming_bridge.pdf>]
+
+[10 <./figs/fig_dashboard_dossier.pdf>]
+
+[11 <./figs/fig_formula_provenance_details.pdf>]
+
+[12]
+
+[13]
+Underfull \hbox (badness 3769) in paragraph at lines 650--651
+\T1/stix/m/n/10 (+20) sce-nar-ios, gen-er-ated out-puts, ev-i-dence man-i-fests
+, and
+
+Underfull \hbox (badness 2426) in paragraph at lines 650--651
+\T1/stix/m/n/10 (+20) manuscript source. The re-vi-sion sup-ple-ment iden-ti-fi
+es
+
+
+[14]
+
+[15] (./LEAP_JSS_sprint7_method_revision.aux) )
+(see the transcript file for additional information)</usr/share/texlive/texmf-d
+ist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/stix/STIXGeneral-Bold.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/stix/STIXGeneral-Italic.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/stix/STIXGeneral-Regular.pfb></usr/share/texmf/fonts/typ
+e1/public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+fsx0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/stix/stix-mathex.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/stix/stix-mathit.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
+Output written on LEAP_JSS_sprint7_method_revision.pdf (16 pages, 3115278 bytes
+).
+Transcript written on LEAP_JSS_sprint7_method_revision.log.

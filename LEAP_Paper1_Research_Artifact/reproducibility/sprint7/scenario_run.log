@@ -1,0 +1,47 @@
+
+========================================================
+      LEAP SCENARIO FIXTURES ACCEPTANCE TEST            
+========================================================
+
+Filename                                 | Status | Expected     | Actual      
+--------------------------------------------------------------------------------
+01_clean_python_kpi.py                   | PASS   | Validated    | Validated   
+02_clean_sql_kpi.sql                     | PASS   | Validated    | Validated   
+03_clean_abap_kpi.abap                   | PASS   | Validated    | Validated   
+04_wrong_operator.sql                    | PASS   | Needs Review | Needs Review
+05_wrong_numerator.sql                   | PASS   | Needs Review | Needs Review
+06_wrong_denominator.sql                 | PASS   | Needs Review | Needs Review
+07_missing_formula_comment.sql           | PASS   | Needs Review | Needs Review
+08_missing_implementation.py             | PASS   | Needs Review | Needs Review
+09_todo_kpi.py                           | PASS   | Needs Review | Needs Review
+10_fixme_kpi.py                          | PASS   | Needs Review | Needs Review
+11_bug_kpi.py                            | PASS   | Needs Review | Needs Review
+12_suspicious_fallback.py                | PASS   | Validated    | Validated   
+13_pdpl_pii_violation.py                 | PASS   | Needs Review | Needs Review
+14_nca_restricted_exec.py                | PASS   | Needs Review | Needs Review
+15_nca_audit_gap.py                      | PASS   | Needs Review | Needs Review
+16_gdpr_data_export_violation.py         | PASS   | Needs Review | Needs Review
+17_soc2_unsigned_lineage.py              | PASS   | Needs Review | Needs Review
+18_pdpl_clean_control.py                 | PASS   | Validated    | Validated   
+19_nca_restricted_clean_control.py       | PASS   | Validated    | Validated   
+20_audit_clean_control.py                | PASS   | Validated    | Validated   
+21_gdpr_clean_control.py                 | PASS   | Validated    | Validated   
+22_soc2_clean_control.py                 | PASS   | Validated    | Validated   
+23_formula_conflict_and_todo.sql         | PASS   | Needs Review | Needs Review
+24_compliance_and_formula_conflict.sql   | PASS   | Needs Review | Needs Review
+25_compliance_alarm_only.py              | PASS   | Needs Review | Needs Review
+26_technical_review_only.py              | PASS   | Needs Review | Needs Review
+27_owner_confirmation_required.py        | PASS   | Needs Review | Needs Review
+28_validated_clean.sql                   | PASS   | Validated    | Validated   
+29_simple_ratio.sql                      | PASS   | Validated    | Validated   
+30_percentage_ratio.sql                  | PASS   | Validated    | Validated   
+31_multiplication_formula.sql            | PASS   | Validated    | Validated   
+32_subtraction_formula.sql               | PASS   | Validated    | Validated   
+33_nullif_denominator.sql                | PASS   | Validated    | Validated   
+34_case_sum_count.sql                    | PASS   | Validated    | Validated   
+35_explicit_latex.py                     | PASS   | Validated    | Validated   
+36_formula_with_underscores.sql          | PASS   | Validated    | Validated   
+37_formula_with_units.py                 | PASS   | Validated    | Validated   
+38_greek_symbols.py                      | PASS   | Validated    | Validated   
+
+✅ All scenario fixtures verified successfully!

@@ -1,0 +1,9 @@
+record_id: RR-004
+title: Deterministic Repository Execution — 62 KPI Run
+evidence_category: Software Engineering Evidence
+archive_status: Raw evidence archived
+created_for_archive: 2026-07-15
+raw_evidence_immutable: true
+ai_correctness_pipeline: false
+execution_mode: deterministic-only
+repository_version: Historical source not yet identified

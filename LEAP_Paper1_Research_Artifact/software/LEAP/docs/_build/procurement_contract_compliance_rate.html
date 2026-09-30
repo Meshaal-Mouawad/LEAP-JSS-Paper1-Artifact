@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Enterprise KPI Dossier - Procurement Contract Compliance Rate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ef7b597" />
+      <link rel="stylesheet" type="text/css" href="_static/leap/ECDS_TOKENS.css?v=c316419d" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {tex: {inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true}, options: {processHtmlClass: 'formula-panel|leap-annotated-equation|leap-annotated-formula-wrapper|leap-business-formula-math|math-equation', ignoreHtmlClass: 'tex2jax_ignore'}, chtml: {linebreaks: {automatic: true, width: 'container'}, mtextInheritFont: true, displayAlign: 'left'}, startup: {pageReady: function () {return MathJax.startup.defaultPageReady().then(function () {if (window.MathJax && window.MathJax.typeset) { window.MathJax.typeset(); }});}}};</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('leap-theme') || 'light-teal';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
+  </head>
+  <body class="leap-doc-body page-procurement_contract_compliance_rate">
+    
+      <section id="procurement-contract-compliance-rate">
+
+<a class="leap-skip-link" href="#leap-main-content">Skip to dossier content</a>
+<div class="leap-workspace kpi-dossier-workspace">
+   <aside class="leap-sidebar-nav">
+      <nav class="leap-nav-rail-inner">
+         <div class="leap-nav-section">
+            <div class="leap-nav-section-title">Workspace</div>
+             <a href="/" data-nav-key="main" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 15h.01"/><path d="M12 15h4"/></svg></span> Main
+             </a>
+             <a href="index.html" data-nav-key="dashboard" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Dashboard
+             </a>
+          </div>
+          <div class="leap-nav-section">
+             <div class="leap-nav-section-title">KPI Portfolio</div>
+             <a href="discovery_report.html#metric-portfolio" data-nav-key="discovery" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Discovery Workspace
+             </a>
+             <a href="discovery_report.html#kpi-inventory" data-nav-key="enterprise-kpis" class="leap-nav-item active">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></span> Enterprise KPIs
+             </a>
+          </div>
+          <div class="leap-nav-section">
+             <div class="leap-nav-section-title">Governance</div>
+             <a href="raci_directory.html" data-nav-key="raci" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> RACI Directory
+             </a>
+             <a href="discovery_report.html#governance-summary" data-nav-key="governance" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg></span> Governance State
+             </a>
+          </div>
+          <div class="leap-nav-section">
+             <div class="leap-nav-section-title">Evidence</div>
+             <a href="#source-evidence" onclick="openLeapSourceEvidence(event)" data-nav-key="evidence" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="13" r="2"/><path d="m20 17-1.45-1.45"/></svg></span> Evidence &amp; Lineage
+             </a>
+          </div>
+          <div class="leap-nav-section">
+             <div class="leap-nav-section-title">Utilities</div>
+             <a href="search.html" data-nav-key="search" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Search
+             </a>
+             <a href="genindex.html" data-nav-key="index" class="leap-nav-item">
+                <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Index
+             </a>
+          </div>
+          <div class="leap-nav-status-card">
+            <span>Workspace Mode</span>
+            <strong>Offline Governance</strong>
+            <small>Certified metric dossier</small>
+         </div>
+      </nav>
+   </aside>
+
+   <div class="leap-workspace-main">
+      <header class="leap-topbar">
+         <div class="leap-topbar-inner">
+            <div class="leap-topbar-left">
+               <a class="leap-brand-home" href="/" aria-label="Open LEAP main page">
+                  <div class="leap-brand-mark">
+                     <img src="_static/leap-axis-logo.svg?v=20260629_01" alt="LEAP AXIS KPI Intelligence System">
+                  </div>
+               </a>
+               <div class="leap-workspace-title">KPI Intelligence Workspace</div>
+            </div>
+            <div class="leap-topbar-controls" aria-label="Workspace display controls">
+               <span class="leap-clock" data-leap-clock>--</span>
+               <select class="leap-theme-select" data-leap-theme-select aria-label="Theme">
+                  <option value="light-teal">Light Teal</option>
+                  <option value="dark">Dark</option>
+                  <option value="classic">Classic</option>
+               </select>
+            </div>
+            <div class="leap-topbar-right">
+               <div class="leap-status-item">
+                  <span class="leap-confidence-dot"></span>
+                  <span class="leap-status-label">Confidence</span>
+                  <strong>95%</strong>
+               </div>
+               <div class="leap-status-item">
+                  <span class="leap-status-label">Source</span>
+                  <strong>SQL</strong>
+               </div>
+               <div class="leap-status-item">
+                  <span class="leap-status-label">Owner</span>
+                  <strong>Enterprise Data Owner</strong>
+               </div>
+               <div class="leap-environment-badge">Offline</div>
+            </div>
+         </div>
+      </header>
+
+      <!-- PHASE 2: ZONE A - Executive Summary Hero (Enterprise Authority Signals) -->
+      <section class="leap-page-header kpi-dossier-page-header kpi-zone-a-hero" data-zone="a" data-confidence="High" data-governance-status="Needs Review">
+         <div class="kpi-hero-eyebrow">Enterprise KPI Dossier</div>
+         <h1>Procurement Contract Compliance Rate</h1>
+         <p>Enterprise intelligence record connecting business definition, certified formula, ownership, and operational evidence.</p>
+         <div class="kpi-decision-signal" aria-label="Executive decision signal">
+            <span class="kpi-decision-status">Needs Review</span>
+
+            <strong>Owner confirmation required before executive use.</strong>
+            <span>Enterprise Data Owner remains accountable while governance review is resolved.</span>
+
+         </div>
+         <div class="kpi-hero-metrics" aria-label="KPI executive summary">
+            <div class="kpi-hero-metric kpi-hero-domain">
+               <span>Business Domain</span>
+               <strong>Enterprise</strong>
+            </div>
+            <div class="kpi-hero-metric kpi-hero-primary" data-metric="confidence">
+               <span>Confidence</span>
+               <strong data-confidence-level="High">95%</strong>
+            </div>
+            <div class="kpi-hero-metric kpi-hero-primary" data-metric="governance">
+               <span>Governance Status</span>
+               <strong data-governance-status="Needs Review">Needs Review</strong>
+            </div>
+            <div class="kpi-hero-metric kpi-hero-secondary">
+               <span>Owner</span>
+               <strong>Enterprise Data Owner</strong>
+            </div>
+            <div class="kpi-hero-metric kpi-hero-secondary">
+               <span>Source</span>
+               <strong>SQL</strong>
+            </div>
+            <div class="kpi-hero-metric kpi-hero-secondary">
+               <span>Last Validation</span>
+               <strong>2026-09-21</strong>
+            </div>
+         </div>
+         <div class="leap-breadcrumb">
+            <span class="leap-breadcrumb-item">LEAP</span>
+            <span class="leap-breadcrumb-separator">/</span>
+            <span class="leap-breadcrumb-item">KPI Catalog</span>
+            <span class="leap-breadcrumb-separator">/</span>
+            <span class="leap-breadcrumb-item active">Procurement Contract Compliance Rate</span>
+         </div>
+      </section>
+
+      <main class="leap-main kpi-dossier-main" id="leap-main-content">
+         <div class="dossier-grid leap-dossier-grid">
+            <section class="kpi-zone-b-business kpi-dossier-left" data-zone="b">
+               <section class="dossier-card leap-card-primary business-reading-card">
+                  <h3 class="leap-card-title">Executive Briefing</h3>
+                  <div class="owner-logic-block">
+                     <div class="micro-label">Executive Summary</div>
+                     <div class="business-copy">If this KPI trends up: Indicates a material change in the measured business condition and should be interpreted with the owner. If it trends down: Indicates a material change in the measured business condition and should be checked against source-data timing. Owner check: What changed in source data, business process, or KPI logic that explains movement in Procurement Contract Compliance Rate?</div>
+                  </div>
+                  <div class="business-reading-grid">
+                     <div class="business-info-card plain-meaning-card">
+                        <div class="card-header">
+                           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                           <span class="card-title">Business Meaning</span>
+                        </div>
+                        <div class="card-body">Fraction of procurement transactions executed under approved framework contracts.</div>
+                     </div>
+
+                     <div class="business-info-card decision-support-card">
+                        <div class="card-header">
+                           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                           <span class="card-title">Decision</span>
+                        </div>
+                        <div class="card-body">Enforce procurement governance and maximize contract utilization.</div>
+                     </div>
+
+                     <div class="business-info-card trust-posture-card">
+                        <div class="card-header">
+                           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 11l2 2 4-4"></path></svg>
+                           <span class="card-title">Trust</span>
+                        </div>
+                        <div class="card-body">
+
+                           Decision use requires owner confirmation.
+
+                        </div>
+                     </div>
+
+                     <div class="business-info-card business-risk-card">
+                        <div class="card-header">
+                           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                           <span class="card-title">Risk</span>
+                        </div>
+                        <div class="card-body">Incorrect interpretation may affect Enterprise planning, accountability, or exception response.</div>
+                     </div>
+
+                     <div class="business-info-card next-action-card">
+                        <div class="card-header">
+                           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                           <span class="card-title">Action</span>
+                        </div>
+                        <div class="card-body">Enterprise Data Owner should monitor movement and confirm context when the metric changes materially.</div>
+                     </div>
+                  </div>
+               </section>
+
+               <section class="dossier-card leap-card-primary formula-dossier-card">
+                  <div class="card-title-row">
+                     <h3 class="leap-card-title">Mathematical Formulation</h3>
+                  </div>
+                  <div class="formula-panel">
+                     <div class="micro-label">Formal Formula</div>
+
+                     <div class="math-equation">\[ \mathrm{Procurement\,Contract\,Compliance\,Rate} = \frac{\mathrm{Contract\,Spend} \times 100.0}{\mathrm{Total\,Spend}} \]</div><p><b>Where:</b></p><ul><li><i>Numerator:</i> Contract Spend * 100.0</li><li><i>Denominator:</i> Total Spend</li></ul>
+
+
+                     <div class="micro-label">Annotated Formula</div>
+                     <div class="leap-toggle-container" role="group" aria-label="Formula annotation perspective">
+                        <button type="button" class="leap-toggle-btn active" data-perspective="business">Business Interpretation</button>
+                        <button type="button" class="leap-toggle-btn" data-perspective="developer">Developer Lineage</button>
+                     </div>
+
+                     <div class="leap-annotated-formula-wrapper leap-annotated-equation" data-perspective="business">
+
+                        <div class="leap-formula-node">
+                           <span class="leap-math-lbl" data-biz="Contract Spend" data-dev="COLUMN: contract_spend">Contract Spend</span>
+                           <div class="leap-math-pointer"></div>
+                           <span class="leap-math-render">contract_spend</span>
+                        </div>
+
+                        <div class="leap-formula-node operator-node">
+                           <span class="leap-math-lbl" data-biz="Scaled by 100.0" data-dev="LITERAL: * 100.0">Scaled by 100.0</span>
+                           <div class="leap-math-pointer"></div>
+                           <span class="leap-math-render">× 100.0</span>
+                        </div>
+
+                        <div class="leap-formula-node operator-node">
+                           <span class="leap-math-lbl" data-biz="Divided By" data-dev="OPERATOR: /">Divided By</span>
+                           <div class="leap-math-pointer"></div>
+                           <span class="leap-math-render">÷</span>
+                        </div>
+
+                        <div class="leap-formula-node">
+                           <span class="leap-math-lbl" data-biz="Total Spend" data-dev="COLUMN: total_spend">Total Spend</span>
+                           <div class="leap-math-pointer"></div>
+                           <span class="leap-math-render">total_spend</span>
+                        </div>
+
+                     </div>
+
+                     <div class="leap-code-lineage" hidden><div class="leap-code-lineage-title">Developer Lineage Breakdown</div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">1 | -- KPI: Procurement Contract Compliance Rate</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">2 | -- Description: Fraction of procurement transactions executed under approved framework contracts.</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">3 | -- Objective: Enforce procurement governance and maximize contract utilization.</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">4 | -- Input measure: On-contract spend, total procurement spend</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">5 | -- Unit: %</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">6 | -- Reporting Source: SAP MM (Materials Management)</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">7 | -- Used In: Procurement Governance Dashboard</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">8 | -- Validation conflict: Governance status is marked Validated below but no formal</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">9 | -- mathematical formula is declared anywhere in this file. The formula field is missing.</div><div class="leap-code-lineage-role">Calculation hint: documents the business expression expected inside the KPI implementation.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">10 | -- LEAP should flag: KPI marked Validated but formula is absent — validation conflict.</div><div class="leap-code-lineage-role">Calculation hint: documents the business expression expected inside the KPI implementation.</div></div></div>
+
+                  </div>
+
+                  <details id="source-evidence" class="evidence-lineage-panel kpi-zone-d-evidence" data-zone="d">
+                     <summary>Evidence &amp; Lineage</summary>
+                     <div class="evidence-tabs" data-evidence-tabs>
+                        <div class="evidence-tab-list" role="tablist" aria-label="Evidence and lineage views">
+                           <button type="button" class="evidence-tab active" data-evidence-tab="source">Operational Logic</button>
+                           <button type="button" class="evidence-tab" data-evidence-tab="formula">Formula Lineage</button>
+                           <button type="button" class="evidence-tab" data-evidence-tab="provenance">Provenance</button>
+                           <button type="button" class="evidence-tab" data-evidence-tab="inputs">Inputs</button>
+                        </div>
+                        <div class="evidence-tab-panel active" data-evidence-panel="source">
+                           <div class="source-evidence-console">
+                              <pre class="font-mono">-- KPI: Procurement Contract Compliance Rate&#10;-- Description: Fraction of procurement transactions executed under approved framework contracts.&#10;-- Objective: Enforce procurement governance and maximize contract utilization.&#10;-- Input measure: On-contract spend, total procurement spend&#10;-- Unit: %&#10;-- Reporting Source: SAP MM (Materials Management)&#10;-- Used In: Procurement Governance Dashboard&#10;&#10;-- Validation conflict: Governance status is marked Validated below but no formal&#10;-- mathematical formula is declared anywhere in this file. The formula field is missing.&#10;-- LEAP should flag: KPI marked Validated but formula is absent — validation conflict.&#10;&#10;SELECT&#10;    vendor_code,&#10;    SUM(contract_spend) AS on_contract_spend_sar,&#10;    SUM(total_spend) AS total_spend_sar,&#10;    -- No explicit formula comment: formula is inferred from code only, not declared&#10;    SUM(contract_spend) * 100.0 / NULLIF(SUM(total_spend), 0) AS procurement_contract_compliance_rate&#10;FROM sap_mm.purchase_order_fact&#10;WHERE fiscal_year = YEAR(GETDATE())&#10;GROUP BY vendor_code;&#10;&#10;-- Governance status: Validated (intentionally mismatched — no formula declared above)&#10;</pre>
+                           </div>
+                           <details class="nested-evidence-detail">
+                              <summary>Inline evidence snippet</summary>
+                              <pre class="font-mono">   1 | -- KPI: Procurement Contract Compliance Rate&#10;   2 | -- Description: Fraction of procurement transactions executed under approved framework contracts.&#10;   3 | -- Objective: Enforce procurement governance and maximize contract utilization.&#10;   4 | -- Input measure: On-contract spend, total procurement spend&#10;   5 | -- Unit: %</pre>
+                           </details>
+                        </div>
+                        <div class="evidence-tab-panel" data-evidence-panel="formula">
+                           <div class="leap-code-lineage" hidden><div class="leap-code-lineage-title">Developer Lineage Breakdown</div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">1 | -- KPI: Procurement Contract Compliance Rate</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">2 | -- Description: Fraction of procurement transactions executed under approved framework contracts.</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">3 | -- Objective: Enforce procurement governance and maximize contract utilization.</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">4 | -- Input measure: On-contract spend, total procurement spend</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">5 | -- Unit: %</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">6 | -- Reporting Source: SAP MM (Materials Management)</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">7 | -- Used In: Procurement Governance Dashboard</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">8 | -- Validation conflict: Governance status is marked Validated below but no formal</div><div class="leap-code-lineage-role">KPI marker: tells LEAP this nearby code defines or documents a KPI.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">9 | -- mathematical formula is declared anywhere in this file. The formula field is missing.</div><div class="leap-code-lineage-role">Calculation hint: documents the business expression expected inside the KPI implementation.</div></div><div class="leap-code-lineage-row"><div class="leap-code-lineage-code">10 | -- LEAP should flag: KPI marked Validated but formula is absent — validation conflict.</div><div class="leap-code-lineage-role">Calculation hint: documents the business expression expected inside the KPI implementation.</div></div></div>
+                           <div class="evidence-detail-grid">
+                              <div>
+                                 <div class="micro-label">Operational Intent</div>
+                                 <div>Fraction of procurement transactions executed under approved framework contracts. LEAP frames this as an operational evidence signal for enterprise decision-making.</div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Verified Logic Mapping</div>
+                                 <div><ol><li>First, LEAP certifies the KPI definition against conflict_validation_compliance.sql and classifies the implementation as SQL evidence.</li><li>Second, because no certified formula statement is declared in implementation comments, LEAP presents the executable calculation evidence in the formal MathJax formula shown above.</li><li>Finally, it preserves the executable context and code fingerprint so future changes to the KPI logic can be identified.</li></ol></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Logic Safeguards</div>
+                                 <div><div class="walkthrough-proof-list"><div class="walkthrough-proof-item"><span class="walkthrough-check">OK</span><div><strong>Zero-Division Guard:</strong> Implementation logic uses NULLIF so denominator values of zero do not create invalid ratio calculations.</div></div><div class="walkthrough-proof-item"><span class="walkthrough-check">OK</span><div><strong>Formula Consistency Check:</strong> The business formula and implementation evidence share compatible calculation structure based on LEAP&#x27;s structured comparison.</div></div><div class="walkthrough-proof-item"><span class="walkthrough-check">OK</span><div><strong>Change Detection:</strong> Code Fingerprint 80292b8f4d records the current implementation so drift can be identified after the next workspace refresh.</div></div><div class="walkthrough-proof-item"><span class="walkthrough-check">OK</span><div><strong>RACI Accountability:</strong> Enterprise Data Owner is assigned as accountable owner for rule confirmation and escalation.</div></div></div></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Executive Alignment</div>
+                                 <div>Business rules are aligned to default rule; no path/name governance match (SQL). RACI Owner: Enterprise Data Owner. Consulted reviewer: Domain Subject Matter Expert. Current status: Needs Review.</div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="evidence-tab-panel" data-evidence-panel="provenance">
+                           <div class="evidence-detail-grid">
+                              <div><span class="micro-label">Business Data System</span><strong>EXPLICIT SOURCE TABLE(S): sap_mm.purchase_order_fact</strong></div>
+                              <div><span class="micro-label">Source File</span><strong class="font-mono">conflict_validation_compliance.sql</strong></div>
+                              <div><span class="micro-label">Source Line</span><strong>1</strong></div>
+                              <div><span class="micro-label">Definition Pattern</span><strong>Sql Comment</strong></div>
+                              <div><span class="micro-label">Governance Domain</span><strong>Enterprise</strong></div>
+                              <div><span class="micro-label">KPI ID</span><strong class="font-mono">KPI-80292B8F4D</strong></div>
+                           </div>
+                        </div>
+                        <div class="evidence-tab-panel" data-evidence-panel="inputs">
+                           <div class="evidence-detail-grid">
+                              <div>
+                                 <div class="micro-label">Business Usage</div>
+                                 <div><p>Procurement Governance Dashboard</p></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Input Evidence</div>
+                                 <div><p>On-contract spend, total procurement spend</p></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Definition</div>
+                                 <div><p>Fraction of procurement transactions executed under approved framework contracts.</p></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Business Context</div>
+                                 <div><p>Enforce procurement governance and maximize contract utilization.</p></div>
+                              </div>
+                              <div>
+                                 <div class="micro-label">Edge Cases / Comments</div>
+                                 <p class="font-mono">Compliance mode preserved only implementation-grounded evidence; unresolved business context is routed to owner confirmation.</p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </details>
+               </section>
+            </section>
+
+            <aside class="leap-metadata-sidebar kpi-dossier-right kpi-zone-c-governance" data-zone="c" data-governance-status="Needs Review">
+               <!-- PHASE 2: Right Rail - Governance Panel (ZONE C) -->
+            <div class="sidebar-card leap-card-secondary governance-card">
+               <h3>Governance</h3>
+               <div class="sidebar-status-badge state-needs-review" data-status="Needs Review">
+                  <span class="status-dot"></span>
+                  Needs Review
+               </div>
+               <div class="sidebar-meta-row"><span class="meta-label">Confidence:</span><span class="meta-value" data-confidence="High">95%</span></div>
+               <div class="sidebar-meta-row"><span class="meta-label">Accountable:</span><span class="meta-value">Enterprise Data Owner</span></div>
+
+            </div>
+
+            <div class="sidebar-card leap-card-secondary raci-card">
+               <h3>RACI</h3>
+               <div class="sidebar-meta-row">
+                  <span class="meta-label">Responsible:</span>
+                  <span class="meta-value">Data Engineering Team</span>
+               </div>
+               <div class="sidebar-meta-row">
+                  <span class="meta-label">Accountable:</span>
+                  <span class="meta-value">Enterprise Data Owner</span>
+               </div>
+               <div class="sidebar-meta-row">
+                  <span class="meta-label">Consulted:</span>
+                  <span class="meta-value">Domain Subject Matter Expert</span>
+               </div>
+               <div class="sidebar-meta-row">
+                  <span class="meta-label">Informed:</span>
+                  <span class="meta-value">Business Stakeholders</span>
+               </div>
+            </div>
+
+             <details class="sidebar-card leap-card-tertiary metadata-card">
+                <summary><h3>Metadata</h3></summary>
+                <div class="card-row"><span class="label">KPI_ID:</span><span class="value font-mono">KPI-80292B8F4D</span></div>
+
+                <div class="card-row"><span class="label">Fingerprint:</span><span class="value code-font">80292b8f</span></div>
+                <div class="card-row"><span class="label">Validated:</span><span class="value font-mono">2026-09-21</span></div>
+                <div class="card-row"><span class="label">Type:</span><span class="value">SQL operational definition</span></div>
+                <div class="card-row"><span class="label">Runtime:</span><span class="value code-font">Offline</span></div>
+                <div class="card-row"><span class="label">Frequency:</span><span class="value code-font">On Demand</span></div>
+             </details>
+
+             <details class="sidebar-card leap-card-tertiary action-card">
+                <summary><h3>Operational Actions</h3></summary>
+                <button class="sidebar-btn btn-primary" type="button" onclick="window.print()">Print Certified Dossier</button>
+
+                <a class="sidebar-btn btn-secondary" href="/edit?kpi=Procurement%20Contract%20Compliance%20Rate" target="_blank">Edit Dossier</a>
+                <a class="sidebar-btn btn-secondary" href="discovery_report.html">Open Discovery Workspace</a>
+                <a class="sidebar-btn btn-secondary" href="raci_directory.html">Open RACI Directory</a>
+             </details>
+
+
+            <div class="sidebar-card leap-card-secondary review-queue-card" id="governance-review-note">
+               <h3>Review Queue</h3>
+               <div class="review-status-header">
+                  <div class="sidebar-status-badge state-needs-review" style="margin-bottom: 0;">
+                     <span class="status-dot"></span>Needs Review
+                  </div>
+               </div>
+               <div class="review-message-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           <div class="review-signal-card signal-owner">
+                              <div class="signal-header">
+                                 <span class="signal-badge">Owner Confirmation Required</span>
+                              </div>
+                              <div class="signal-title">Business Evidence Confirmation</div>
+                              <div class="signal-message">Evidence incomplete: business formula comment not declared.</div>
+                           </div>
+
+
+
+
+               </div>
+               <textarea class="review-queue-text" readonly>Please review this governed KPI evidence package.&#10;&#10;KPI: Procurement Contract Compliance Rate&#10;KPI ID: KPI-80292B8F4D&#10;Accountable owner: Enterprise Data Owner&#10;Consulted SME: Domain Subject Matter Expert&#10;Source: conflict_validation_compliance.sql&#10;Line: 1&#10;&#10;Review questions:&#10;- Does the business meaning match how the KPI is used?&#10;- Does the formula reflect the approved business rule?&#10;- Are the source fields, filters, and reporting period correct?&#10;- Should this KPI be marked Validated or Needs Review?</textarea>
+
+               <div class="review-actions-instruction">
+                  Send or copy this review request to the accountable owner or domain subject matter expert (SME).
+               </div>
+               <a id="open-email-draft-btn" class="sidebar-btn btn-secondary" href="mailto:?subject=LEAP+KPI+review+requested%3A+Procurement+Contract+Compliance+Rate&body=Please+review+this+governed+KPI+evidence+package.%0A%0AKPI%3A+Procurement+Contract+Compliance+Rate%0AKPI+ID%3A+KPI-80292B8F4D%0AAccountable+owner%3A+Enterprise+Data+Owner%0AConsulted+SME%3A+Domain+Subject+Matter+Expert%0ASource%3A+conflict_validation_compliance.sql%0ALine%3A+1%0A%0AReview+questions%3A%0A-+Does+the+business+meaning+match+how+the+KPI+is+used%3F%0A-+Does+the+formula+reflect+the+approved+business+rule%3F%0A-+Are+the+source+fields%2C+filters%2C+and+reporting+period+correct%3F%0A-+Should+this+KPI+be+marked+Validated+or+Needs+Review%3F">Open Email Draft</a>
+               <button class="sidebar-btn btn-secondary" type="button" onclick="copyLeapReviewText(this)">Copy Review Text</button>
+            </div>
+
+         </aside>
+      </div>
+      </main>
+
+ <footer class="leap-footer compact-enterprise-footer">
+   <div class="compact-footer-inner">
+     <div class="compact-footer-brand">
+       <strong>LEAP AXIS KPI Intelligence Workspace</strong>
+       <span>AI: Offline Mode · Deterministic AST Engine</span>
+     </div>
+     <div class="compact-footer-links">
+       <a href="index.html">Workspace</a>
+       <a href="discovery_report.html">Discovery</a>
+       <a href="raci_directory.html">RACI</a>
+     </div>
+     <div class="compact-footer-certifications">
+       <span>SDAIA PDPL</span>
+       <span>NCA ECC</span>
+       <span>ISO 22400</span>
+     </div>
+   </div>
+ </footer>
+        <script>
+           (function () {
+              function runLeapMathJax(target) {
+                 if (!window.MathJax) return;
+                 if (window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise(target ? [target] : undefined).catch(function () {});
+                    return;
+                 }
+                 if (window.MathJax.typeset) {
+                    try {
+                       window.MathJax.typeset(target ? [target] : undefined);
+                    } catch (error) {}
+                 }
+              }
+              function stripOuterParens(value) {
+         var text = (value || "").trim();
+         while (text.charAt(0) === "(" && text.charAt(text.length - 1) === ")") {
+            var depth = 0;
+            var balanced = true;
+            for (var i = 0; i < text.length; i += 1) {
+               if (text.charAt(i) === "(") depth += 1;
+               if (text.charAt(i) === ")") depth -= 1;
+               if (depth === 0 && i < text.length - 1) {
+                  balanced = false;
+                  break;
+               }
+            }
+            if (!balanced) break;
+            text = text.slice(1, -1).trim();
+         }
+         return text;
+      }
+      function splitTopLevel(value, operators) {
+         var text = value || "";
+         var depth = 0;
+         for (var i = text.length - 1; i >= 0; i -= 1) {
+            var ch = text.charAt(i);
+            if (ch === ")") depth += 1;
+            else if (ch === "(") depth -= 1;
+            else if (depth === 0 && operators.indexOf(ch) >= 0) {
+               if (ch === "-" && i === 0) continue;
+               return [text.slice(0, i), ch, text.slice(i + 1)];
+            }
+         }
+         return null;
+      }
+      function texVariable(value) {
+         var text = stripOuterParens(value || "")
+            .replace(/`/g, "")
+            .replace(/["']/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+         if (!text) return "";
+         if (/^\d+(?:\.\d+)?$/.test(text)) return text;
+         return "\\text{" + text.replace(/_/g, " ") + "}";
+      }
+      function cleanExpression(value) {
+         return (value || "")
+            .replace(/&amp;/g, "&")
+            .replace(/×/g, "*")
+            .replace(/÷/g, "/")
+            .replace(/\breturn\b\s*/gi, "")
+            .replace(/\bNULLIF\s*\(\s*([^,()]+)\s*,\s*0(?:\.0)?\s*\)/gi, "$1")
+            .replace(/\bSUM\s*\(\s*([^()]+)\s*\)/gi, "$1")
+            .replace(/\bAVG\s*\(\s*([^()]+)\s*\)/gi, "$1")
+            .replace(/\bCOUNT\s*\(\s*([^()]+)\s*\)/gi, "$1")
+            .trim();
+      }
+      function expressionToTex(value) {
+         var expr = stripOuterParens(cleanExpression(value));
+         var split = splitTopLevel(expr, ["+", "-"]);
+         if (split) return expressionToTex(split[0]) + " " + split[1] + " " + expressionToTex(split[2]);
+         split = splitTopLevel(expr, ["*"]);
+         if (split) return expressionToTex(split[0]) + " \\times " + expressionToTex(split[2]);
+         split = splitTopLevel(expr, ["/"]);
+         if (split) return "\\frac{" + expressionToTex(split[0]) + "}{" + expressionToTex(split[2]) + "}";
+         return texVariable(expr);
+      }
+      function renderBusinessFormula(container) {
+         var raw = container.getAttribute("data-raw-formula") || "";
+         if (!/[+\-*/×÷]/.test(raw)) return;
+         var tex = expressionToTex(raw);
+         if (!tex) return;
+                 container.innerHTML = "\\[" + tex + "\\]";
+                 runLeapMathJax(container);
+              }
+              window.switchLeapMath = function (panel, perspective) {
+                 var equation = panel.querySelector(".leap-annotated-equation, .leap-annotated-formula-wrapper");
+                 if (!equation) return;
+                 equation.setAttribute("data-perspective", perspective);
+         var lineage = panel.querySelector(".leap-code-lineage");
+         if (lineage) lineage.hidden = perspective !== "developer";
+         equation.querySelectorAll(".leap-math-lbl").forEach(function (annotation) {
+                            var label = annotation.getAttribute(perspective === "developer" ? "data-dev" : "data-biz");
+                            if (label) annotation.textContent = label;
+            annotation.style.removeProperty("color");
+            annotation.style.removeProperty("background-color");
+            annotation.style.removeProperty("border-color");
+                         });
+                 runLeapMathJax(panel);
+              };
+      document.querySelectorAll(".formula-panel").forEach(function (panel) {
+         var equation = panel.querySelector(".leap-annotated-equation, .leap-annotated-formula-wrapper");
+         var buttons = panel.querySelectorAll(".leap-toggle-btn");
+         if (!equation || !buttons.length) return;
+         buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+               var perspective = button.getAttribute("data-perspective") || "business";
+               window.switchLeapMath(panel, perspective);
+               buttons.forEach(function (tabButton) {
+                  tabButton.classList.toggle("active", tabButton === button);
+               });
+            });
+         });
+              });
+              document.querySelectorAll("[data-evidence-tabs]").forEach(function (tabs) {
+                 var buttons = tabs.querySelectorAll("[data-evidence-tab]");
+                 var panels = tabs.querySelectorAll("[data-evidence-panel]");
+                 buttons.forEach(function (button) {
+                    button.addEventListener("click", function () {
+                       var target = button.getAttribute("data-evidence-tab");
+                       buttons.forEach(function (tabButton) {
+                          tabButton.classList.toggle("active", tabButton === button);
+                       });
+                       panels.forEach(function (panel) {
+                          panel.classList.toggle("active", panel.getAttribute("data-evidence-panel") === target);
+                       });
+                    });
+                 });
+              });
+              document.querySelectorAll(".leap-business-formula-math").forEach(renderBusinessFormula);
+         function syncLeapThemeControls() {
+            var currentTheme = localStorage.getItem("leap-theme") || "light-teal";
+            document.documentElement.setAttribute("data-theme", currentTheme);
+            document.body.setAttribute("data-theme", currentTheme);
+            document.querySelectorAll("[data-leap-theme-select]").forEach(function (select) {
+               select.value = currentTheme;
+               select.addEventListener("change", function () {
+                  localStorage.setItem("leap-theme", select.value);
+                  document.documentElement.setAttribute("data-theme", select.value);
+                  document.body.setAttribute("data-theme", select.value);
+                  document.querySelectorAll("[data-leap-theme-select]").forEach(function (peer) {
+                     if (peer !== select) peer.value = select.value;
+                  });
+               });
+            });
+         }
+         function updateLeapClock() {
+            var now = new Date();
+            var zone = "";
+            try {
+               zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+            } catch (err) {
+               zone = "";
+            }
+            var dateText = now.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+            var timeText = now.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+            document.querySelectorAll("[data-leap-clock]").forEach(function (clock) {
+               clock.textContent = zone ? dateText + " · " + timeText + " · " + zone : dateText + " · " + timeText;
+            });
+         }
+              window.addEventListener("DOMContentLoaded", function () {
+            syncLeapThemeControls();
+            updateLeapClock();
+            window.setInterval(updateLeapClock, 60000);
+                 runLeapMathJax();
+              });
+              window.copyLeapReviewText = function (button) {
+                 var card = button.closest(".review-queue-card");
+                 var text = card ? card.querySelector(".review-queue-text") : null;
+                 if (!text) return;
+                 text.select();
+                 var value = text.value || "";
+                 var done = function () {
+                    var previous = button.textContent;
+                    button.textContent = "Copied";
+                    setTimeout(function () { button.textContent = previous; }, 1400);
+                 };
+                 if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(value).then(done).catch(function () {
+                       document.execCommand("copy");
+                       done();
+                    });
+                 } else {
+                    document.execCommand("copy");
+                    done();
+                 }
+              };
+              window.openLeapSourceEvidence = function (event) {
+                 if (event) event.preventDefault();
+                 var section = document.getElementById("source-evidence");
+                 if (!section) return;
+                 var details = section.matches("details") ? section : section.querySelector("details");
+                 if (details) details.open = true;
+                 section.scrollIntoView({ behavior: "smooth", block: "start" });
+              };
+           })();
+</script>
+   </div>
+</div></section>
+
+    
+    <script>
+      (function () {
+        function currentPageName() {
+          var file = (window.location.pathname || "").split("/").pop();
+          return file || "index.html";
+        }
+
+        function activeNavKey() {
+          var file = currentPageName();
+          var hash = window.location.hash || "";
+
+          if (file === "index.html") {
+            return "dashboard";
+          }
+          if (file === "raci_directory.html") {
+            return "raci";
+          }
+          if (file === "search.html") {
+            return "search";
+          }
+          if (file === "genindex.html") {
+            return "index";
+          }
+          if (file === "discovery_report.html") {
+            if (hash === "#kpi-inventory") {
+              return "enterprise-kpis";
+            }
+            if (hash === "#governance-summary") {
+              return "governance";
+            }
+            return "discovery";
+          }
+          return "enterprise-kpis";
+        }
+
+        function syncLeapNavigationActiveState() {
+          var rail = document.querySelector(".leap-sidebar-nav");
+          if (!rail) {
+            return;
+          }
+          var key = activeNavKey();
+          rail.querySelectorAll(".leap-nav-item").forEach(function (item) {
+            item.classList.toggle("active", item.getAttribute("data-nav-key") === key);
+          });
+        }
+
+        function syncLeapThemeControls() {
+          var currentTheme = localStorage.getItem("leap-theme") || "light-teal";
+          document.documentElement.setAttribute("data-theme", currentTheme);
+          document.body.setAttribute("data-theme", currentTheme);
+          document.querySelectorAll("[data-leap-theme-select]").forEach(function (select) {
+            select.value = currentTheme;
+            select.addEventListener("change", function () {
+              localStorage.setItem("leap-theme", select.value);
+              document.documentElement.setAttribute("data-theme", select.value);
+              document.body.setAttribute("data-theme", select.value);
+              document.querySelectorAll("[data-leap-theme-select]").forEach(function (peer) {
+                if (peer !== select) peer.value = select.value;
+              });
+            });
+          });
+        }
+
+        function updateLeapClock() {
+          var now = new Date();
+          var zone = "";
+          try {
+            zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+          } catch (err) {
+            zone = "";
+          }
+          var dateText = now.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+          var timeText = now.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+          document.querySelectorAll("[data-leap-clock]").forEach(function (clock) {
+            clock.textContent = zone ? dateText + " · " + timeText + " · " + zone : dateText + " · " + timeText;
+          });
+        }
+
+        window.addEventListener("DOMContentLoaded", function () {
+          syncLeapNavigationActiveState();
+          syncLeapThemeControls();
+          updateLeapClock();
+          window.setInterval(updateLeapClock, 60000);
+        });
+        window.addEventListener("hashchange", syncLeapNavigationActiveState);
+        window.addEventListener("pageshow", syncLeapNavigationActiveState);
+      })();
+    </script>
+  </body>
+</html>

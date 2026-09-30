@@ -1,0 +1,12 @@
+record_id: RR-006
+title: Full Local Repository Execution — 148 KPI Run
+evidence_category: Runtime Stress-Test Evidence
+archive_status: Raw evidence archived
+created_for_archive: 2026-07-15
+raw_evidence_immutable: true
+execution_mode: deterministic-only
+source_log: 05_Raw_Evidence/full_local_repository_run_148kpi_2026-07-15.log
+repository_path_scanned: /Users/meshaalmouawad/AI-Powered_KPI_Extractor_Interactive_Bluebook_Generator
+enterprise_kpis: 148
+workspace_files_inventoried: 4,084
+total_wall_time: 2.73s

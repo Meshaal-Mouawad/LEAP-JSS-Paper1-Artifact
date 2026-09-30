@@ -1,0 +1,26 @@
+detection_kind,rank,source_line,context_expression
+comment,5,615,"_window(lines, i)"
+python_function,2,658,"_window(lines, i)"
+csharp_attribute,3,683,"_window(
+                        lines, i, 5, 60
+                    )"
+method_name,2,708,"_window(lines, i, 5, 60)"
+sql_comment,3,755,code_context
+create_function,2,779,"_expand_forward_statement(lines, i)"
+create_view,2,797,"_window(lines, i, 5, 120)"
+select_alias,2,818,"_window(lines, i, 3, 80)"
+plsql_return_fallback,1,849,text
+hana_json,2,898,code
+plsql_function,2,930,"_window(lines, i)"
+dax_measure,3,957,"_window(lines, i)"
+dax_simple,2,977,"_window(lines, i)"
+dax_comment,3,994,"_window(lines, i)"
+abap_report,2,1019,"_window(lines, i)"
+iec_block,3,1050,"_window(lines, i)"
+iec_brace,3,1065,"_window(lines, i)"
+logic_fallback,0,1090,'Inferred logic: ' + expr
+generic_block,3,1124,"_window(lines, i)"
+generic_iec,3,1138,"_window(lines, i)"
+generic_bare,2,1151,"_window(lines, i)"
+logic_fallback,0,1337,ctx
+forced_fallback,-1,1365,ctx

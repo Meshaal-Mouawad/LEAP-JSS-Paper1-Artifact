@@ -1,0 +1,328 @@
+Execution Terminal
+−
+Starting generation...
+Cleared previous workspace artifacts.
+Reset prior workspace pages.
+Reading enterprise metric sources in: /Users/meshaalmouawad/AI-Powered_KPI_Extractor_Interactive_Bluebook_Generator
+Metric inventory: 148 governed business metrics (all files: 4084, eligible files: 454, implementation files: 195)
+Governance layer: assigned RACI ownership using local rules and overrides.
+Business definition phase: preparing 148 governed metrics with 4 deterministic detail workers...
+Business definition ready for 'normalize kpi name' (0.00s).
+Business definition ready for 'generate last Figs' (0.00s).
+Business definition ready for 'meeting duration log' (0.00s).
+Business definition ready for 'SOURCE PACKAGE CHECKSUMS' (0.00s).
+Business definition ready for 'historical claim map' (0.00s).
+Business definition ready for 'start generation' (0.00s).
+Business definition ready for 'count generated kpis' (0.00s).
+Business definition ready for 'claim audit' (0.00s).
+Business definition ready for 'Customer Activity Index\ndef calculate(national id, phone num): pass' (0.00s).
+Business definition ready for 'Energy Intensity (BTU/lb)' (0.00s).
+Business definition ready for 'RAW EVIDENCE CHECKSUMS' (0.00s).
+Business definition ready for 'current architecture' (0.00s).
+Business definition ready for 'bluebook completeness' (0.00s).
+Business definition ready for 'ARCHIVE MANIFEST' (0.00s).
+Business definition ready for 'CLAIM STATUS REGISTER' (0.00s).
+Business definition ready for 'INCONSISTENCY REGISTER' (0.00s).
+Business definition ready for 'RESEARCH RECORD REGISTER' (0.00s).
+Business definition ready for 'yield percentage' (0.00s).
+Business definition ready for 'verify scenario rendered alarms' (0.00s).
+Business definition ready for 'yield rate' (0.00s).
+Business definition ready for 'wrong yield' (0.00s).
+Business definition ready for 'Asset Utilization (Wrong)' (0.00s).
+Business definition ready for 'Yield Rate (Wrong Operator)' (0.00s).
+Business definition ready for 'Customer Growth Rate' (0.00s).
+Business definition ready for 'Yield Rate (Correct)' (0.00s).
+Business definition ready for 'Asset Utilization (Correct)' (0.00s).
+Business definition ready for 'Yield Rate (Wrong Variables)' (0.00s).
+Business definition ready for 'CO2 Emissions Intensity' (0.00s).
+Business definition ready for 'Permit To Work Closure Compliance' (0.00s).
+Business definition ready for 'Emergency Shutdown Demand Rate' (0.00s).
+Business definition ready for 'Net Plant Availability' (0.00s).
+Business definition ready for 'Adjusted Feedstock Yield' (0.00s).
+Business definition ready for 'Critical Spare Readiness' (0.00s).
+Business definition ready for 'Weighted Energy Intensity Index' (0.00s).
+Business definition ready for 'Rolling 30 Day On-Spec Rate' (0.00s).
+Business definition ready for 'Asset Utilization' (0.00s).
+Business definition ready for 'Yield Rate' (0.00s).
+Business definition ready for 'Clean Python KPI' (0.00s).
+Business definition ready for 'PDPL PII Violation' (0.00s).
+Business definition ready for 'Percentage Ratio' (0.00s).
+Business definition ready for 'Owner Confirmation Required' (0.00s).
+Business definition ready for 'SOC2 Unsigned Lineage' (0.00s).
+Business definition ready for 'NCA Restricted Clean Control' (0.00s).
+Business definition ready for 'NCA Restricted Execution' (0.00s).
+Business definition ready for 'GDPR Alarm Only' (0.00s).
+Business definition ready for 'Units Formula' (0.00s).
+Business definition ready for 'Explicit LaTeX' (0.00s).
+Business definition ready for 'Audit Clean Control' (0.00s).
+Business definition ready for 'Nullif Denominator Formula' (0.00s).
+Business definition ready for 'GDPR Clean Control' (0.00s).
+Business definition ready for 'Multiplication Formula' (0.00s).
+Business definition ready for 'Clean ABAP KPI' (0.00s).
+Business definition ready for 'Technical Review Only' (0.00s).
+Business definition ready for 'GDPR Data Export Violation' (0.00s).
+Business definition ready for 'Greek Symbols Formula' (0.00s).
+Business definition ready for 'Clean SQL KPI' (0.00s).
+Business definition ready for 'Validated Clean' (0.00s).
+Business definition ready for 'PDPL Clean Control' (0.00s).
+Business definition ready for 'NPS Pattern Formula' (0.00s).
+Business definition ready for 'NCA Audit Gap' (0.00s).
+Business definition ready for 'SOC2 Clean Control' (0.00s).
+Business definition ready for 'Underscores Formula' (0.00s).
+Business definition ready for 'Simple Ratio' (0.00s).
+Business definition ready for 'Subtraction Formula' (0.00s).
+Business definition ready for 'Furnace OEE Composite' (0.00s).
+Business definition ready for 'Benzene Purity Pct' (0.00s).
+Business definition ready for 'Spend Leakage Pct' (0.00s).
+Business definition ready for 'Procurement Contract Risk Score' (0.00s).
+Business definition ready for 'Complaint Reopen Rate Pct' (0.00s).
+Business definition ready for 'Aromatics Release Readiness Index' (0.00s).
+Business definition ready for 'Furnace Energy Efficiency Pct' (0.00s).
+Business definition ready for 'CO2e Emissions Intensity' (0.00s).
+Business definition ready for '# Days Inventory On Hand (DIOH)' (0.00s).
+Business definition ready for '% Service Factor' (0.00s).
+Business definition ready for '% Working Capital / Sales Revenue' (0.00s).
+Business definition ready for 'Distillation Column Efficiency %' (0.00s).
+Business definition ready for 'Furnace OEE %' (0.00s).
+Business definition ready for '$ Manufacturing Fixed Cash Cost Normalized (to TA)' (0.00s).
+Business definition ready for 'Reactor Selectivity %' (0.00s).
+Business definition ready for 'Furnace Efficiency %' (0.00s).
+Business definition ready for '% Maintenance Man Hours Estimation Accuracy' (0.00s).
+Business definition ready for '# Days To Cash (DTC)' (0.00s).
+Business definition ready for 'kpi flare recovery pct' (0.00s).
+Business definition ready for '% Customer Churn Rate' (0.00s).
+Business definition ready for '# Days of Working Inventory' (0.00s).
+Business definition ready for '# Days To Payables (DTP)' (0.00s).
+Business definition ready for 'Propylene to Ethylene (P/E) Ratio' (0.00s).
+Business definition ready for 'Cooling Water Delta-T (°C)' (0.00s).
+Business definition ready for 'Benzene Purity %' (0.00s).
+Business definition ready for '# Days of Working Capital' (0.00s).
+Business definition ready for '% Net Promoter Score (NPS)' (0.00s).
+Business definition ready for 'Steam-to-Ethylene Ratio' (0.00s).
+Business definition ready for '$ Operating Cash Flow' (0.00s).
+Business definition ready for '# Total Customer Complaints' (0.00s).
+Business definition ready for '# Justified Customer Complaints' (0.00s).
+Business definition ready for 'TRANSFORMATION LOG' (0.00s).
+Business definition ready for '% Benchmark Capability Utilization' (0.00s).
+Business definition ready for 'Maintenance to Operating Cost Ratio' (0.00s).
+Business definition ready for '# Complaints Response Time (avg in days)' (0.00s).
+Business definition ready for '% Emergency Maintenance Cost' (0.00s).
+Business definition ready for '# Non-Justified Customer Complaints' (0.00s).
+Business definition ready for 'Reactor Conversion %' (0.00s).
+Business definition ready for '# Open Customer Complaints' (0.00s).
+Business definition ready for 'OEE %' (0.00s).
+Business definition ready for 'Aromatics Recovery %' (0.00s).
+Business definition ready for 'Hydrogen Utilization %' (0.00s).
+Business definition ready for 'Dehydrogenation Selectivity %' (0.00s).
+Business definition ready for 'Flare Reduction %' (0.00s).
+Business definition ready for 'Catalyst Activity Index' (0.00s).
+Business definition ready for '$ Variable Cost / Total Production' (0.00s).
+Business definition ready for 'Polymerization Conversion %' (0.00s).
+Business definition ready for 'Compressor Availability %' (0.00s).
+Business definition ready for '# Production Loss' (0.00s).
+Business definition ready for 'Propylene Yield %' (0.00s).
+Business definition ready for '$ Fixed Cash Cost / Total Production' (0.00s).
+Business definition ready for '% On-Stream Factor' (0.00s).
+Business definition ready for '% Overall Equipment Effectiveness' (0.00s).
+Business definition ready for 'Ethylene Yield %' (0.00s).
+Business definition ready for '% Capacity Utilization' (0.00s).
+Business definition ready for 'generate figures' (0.00s).
+Business definition ready for 'webp to svg' (0.00s).
+Business definition ready for 'Gross Margin Percentage' (0.00s).
+Business definition ready for 'HSE Safety Incident Rate' (0.00s).
+Business definition ready for 'Signed Lineage Audit Trail' (0.00s).
+Business definition ready for 'Compressor Vibration Index' (0.00s).
+Business definition ready for 'Ethylene Production Yield' (0.00s).
+Business definition ready for 'SOx Emissions Concentration (kg/m3)' (0.00s).
+Business definition ready for 'Flare Emission Recovery Rate' (0.00s).
+Business definition ready for 'Yield Percentage (%)' (0.00s).
+Business definition ready for 'Inventory Modification Gap' (0.00s).
+Business definition ready for 'Mean Time Between Failures (MTBF)' (0.00s).
+Business definition ready for 'Safe Execution Latency' (0.00s).
+Business definition ready for 'Catalyst Replacement Frequency' (0.00s).
+Business definition ready for 'On-Spec Rate (%)' (0.00s).
+Business definition ready for 'EU Data Export Volume' (0.00s).
+Business definition ready for 'Polymer Melt Flow Index (MFI) Variance' (0.00s).
+Business definition ready for 'Governed Inventory Modification' (0.00s).
+Business definition ready for 'Procurement Contract Compliance Rate' (0.00s).
+Business definition ready for 'Daily Feedstock Throughput (tons/day)' (0.00s).
+Business definition ready for 'Runtime Execution Latency' (0.00s).
+Business definition ready for 'Audit Trail Completeness' (0.00s).
+Business definition ready for 'Customer Activity Index' (0.00s).
+Business definition ready for 'Masked Customer Activity Index' (0.00s).
+Business definition ready for 'Governed EU Data Export' (0.00s).
+Business definition ready for 'Specific Catalyst Cost ($/ton)' (0.00s).
+Business definition ready for 'source note inventory' (0.00s).
+Business definition ready for 'language support' (0.00s).
+Business definition ready for '# Number of New Customers' (0.00s).
+Prepared dossier for 'normalize kpi name'.
+Prepared dossier for 'generate last Figs'.
+Prepared dossier for 'meeting duration log'.
+Prepared dossier for 'SOURCE PACKAGE CHECKSUMS'.
+Prepared dossier for 'historical claim map'.
+Prepared dossier for 'start generation'.
+Prepared dossier for 'count generated kpis'.
+Prepared dossier for 'claim audit'.
+Prepared dossier for 'Customer Activity Index\ndef calculate(national id, phone num): pass'.
+Prepared dossier for 'Energy Intensity (BTU/lb)'.
+Prepared dossier for 'RAW EVIDENCE CHECKSUMS'.
+Prepared dossier for 'current architecture'.
+Prepared dossier for 'bluebook completeness'.
+Prepared dossier for 'ARCHIVE MANIFEST'.
+Prepared dossier for 'CLAIM STATUS REGISTER'.
+Prepared dossier for 'INCONSISTENCY REGISTER'.
+Prepared dossier for 'RESEARCH RECORD REGISTER'.
+Prepared dossier for 'yield percentage'.
+Prepared dossier for 'verify scenario rendered alarms'.
+Prepared dossier for 'yield rate'.
+Prepared dossier for 'wrong yield'.
+Prepared dossier for 'Asset Utilization (Wrong)'.
+Prepared dossier for 'Yield Rate (Wrong Operator)'.
+Prepared dossier for 'Customer Growth Rate'.
+Prepared dossier for 'Yield Rate (Correct)'.
+Prepared dossier for 'Asset Utilization (Correct)'.
+Prepared dossier for 'Yield Rate (Wrong Variables)'.
+Prepared dossier for 'CO2 Emissions Intensity'.
+Prepared dossier for 'Permit To Work Closure Compliance'.
+Prepared dossier for 'Emergency Shutdown Demand Rate'.
+Prepared dossier for 'Net Plant Availability'.
+Prepared dossier for 'Adjusted Feedstock Yield'.
+Prepared dossier for 'Critical Spare Readiness'.
+Prepared dossier for 'Weighted Energy Intensity Index'.
+Prepared dossier for 'Rolling 30 Day On-Spec Rate'.
+Prepared dossier for 'Asset Utilization'.
+Prepared dossier for 'Yield Rate'.
+Prepared dossier for 'Clean Python KPI'.
+Prepared dossier for 'PDPL PII Violation'.
+Prepared dossier for 'Percentage Ratio'.
+Prepared dossier for 'Owner Confirmation Required'.
+Prepared dossier for 'SOC2 Unsigned Lineage'.
+Prepared dossier for 'NCA Restricted Clean Control'.
+Prepared dossier for 'NCA Restricted Execution'.
+Prepared dossier for 'GDPR Alarm Only'.
+Prepared dossier for 'Units Formula'.
+Prepared dossier for 'Explicit LaTeX'.
+Prepared dossier for 'Audit Clean Control'.
+Prepared dossier for 'Nullif Denominator Formula'.
+Prepared dossier for 'GDPR Clean Control'.
+Prepared dossier for 'Multiplication Formula'.
+Prepared dossier for 'Clean ABAP KPI'.
+Prepared dossier for 'Technical Review Only'.
+Prepared dossier for 'GDPR Data Export Violation'.
+Prepared dossier for 'Greek Symbols Formula'.
+Prepared dossier for 'Clean SQL KPI'.
+Prepared dossier for 'Validated Clean'.
+Prepared dossier for 'PDPL Clean Control'.
+Prepared dossier for 'NPS Pattern Formula'.
+Prepared dossier for 'NCA Audit Gap'.
+Prepared dossier for 'SOC2 Clean Control'.
+Prepared dossier for 'Underscores Formula'.
+Prepared dossier for 'Simple Ratio'.
+Prepared dossier for 'Subtraction Formula'.
+Prepared dossier for 'Furnace OEE Composite'.
+Prepared dossier for 'Benzene Purity Pct'.
+Prepared dossier for 'Spend Leakage Pct'.
+Prepared dossier for 'Procurement Contract Risk Score'.
+Prepared dossier for 'Complaint Reopen Rate Pct'.
+Prepared dossier for 'Aromatics Release Readiness Index'.
+Prepared dossier for 'Furnace Energy Efficiency Pct'.
+Prepared dossier for 'CO2e Emissions Intensity'.
+Prepared dossier for '# Days Inventory On Hand (DIOH)'.
+Prepared dossier for '% Service Factor'.
+Prepared dossier for '% Working Capital / Sales Revenue'.
+Prepared dossier for 'Distillation Column Efficiency %'.
+Prepared dossier for 'Furnace OEE %'.
+Prepared dossier for '$ Manufacturing Fixed Cash Cost Normalized (to TA)'.
+Prepared dossier for 'Reactor Selectivity %'.
+Prepared dossier for 'Furnace Efficiency %'.
+Prepared dossier for '% Maintenance Man Hours Estimation Accuracy'.
+Prepared dossier for '# Days To Cash (DTC)'.
+Prepared dossier for 'kpi flare recovery pct'.
+Prepared dossier for '% Customer Churn Rate'.
+Prepared dossier for '# Days of Working Inventory'.
+Prepared dossier for '# Days To Payables (DTP)'.
+Prepared dossier for 'Propylene to Ethylene (P/E) Ratio'.
+Prepared dossier for 'Cooling Water Delta-T (°C)'.
+Prepared dossier for 'Benzene Purity %'.
+Prepared dossier for '# Days of Working Capital'.
+Prepared dossier for '% Net Promoter Score (NPS)'.
+Prepared dossier for 'Steam-to-Ethylene Ratio'.
+Prepared dossier for '$ Operating Cash Flow'.
+Prepared dossier for '# Total Customer Complaints'.
+Prepared dossier for '# Justified Customer Complaints'.
+Prepared dossier for 'TRANSFORMATION LOG'.
+Prepared dossier for '% Benchmark Capability Utilization'.
+Prepared dossier for 'Maintenance to Operating Cost Ratio'.
+Prepared dossier for '# Complaints Response Time (avg in days)'.
+Prepared dossier for '% Emergency Maintenance Cost'.
+Prepared dossier for '# Non-Justified Customer Complaints'.
+Prepared dossier for 'Reactor Conversion %'.
+Prepared dossier for '# Open Customer Complaints'.
+Prepared dossier for 'OEE %'.
+Prepared dossier for 'Aromatics Recovery %'.
+Prepared dossier for 'Hydrogen Utilization %'.
+Prepared dossier for 'Dehydrogenation Selectivity %'.
+Prepared dossier for 'Flare Reduction %'.
+Prepared dossier for 'Catalyst Activity Index'.
+Prepared dossier for '$ Variable Cost / Total Production'.
+Prepared dossier for 'Polymerization Conversion %'.
+Prepared dossier for 'Compressor Availability %'.
+Prepared dossier for '# Production Loss'.
+Prepared dossier for 'Propylene Yield %'.
+Prepared dossier for '$ Fixed Cash Cost / Total Production'.
+Prepared dossier for '% On-Stream Factor'.
+Prepared dossier for '% Overall Equipment Effectiveness'.
+Prepared dossier for 'Ethylene Yield %'.
+Prepared dossier for '% Capacity Utilization'.
+Prepared dossier for 'generate figures'.
+Prepared dossier for 'webp to svg'.
+Prepared dossier for 'Gross Margin Percentage'.
+Prepared dossier for 'HSE Safety Incident Rate'.
+Prepared dossier for 'Signed Lineage Audit Trail'.
+Prepared dossier for 'Compressor Vibration Index'.
+Prepared dossier for 'Ethylene Production Yield'.
+Prepared dossier for 'SOx Emissions Concentration (kg/m3)'.
+Prepared dossier for 'Flare Emission Recovery Rate'.
+Prepared dossier for 'Yield Percentage (%)'.
+Prepared dossier for 'Inventory Modification Gap'.
+Prepared dossier for 'Mean Time Between Failures (MTBF)'.
+Prepared dossier for 'Safe Execution Latency'.
+Prepared dossier for 'Catalyst Replacement Frequency'.
+Prepared dossier for 'On-Spec Rate (%)'.
+Prepared dossier for 'EU Data Export Volume'.
+Prepared dossier for 'Polymer Melt Flow Index (MFI) Variance'.
+Prepared dossier for 'Governed Inventory Modification'.
+Prepared dossier for 'Procurement Contract Compliance Rate'.
+Prepared dossier for 'Daily Feedstock Throughput (tons/day)'.
+Prepared dossier for 'Runtime Execution Latency'.
+Prepared dossier for 'Audit Trail Completeness'.
+Prepared dossier for 'Customer Activity Index'.
+Prepared dossier for 'Masked Customer Activity Index'.
+Prepared dossier for 'Governed EU Data Export'.
+Prepared dossier for 'Specific Catalyst Cost ($/ton)'.
+Prepared dossier for 'source note inventory'.
+Prepared dossier for 'language support'.
+Prepared dossier for '# Number of New Customers'.
+Business definition phase wall time: 0.02s for 148 KPIs with 4 deterministic detail workers.
+Deterministic detail preparation latency (sum across KPIs): 0.02s; avg per KPI latency: 0.00s; avg wall time per KPI (wall/num): 0.00s
+======================================================================
+KPI PORTFOLIO SUMMARY
+Workspace items inventoried: 4,488
+Workspace files inventoried: 4,084
+Workspace directories inventoried: 404
+Eligible files after exclusions: 454
+Implementation files evaluated: 195
+Binary/image files ignored: 38
+Unsupported files ignored: 196
+Non-metric routines ignored: 7
+Configured ignored files: 25
+Configured ignored directories: 17
+Implementation lines evaluated: 4,539
+Enterprise KPIs: 148
+Governed metrics: 148
+Average confidence: 88.3%
+======================================================================
+Workspace navigation updated with discovery workspace, RACI directory, and 148 KPI dossiers.
+Workspace build successful. Structurally resolved duplicate headings on 151 pages.
+Total wall time: 2.73s
+--- Bluebook Generation Complete! ---

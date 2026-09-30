@@ -1,0 +1,9 @@
+record_id: RR-005
+title: Pipeline Repeatability Across Consecutive Runs
+evidence_category: Current Reproducibility
+archive_status: Processed evidence created from archived log
+created_for_archive: 2026-07-15
+raw_evidence_immutable: true
+ai_correctness_pipeline: false
+source_record: RR-004
+execution_mode: deterministic-only

@@ -1,0 +1,1041 @@
+% LEAP Paper 1 -- author, declaration, and Figure 6 caption revision, 30 September 2026.
+% Current editable source: LEAP_JSS_Paper1.tex
+
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[authoryear,round]{natbib}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath,amssymb}
+\usepackage{placeins}
+\usepackage{siunitx}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{xurl}
+\emergencystretch=1.5em
+\usepackage{enumitem}
+
+\graphicspath{{figs/}}
+
+\hypersetup{
+  pdfauthor={Meshaal Obaid Mouawad},
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\newcommand{\tool}{\textsc{LEAP}}
+\newcommand{\bluebook}{\emph{Interactive Bluebook}}
+
+\newcommand{\fullcap}{\ensuremath{\checkmark}}
+\newcommand{\partialcap}{\ensuremath{\triangle}}
+\newcommand{\nocap}{--}
+
+
+% Missing figure files must fail the submission build.
+\newcommand{\safeincludegraphics}[2][]{\includegraphics[#1]{#2}}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red!70!black},
+  showstringspaces=false,
+  columns=flexible,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  captionpos=b,
+  tabsize=2
+}
+
+\begin{document}
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{LEAP: Traceable KPI Knowledge from Enterprise Code}
+\shortauthors{M.O. Mouawad}
+
+\title[mode=title]{LEAP: A Literate-Programming Architecture for Reconstructing Traceable KPI Knowledge from Enterprise Codebases}
+
+\author[1]{Meshaal Obaid Mouawad}[
+  auid=001,
+  orcid=0000-0002-1152-8324
+]
+\cormark[1]
+\ead{mmouawad@ece.msstate.edu}
+\credit{Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Visualization, Writing -- original draft}
+
+\affiliation[1]{
+  organization={Department of Electrical and Computer Engineering, Mississippi State University},
+  addressline={Box 9571},
+  city={Mississippi State},
+  postcode={39762},
+  state={MS},
+  country={USA}
+}
+
+\cortext[cor1]{Corresponding author}
+
+\begin{abstract}
+Enterprise key performance indicators (KPIs) are implemented in source code while their business definitions, mathematical descriptions, and review records are often maintained separately. This separation makes discrepancies difficult to trace across technical and business representations. We present \tool{} (Literate Programming for Automated KPI Extraction), an architecture for reconstructing a source-linked KPI knowledge record and publishing it through an \bluebook{}. The method applies literate-programming coupling to heterogeneous implementation artifacts. It combines annotation-based and structural candidate selection, preparation of declared and supported source expressions, mathematical annotation, captured source context, and bounded review signals. Declared meaning, executable evidence, and optional AI-assisted explanation remain distinguishable rather than being treated as interchangeable authorities.
+
+Evaluation uses a frozen research artifact, a worked transformation, archived executions, and a historically traced prepared-record acceptance suite. The archived snapshot verification reports 19 passing pytest checks: 18 application-test functions and one suite-level check over 38 prepared-record fixtures. The same fixtures passed the standalone scenario harness; they exercise downstream detail and governance behavior, not repository discovery or formula equality. Four archived runs each produced 62 KPI records from the same 65 selected source files and 527 analyzed lines in 0.93--1.16 seconds; a broader run generated 148 dossiers in 2.73 seconds. These results establish bounded implementation behavior and execution characteristics, not independently measured extraction accuracy. The contribution is the KPI-specific source-to-record method and its evidence responsibilities, including preservation of disagreement through publication; it is not a new general formula-extraction or provenance algorithm.
+
+\end{abstract}
+
+\begin{highlights}
+  \item LEAP links executable KPI evidence, formulas, business context, and review state.
+  \item Literate-programming principles guide a source-linked KPI knowledge record.
+  \item A worked example connects source annotations to a generated KPI dossier.
+  \item Verification separates discovery, prepared-record scenarios, and MATE checks.
+  \item Optional AI-assisted authoring remains separate from source-derived evidence.
+
+\end{highlights}
+
+\begin{keywords}
+key performance indicators \sep program comprehension \sep software documentation \sep literate programming \sep static analysis \sep knowledge engineering \sep traceability
+\end{keywords}
+
+\maketitle
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Modern enterprises depend on key performance indicators (KPIs) for operational control and strategic decision-making \citep{Parmenter2015,Kaplan1996}. Yet a KPI rarely exists as one coherent artifact. Its intended meaning may be maintained in a catalog, its calculation in source code, its presentation in a dashboard, and its ownership in a governance register. The executable result is produced by software, while the explanation used by analysts and decision makers is maintained elsewhere.
+
+This separation creates a knowledge discontinuity between technical implementation and business interpretation. A code change can alter a KPI while its documentation remains unchanged; a definition can likewise change without a corresponding implementation update. We use \emph{KPI semantic drift} to describe divergence among intended meaning, documented meaning, and executable logic. The engineering problem is therefore not only to find KPI-like calculations, but to recover an evidence chain that relates source regions, formulas, definitions, ownership, review state, and published documentation.
+
+This paper presents \tool{} (Literate Programming for Automated KPI Extraction), a research artifact for reconstructing reviewable KPI knowledge from heterogeneous enterprise codebases. Here, \emph{governed} denotes configured ownership, review signals, and rule metadata within the artifact; it does not establish organizational approval or external certification. The work follows a four-level hierarchy: literate programming provides the conceptual foundation; enterprise KPI knowledge engineering defines the problem; deterministic analysis with optional AI-assisted authoring defines the computational approach; and the \bluebook{} is one published output. The Bluebook is therefore not the system itself, but a navigable view over the recovered knowledge records.
+
+One implementation principle separates evidence construction from optional authoring:
+
+\begin{quote}
+\emph{Rule-based analysis selects and represents source evidence under explicit conditions. Optional AI-assisted authoring may explain a prepared record, but it does not assign its review status.}
+\end{quote}
+
+The literate-programming contribution is therefore not simply documentation generation from code. Classical literate programming keeps executable representation and human explanation connected. \tool{} generalizes that coupling to a heterogeneous enterprise setting by preserving code regions, mathematical representation, business meaning, provenance, ownership, and review signals as linked fields of one knowledge record. The \bluebook{} is a publication surface over that record rather than a detached narrative copy.
+
+\tool{} uses fixed rules for discovery, candidate selection, preparation of declared formulas and supported executable expressions, mathematical annotation, source capture, and bounded review checks. Selection is conditional on file and candidate order: the frozen traversal is unsorted, and duplicate-name retention can therefore vary with traversal order. Optional AI-assisted authoring is disabled for the reported verification and is not required for record construction or publication.
+
+\subsection{Research questions}
+
+The evaluation is organized around three technical research questions:
+
+\begin{description}[style=nextline,leftmargin=1.2cm]
+  \item[\textbf{RQ1}] How can literate-programming principles be operationalized in an architecture for constructing traceable KPI knowledge records from heterogeneous source evidence?
+  \item[\textbf{RQ2}] What source-to-record, mathematical-annotation, publication, and review-routing behaviors are demonstrated by the artifact's verification layers?
+  \item[\textbf{RQ3}] What execution characteristics are observed in archived runs at the curated and broader repository scopes?
+
+\end{description}
+
+This paper studies the architecture, record-construction method, and artifact behavior. Governance effectiveness, AI-assisted authoring quality, and human or organizational outcomes are reserved for separate studies. Independent extraction and formula-fidelity evaluation is not inferred from software tests.
+
+\subsection{Contributions}
+
+The paper makes three technical contributions, supported by a reproducibility package:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{A literate KPI knowledge architecture.} We define a source-to-knowledge pipeline that connects executable evidence, mathematical representation, business context, ownership, review state, and provenance.
+  \item \textbf{A source-to-record construction method.} We specify the implemented candidate-promotion and selection procedure, the Mathematical Annotation and Tagging Engine (MATE), and the provenance retained by the published record.
+  \item \textbf{Traceable mathematical representation and bounded review signals.} We connect mathematical presentation, source context, and bounded review checks, including a small set of rule-mapped scenarios and ISO~22400 templates; exhaustive governance evaluation is outside this paper's scope.
+\end{enumerate}
+
+An accompanying reproducibility package binds tests, fixtures, generated outputs, and archived executions to a claim register. It supports inspection of these contributions rather than constituting an additional algorithmic invention.
+
+\subsection{Artifact availability}
+
+The review package contains a frozen software snapshot, evidence archive, claim matrix, tests, controlled fixtures, generated Bluebook pages, and the manuscript source. The frozen snapshot derives from commit \texttt{f3b7b1d7af61}; the accompanying software manifest records the full identity. This review version does not assert a public archival identifier.
+
+% ============================================================
+\section{Background and Related Work}
+% ============================================================
+
+\subsection{Literate programming and executable documentation}
+
+Knuth's literate programming paradigm treats programs as explanations intended for human readers as well as instructions for machines \citep{Knuth1984}. Elucidative Programming later showed that source and explanation can remain in separate artifacts while preserving explicit, navigable relations between them \citep{Normark2000}. Computational notebooks further lowered the barrier to combining executable content and narrative \citep{Rule2018,Kluyver2016}. However, enterprise systems differ from notebooks in three important respects: they are distributed across repositories, implemented in multiple languages, and changed by teams with different roles and incentives. Manually maintained narrative therefore tends to lag behind implementation.
+
+A related but opposite transformation direction is represented by Drasil: domain knowledge is encoded explicitly and then used to generate mutually consistent software and documentation artifacts, improving traceability and change management \citep{Carette2023}. LEAP instead starts from existing heterogeneous implementations and reconstructs a reviewable KPI record around them. This distinction matters because the source code already exists and may disagree with comments, formulas, or business metadata.
+
+\tool{} extends the literate-programming principle through this reconstruction direction. Rather than treating prose as a detached derivative of code, it maintains linked record components for executable source, formula presentation, business interpretation, provenance, ownership, review state, and published explanation. Following the cross-artifact coupling already demonstrated by elucidative programming, LEAP specializes that relationship to a KPI record with explicit evidence origins and review responsibilities; separating code and explanation is not itself claimed as novel. The approach does not replace human review; it preserves the connection between implementation and explanation while making that connection inspectable and regenerable. Large-scale notebook studies also show that combining code and narrative does not by itself guarantee reproducibility, reinforcing the need for explicit provenance and validation state \citep{Pimentel2019}.
+
+\subsection{Mathematical documentation from source code}
+
+Source-to-mathematics documentation predates LEAP. RbG extracts mathematical formulas and decision tables through static analysis and uses source annotations to structure generated OpenDocument or LaTeX documentation \citep{Moser2015}. Moseler et~al. identify formula-code patterns in Java and reconstruct selected sum and product computations in mathematical notation \citep{Moseler2021}. Their contribution concerns formula-code structure and occurrence, whereas LEAP's unit of analysis is a KPI record assembled from potentially inconsistent implementation and declaration evidence.
+
+MATE should therefore be understood as a component of this record-construction method, not as the invention of formula extraction or mathematical redocumentation. Its role is to prepare supported source expressions and declared formulas, expose mathematical and token views, and retain the source context and bounded disagreement signals needed to interpret those views. LEAP does not reproduce the formula-recovery evaluations of these predecessors or claim comparative accuracy.
+
+\subsection{Program comprehension and code summarization}
+
+Program comprehension research has examined static analysis, code naturalness, learned representations, and natural-language summaries \citep{Allamanis2018}. Empirical work on software documentation shows that creation and maintenance problems are persistent in practice \citep{Aghajani2019}. Recent work has also evaluated LLMs for documentation-to-code traceability and found that model-assisted link recovery can be useful while still producing false links and relationship errors that motivate human review \citep{Alor2026}. For enterprise KPI documentation, these limitations matter because stakeholders need not only a fluent description but also evidence that connects each statement to executable logic.
+
+\tool{} therefore adopts a hybrid architecture. Static and rule-based methods establish the structural and mathematical representation; optional AI-assisted authoring receives the prepared record, source evidence, and context and may produce business-facing explanation. This reduces reliance on unconstrained generation and keeps source anchors, token links, and origin categories explicit for the record fields that the artifact can support. AI-assisted authoring is an architectural extension point, not part of the validation authority evaluated in this paper.
+
+The placement of AI within a governance architecture is a separate design decision. Akermi et~al.'s Proactive Data Governance Platform uses a pluggable language model within an event-driven classification and policy-enforcement workflow \citep{Akermi2026PDGP}. LEAP instead places optional authoring after record preparation and outside review-state assignment. This comparison concerns the responsibility assigned to the model, rather than a common task or a performance ranking.
+
+\subsection{KPI modeling, assessment, and evolution}
+
+The Balanced Scorecard \citep{Kaplan1996} and Goal--Question--Metric \citep{VanSolingen2002} organize measures, while management-oriented KPI literature discusses their selection and use \citep{Parmenter2015,Eckerson2011,Marr2012}. Technical KPI approaches already integrate definition, calculation, visualization, and traceability. MIKADO builds executable assessments and dashboards from KPI and domain models \citep{DeSanctis2022}. Its ethical-risk extension links expert-assessed risks to KPI inputs and exposes warnings in generated results \citep{DeSanctis2025Ethics}. Review-relevant warnings in KPI presentation are therefore not unique to LEAP; the distinction here is their connection to reconstructed source and declared-formula evidence.
+
+Semantic KPI methods provide a more direct connection between business definitions and analytic execution. Mat\'e et~al. specify KPIs through a semantic approach that translates strategic models into analytic queries and retrieves their values \citep{Mate2017}. Rold\'an-Garc\'ia et~al. represent indicator elements and relationships in an ontology with rules for selection and semantic validation \citep{RoldanGarcia2021}. Diamantini et~al.'s survey places shared indicator meaning and alignment between definition and implementation at the center of this research \citep{Diamantini2025}. LEAP approaches these relationships through evidence recovered from an existing implementation, retaining the declared formula and captured source as separately inspectable representations.
+
+AFFECTK models KPI evolution, consistency, and traceability through configurable evolution patterns \citep{Dominguez2025}. Its prototype executes primary model transformations, including creating or deleting KPIs and updating calculation rules. Consequent propagation actions are recorded as pending optional or compulsory decisions rather than all being applied automatically. This is model-evolution management, not reconstruction of a KPI's implementation from source. LEAP begins with existing heterogeneous artifacts and retains disagreement among their representations; it does not claim AFFECTK's longitudinal evolution-management capabilities.
+
+\subsection{Traceability, software knowledge, and boundary objects}
+
+Recovery of links between documentation and source code is an established software-engineering problem \citep{Marcus2005}. Putrycz and Kark further connected business rules recovered from legacy source code to existing documentation for business-facing use \citep{PutryczKark2008}, making code-to-business knowledge reconstruction an important direct predecessor rather than a new problem introduced by LEAP. Traceability research also emphasizes that these links must be maintained as systems evolve \citep{MaderGotel2012}. Industrial experience shows that missing or decayed traceability can directly obstruct software-quality and maintenance work \citep{Fucci2022}. Software knowledge graphs provide another adjacent approach for organizing code, architecture, API, and other engineering knowledge; a recent systematic review documents broad use across software engineering while also showing that knowledge-graph designs vary substantially by task and modeled content \citep{Wang2023}.
+
+Business-rule recovery also supplies direct method precedents. MARBLE uses static analysis and model transformations through the Knowledge Discovery Metamodel to recover business-process models from legacy source, followed by expert refinement \citep{PerezCastillo2011MARBLE}. Chittimalli and Bhattacharyya combine program analysis with domain descriptions; their variable-provenance method propagates those descriptions through program terms to generate SBVR business rules \citep{Chittimalli2019SBVR}. These methods establish reconstruction from code and the connection to business vocabulary. LEAP's specified transformation selects KPI candidates, prepares mathematical views, and publishes captured source, declared metadata and review signals within one dossier; it does not substitute process-model recovery or variable-provenance propagation for its documented selection rules.
+
+Integrated evidence and provenance models are further precedents. SEPIO distinguishes propositions, assertions, evidence lines, supporting data and their provenance, including conflicting assertions and supporting or refuting evidence \citep{Brush2016SEPIO}. OneProvenance reconstructs execution-dependent database lineage from query-event logs, adds runtime metadata and supplies provenance to a data catalog \citep{Psallidas2023OneProvenance}. ESDPKI specifies a reference architecture that connects provenance capture and semantic normalization with validation-gated ingestion, query, publication and governance \citep{Sadiq2026ESDPKI}. These works already combine evidence with provenance or governed publication. The LEAP comparison concerns the record reconstructed and the relationships preserved: declared mathematics, captured executable context, business-metadata origins and configured review signals. Its source context is not a substitute for OneProvenance's runtime-dependency reconstruction, and its dossier is not an implementation of SEPIO or GeoPROV.
+
+The \bluebook{} is designed around the boundary-object principle of retaining a shared referent across different communities \citep{StarGriesemer1989}: developers inspect functions, variables, and provenance; analysts inspect business meaning, units, and assumptions; governance staff inspect ownership, evidence, exceptions, and review state. The contribution in this paper is not a general knowledge graph or a generic trace-link predictor. It is the construction of a KPI-specific record whose mathematical and human-facing fields remain linked to source evidence.
+
+\subsection{Contemporary source-bound knowledge representations}
+
+Recent source-bound documentation systems further narrow the comparison. CODENS incrementally turns code changes and pull-request history into structured, queryable documentation using a typed software knowledge graph and semantic extraction \citep{Kelious2026}. Gao's Executable Code Knowledge (ECK) preprint defines source-bound knowledge units that carry semantics, executable evidence, provenance, validation state, and query interfaces for AI coding agents \citep{Gao2026}. These systems reinforce the premise that useful software knowledge should remain bound to source and validation evidence rather than exist only as free-standing generated text.
+
+The distinction for LEAP is therefore not merely ``agents versus KPIs.'' CODENS emphasizes change history and queryable repository knowledge; ECK emphasizes authored or maintained code-bound units, evidence execution, and freshness. LEAP reconstructs KPI-specific records from existing heterogeneous artifacts, separates declared mathematical meaning from executable evidence, prepares business/developer formula views, and applies bounded review-state rules before dossier publication. The novelty claim in this paper is limited to that reconstruction method and evidence responsibility model, not to source-linked software knowledge in general.
+
+\subsection{Position relative to adjacent research}
+
+The preceding systems already connect several of the required concerns. Semantic KPI models connect business definitions to calculation and reasoning \citep{Mate2017,RoldanGarcia2021}; business-rule and process-recovery methods connect implementation to business-level representations \citep{PutryczKark2008,PerezCastillo2011MARBLE,Chittimalli2019SBVR}; evidence and provenance infrastructures represent derivation, disagreement, publication or governance \citep{Brush2016SEPIO,Psallidas2023OneProvenance,Sadiq2026ESDPKI}. Alongside literate and elucidative programming, mathematical redocumentation and source-bound knowledge, they provide overlapping foundations rather than isolated ingredients. LEAP's contribution is the implemented coordination of candidate selection, formula preparation, evidence-origin distinctions and review-state construction for a published KPI record. The comparison is at those mechanisms and outputs, not a claim that combining provenance with publication is new.
+
+LEAP's theoretical connection to literate programming remains central. Classical literate programming organizes narrative and code for human comprehension \citep{Knuth1984}. LEAP extends this idea by recovering and maintaining a structured chain from executable implementation to mathematical meaning, business interpretation, assumptions, provenance, review state, and published documentation. In this sense, LEAP operationalizes literate programming as a form of \emph{executable knowledge engineering} for heterogeneous enterprise repositories.
+
+\subsection{Comparison with representative industrial platforms}
+\label{sec:platform-comparison}
+
+LEAP overlaps with adjacent industrial categories rather than serving as a direct substitute for a single platform. Palantir Foundry documents data integration and ontology-centered operations \citep{PalantirDocs}; Collibra and Alation document catalog, governance, and lineage capabilities \citep{CollibraDocs,AlationDocs}; SAP LeanIX documents enterprise-architecture management \citep{LeanIXDocs}; and Sourcegraph documents source-code navigation and code intelligence \citep{SourcegraphDocs}. LEAP's narrower contribution begins at executable source evidence and constructs a KPI record that joins formula structure, provenance, ownership, deterministic review signals, and a published dossier. This positioning is conceptual; the paper does not claim a comparative product-performance evaluation.
+
+
+\subsection{Research gap}
+
+Prior approaches recover business rules and process models from legacy software, connect KPI definitions to analytic execution, reconstruct mathematical representations, and integrate evidence, provenance and publication \citep{PutryczKark2008,PerezCastillo2011MARBLE,Chittimalli2019SBVR,Mate2017,Moser2015,Moseler2021,Brush2016SEPIO,Psallidas2023OneProvenance,Sadiq2026ESDPKI}. Other systems generate software from domain knowledge, manage modeled KPI evolution, or maintain source-bound documentation and executable knowledge \citep{Carette2023,DeSanctis2022,Dominguez2025,Kelious2026,Gao2026}. Neither starting from existing code nor combining provenance and publication alone defines LEAP's contribution.
+
+The problem addressed here is the construction of a KPI-specific record from existing heterogeneous artifacts when a declaration, source calculation, business description, and review state may disagree. LEAP specifies how candidate selection, formula preparation, evidence-origin distinctions, and bounded review signals produce an inspectable dossier without silently treating one representation as proof of another. The contribution lies in that operational connection and its implementation, rather than a claim of firstness for the individual components or demonstrated superiority over the preceding systems.
+
+% ============================================================
+\section{LEAP Architecture and Method}
+\label{sec:method}
+
+\subsection{Design principles and architectural rationale}
+
+The design addresses a specific form of documentary separation: a source expression, its mathematical description, and its business interpretation may change independently. Literate programming motivates keeping explanation connected to executable representation \citep{Knuth1984}. For existing enterprise repositories, \tool{} applies that principle through reconstruction rather than requiring developers to rewrite all software as literate source. The resulting record is a navigable connection among artifacts, not a replacement for the original implementation.
+
+Table~\ref{tab:principles} maps this rationale to the implemented mechanisms in Figure~\ref{fig:architecture}. It is an explicit account of the artifact's design choices, not a claim that a prospective design-science or independent practitioner-validation study was conducted. In particular, fixed-rule execution permits inspection of how a record was constructed; reproducibility also depends on input and traversal order. Neither property establishes the correctness of a formula or business interpretation.
+
+\begin{table*}[!t]
+\centering
+\caption{Design rationale linking the KPI knowledge problem to the architecture.}
+\label{tab:principles}
+\begin{tabularx}{\textwidth}{p{0.20\textwidth}XX}
+\toprule
+\textbf{Principle} & \textbf{Problem addressed} & \textbf{Architectural mechanism} \\
+\midrule
+Literate coupling & Formula, explanation, and implementation become detached. & One dossier exposes the formula and business context alongside the recorded source region. \\
+Evidence origin & An annotation or generated explanation can be mistaken for executable behavior. & Keep source text, declared metadata, rendered formula, and review signals distinguishable. \\
+Inspectable reconstruction & A document can outlive the source state it describes. & Re-run source analysis and record preparation; bind the evaluated package to a software manifest. \\
+Explicit validation responsibility & Fluent narrative can obscure an unresolved source conflict. & Rule and review signals are assigned outside optional AI-assisted authoring. \\
+Role-preserving views & Stakeholders need different representations of the same calculation. & Business and developer formula perspectives share a dossier and source context. \\
+Bounded automation & Unsupported candidates can appear to be validated metrics. & Promotion gates and review records retain reasons for withholding or reviewing a dossier. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Architectural overview}
+
+Source artifacts pass through discovery, language routing, candidate selection, formula preparation, provenance capture, and review evaluation. The resulting records are published through the \bluebook{}. These stages are implemented with parsing, patterns, and rules. Optional AI-assisted authoring may express a prepared record for human readers; it does not determine the source evidence or assign validation status.
+
+\begin{figure*}[!t]
+  \centering
+  \safeincludegraphics[width=\textwidth]{figs/fig04_architecture_overview.pdf}
+  \caption{LEAP source-to-knowledge architecture. Source analysis constructs a record; formula, provenance, and review information remain linked at publication. The optional-authoring connection represents narrative data flow over a prepared record; review and validation status remain assigned by the non-generative rule/review path.}
+  \label{fig:architecture}
+\end{figure*}
+
+The distinction is operational, not a comparison claiming superiority over an AI-based extractor. AI-assisted authoring was disabled for the reported verification. Table~\ref{tab:division} defines the responsibilities relevant to reproducing this configuration.
+
+\begin{table}[!t]
+\centering
+\caption{Evidence construction and optional authoring responsibilities.}
+\label{tab:division}
+\begin{tabularx}{\columnwidth}{p{0.30\columnwidth}X}
+\toprule
+\textbf{Responsibility} & \textbf{Implemented or evaluated role} \\
+\midrule
+Source analysis & Discover candidates, preserve local context, and select records through implemented rules. \\
+Mathematical presentation & Prepare supported formula forms and business/developer annotations. \\
+Review evaluation & Attach configured ownership, conflict, technical, and rule-mapped signals. \\
+Publication & Generate dossiers and portfolio views from the prepared records. \\
+Optional authoring & May produce business-facing explanation over a record; disabled in this evaluation. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Hybrid candidate extraction and selection}
+\label{sec:extraction}
+
+The implemented hybrid method combines explicit declarations with structural and naming patterns. It is not specified by a learned weighted threshold. The extractor inventories the requested directory, excludes configured paths and non-source artifacts, and routes eligible text files by extension. A candidate stores a normalized name, a detection kind, a file-line anchor, and local \texttt{code\_context}. Common comment and Python routes use a window of up to ten preceding and twenty following lines; some SQL and .NET paths expand that context. This is a recorded source region, not necessarily a complete interprocedural dependency slice.
+
+Promotion applies ordered rules. Candidates with malformed names, helper/test wording, or weak fallback-only evidence are withheld; scenario fixtures are not promoted during an ordinary whole-repository scan. An explicit KPI declaration must have a nearby formula marker, executable calculation, or business metadata. Inferred candidates require the implemented combination of business context and calculation structure; inferred Python symbols additionally require local return-arithmetic evidence. CSV promotion requires explicit KPI and Formula evidence. Rejected candidates are retained in Extraction Review with a reason and suggested action.
+
+Listing~\ref{lst:extraction-procedure} summarizes the actual selection path. The extractor deduplicates names within a file and selects one highest-ranked candidate, breaking a rank tie in favor of a human-readable name containing spaces or brackets. A further name filter operates across files. Thus this snapshot does not enumerate every independent calculation in a multi-KPI file, and identical names can collapse distinct implementations. These are implementation boundaries relevant to interpreting dossier counts.
+
+\begin{lstlisting}[language={},numbers=none,basicstyle=\ttfamily\scriptsize,caption={Source-faithful summary of the frozen candidate-selection procedure.},label={lst:extraction-procedure}]
+for each eligible source file:
+    route text to its language/pattern extractor
+    construct candidate records with source context
+    for each candidate:
+        apply name, fixture, and fallback exclusions
+        apply explicit-tag or inferred-evidence gates
+        retain rejected candidate with review reason
+    deduplicate promoted candidates by name
+    select the highest-ranked candidate for the file
+    assign evidence score from rank and detection kind
+    retain selection if its name is not already emitted
+return selected records and extraction-review records
+\end{lstlisting}
+
+\begin{table*}[!t]
+\centering
+\caption{Principal candidate-promotion and selection decisions in the frozen extractor. Internal ranks order competing candidates; they are not probabilities.}
+\label{tab:candidate-decisions}
+\begin{tabularx}{\textwidth}{p{0.20\textwidth}p{0.10\textwidth}XX}
+\toprule
+\textbf{Candidate route} & \textbf{Priority} & \textbf{Promotion condition} & \textbf{Outcome / boundary} \\
+\midrule
+Explicit KPI comment & rank 5 & KPI marker plus nearby formula marker, executable calculation, or business metadata. & Promoted unless the name is invalid/test-like; retains local source context. \\
+Structured explicit forms & rank 3 & \texttt{sql\_comment}, \texttt{dax\_measure}, \texttt{csharp\_attribute}, and \texttt{iec\_block} are explicit detection kinds; other forms require matching context. & Promoted through the same evidence gate; Full kind mapping is in Supplement~S1. \\
+Inferred function/view/alias forms & rank 2 & Business context, formula-shaped structure, and executable calculation must co-occur; inferred Python/method routes also require local return arithmetic. & Promoted when all required evidence is present; otherwise routed to Extraction Review. \\
+CSV & route-specific & Explicit KPI and Formula markers and no known bad formula artifact. & Otherwise withheld for review. \\
+Weak fallbacks & rank 1, 0, or -1 & \texttt{plsql\_return\_fallback}, logic-only, forced, and empty-file fallbacks are not sufficient evidence. & Withheld from governed dossier publication. \\
+Generic textual route & rank 2 or 3 & Business context plus calculation structure, or explicit metric language plus calculation structure. & May be promoted, subject to the same name and deduplication rules. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+After promotion, within-file deduplication retains the first candidate with each exact normalized name, before rank selection. Normalization removes supported surrounding delimiters and collapses underscores and whitespace; these final name sets are case-sensitive. Selection maximizes the pair (internal rank, readable-name indicator). If both values tie, the first candidate in extractor emission order is retained. A cross-file set then keeps the first emitted occurrence of each name. The frozen \texttt{os.walk} traversal is unsorted, so duplicate-name retention can depend on traversal order. DAX also performs earlier, route-local name suppression using lowercase names.
+
+Supplement~S1, \emph{Frozen method specification and evidence navigation}, provides the complete detection-kind/rank table, route-specific context bounds, predicate locations, emission-order rules, and source hashes. Its machine-readable locator index and verbatim source excerpts accompany the frozen implementation; they specify this snapshot rather than a revised algorithm.
+
+\subsection{Heterogeneous artifact coverage}
+
+Table~\ref{tab:languages} separates implemented routes from the distribution of the 38 prepared-record scenarios. The scenario counts describe prepared-record tests, not language-level extraction accuracy. The sample project also supplies files for routes absent from that suite; file presence alone is not an independent validation result. Formula handling depends on supported comments and expression forms, rather than complete compiler semantics for every language family.
+
+\begin{table*}[!t]
+\centering
+\caption{Implemented routing and available examples in the frozen package. Counts are file inventories, not accuracy or coverage percentages.}
+\label{tab:languages}
+\begin{tabularx}{\textwidth}{p{0.16\textwidth}Xp{0.18\textwidth}p{0.17\textwidth}}
+\toprule
+\textbf{Artifact family} & \textbf{Implemented candidate mechanism} & \textbf{Source/formula handling} & \textbf{Available examples} \\
+\midrule
+Python & KPI comments; KPI-like function names; local arithmetic promotion gate. & Comment formula and local source window. & 22 scenario files; 14 demo files. \\
+SQL & KPI comments; selected aliases, views, and function patterns. & Statement context and supported expressions. & 15 scenario files; 4 demo files. \\
+T-SQL / PL/SQL & SQL-like route; PL/SQL function-signature fallback. & SQL-shaped context, not complete dialect semantics. & One \texttt{.tsql} and one \texttt{.pks} demo file; no scenario files. \\
+SAP HANA & SQL-like extraction; JSON view-column expression fallback. & Captured SQL context or constructed expression. & One \texttt{.hdbview} demo file; no scenario files. \\
+ABAP & KPI comments and REPORT naming patterns. & Local context and explicit formula metadata. & 1 scenario file; 2 demo files. \\
+C\# / VB.NET & KPI attributes, comments, and selected method names. & Widened context for method/return forms. & 2 \texttt{.cs} and 1 \texttt{.vb} demo files; no scenario files. \\
+DAX / Structured Text & DAX measures and comments; Structured Text block/comment patterns. & Supported textual forms and local context. & 1 \texttt{.dax} and 1 \texttt{.st} demo file; no scenario files. \\
+Text / CSV & Generic textual candidates subject to promotion gates. & Explicit metadata required for CSV promotion. & 1 text demo file; no scenario files. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Mathematical annotation and evidence scoring}
+\label{sec:mate}
+
+The Mathematical Annotation and Tagging Engine (MATE) prepares formula evidence for dossier presentation through distinct operations: acquisition of an explicit declaration, extraction of a supported executable expression, normalization for display, and annotation of selected tokens. Its tested behaviors include preserving and normalizing explicit LaTeX, rendering supported expression forms, and linking formula tokens to business and developer perspectives. Formula declarations and executable source are distinct evidence: rendering a declaration does not prove that the implementation computes it. The dossier retains the source context so that this relationship can be inspected and configured conflicts can be surfaced.
+
+A focused application test supplies an explicit yield expression to the LaTeX-normalization path and checks the normalized expression, equation container, numerator/denominator labels, and scale annotation. A separate test inspects the generated Ethylene Production Yield page for mathematical output, the annotated-formula class, and business/developer token attributes. Figure~\ref{fig:formula} shows these stages. Section~\ref{sec:worked-example} supplies the concrete source-to-output transformation.
+
+Table~\ref{tab:mate-rules} makes the operative rules explicit. The parser supports selected DAX forms, SQL aliases, return/assignment expressions, Structured Text, and math-like fallbacks. Before these executable-expression paths, however, it accepts a suitable formula/calculation hint from a comment. At dossier construction, the source file is reloaded when readable; Python uses the function-scoping helper, while other formats retain the available full-file text. This downstream context can differ from the extractor's local candidate window. Supplement~S1 specifies the context fallback and ordered branches.
+
+The nominal \emph{programmatic} formula can therefore be declaration-derived when a qualifying comment remains in the parser input. A formula-like business description is also prepared separately for display selection. The generic mismatch check combines operators inferred from the programmatic display with operators found in filtered source text. Reused declaration operators can consequently suppress a mismatch signal: these display cues are not invariably independent executable evidence. The Gross Margin Python example below retains its demonstrated mismatch because its scoped executable context lacks the declared subtraction. Normalization removes selected \texttt{NULLIF}, \texttt{COALESCE}, and \texttt{CAST} wrappers for presentation, not to preserve all null, conversion, or exceptional-case semantics. Rendered mathematics is not a substitute for inspecting the retained source.
+
+\begin{table*}[!t]
+\centering
+\caption{Formula preparation, conflict signaling, and rendered review-state rules in the frozen artifact. These are structural rules, not semantic-equivalence proofs.}
+\label{tab:mate-rules}
+\begin{tabularx}{\textwidth}{p{0.19\textwidth}XX}
+\toprule
+\textbf{Decision} & \textbf{Implemented rule} & \textbf{Interpretation boundary} \\
+\midrule
+Programmatic formula preparation & Accept the first suitable declaration hint in the downstream context before supported executable-expression paths; normalize the selected form for display. & The display can reuse a declaration; it is not invariably independent executable evidence. \\
+Declared formula preparation & Prepare a formula-like business/metadata description separately for mathematical display selection. & Separate processing does not imply an independent origin or executable fidelity. \\
+Generic formula mismatch & Compare declared operator families with the union of programmatic-display cues and filtered source operators; missing families raise a mismatch. & Declaration reuse can mask a conflict. The rule does not establish variable identity, operand order, or semantic equivalence. \\
+Review-state aggregation & Any formula mismatch, governance conflict, audit note, or compliance alarm yields \emph{Needs Review}; an approved override can yield \emph{Validated}; otherwise a displayed score below 75 yields \emph{Needs Review}, and the remaining path yields \emph{Validated}. & Status is an artifact review state, not external certification. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+For the Gross Margin example, the declared expression contains subtraction, division, and multiplication, whereas the captured executable return expression contains division and multiplication but no subtraction. The structural operator-family rule therefore contributes a mismatch signal and the rendered status becomes \emph{Needs Review}. The same rule would not, by itself, detect every semantic error that preserves the same operator families; that limitation is why the source expression remains visible for review.
+
+\begin{figure*}[!t]
+  \centering
+  \safeincludegraphics[width=\textwidth]{figs/fig42_formula_extraction_engine.pdf}
+  \caption{MATE prepares supported formula evidence for mathematical and token-level presentation. Tests check specified transformations and output attributes; independent formula fidelity is a separate evaluation.}
+  \label{fig:formula}
+\end{figure*}
+
+The candidate evidence score is a heuristic, not a probability. In the inspected selection path, base scores for ranks $3,2,1,0,-1$ are $95,85,75,60,50$; other ranks default to $70$. Designated explicit detection kinds receive a floor of $90$, and designated fallback kinds receive a ceiling of $55$. This is the implemented rank/kind mapping, not a calibrated weighted sum of tag, formula, structural, and contextual probabilities. Displayed confidence therefore does not establish extraction precision or correctness.
+
+\subsection{KPI knowledge record and evidence origins}
+\label{sec:record}
+
+We define the paper's unit of analysis as a source-linked KPI record
+\begin{equation}
+ K=\langle I,S,F,B,R,P\rangle,
+\end{equation}
+where $I$ is identity, $S$ is captured source evidence, $F$ is formula presentation, $B$ is business context, $R$ is review information, and $P$ is the published view. This is a logical description of the implemented record and dossier, not a claim that the software stores this tuple as a dedicated database schema. The artifact carries these fields across extracted dictionaries, prepared details, governance metadata, and generated HTML.
+
+Table~\ref{tab:record} distinguishes their origins and rebuild behavior. Some fields originate in source comments or configured defaults, not an independent business authority. A displayed owner therefore records an assignment in the artifact; it does not by itself prove organizational approval. The software manifest identifies the evaluated source revision at package level. We do not claim that every displayed field contains its own persisted revision identifier or that display identifiers are stable under all source renames.
+
+\begin{table*}[!t]
+\centering
+\caption{Logical KPI record: evidence origins and update boundaries in the evaluated artifact.}
+\label{tab:record}
+\begin{tabularx}{\textwidth}{p{0.16\textwidth}p{0.26\textwidth}XX}
+\toprule
+\textbf{Component} & \textbf{Evidence or representation} & \textbf{Origin / responsibility} & \textbf{Rebuild boundary} \\
+\midrule
+Identity ($I$) & Name, detection kind, displayed KPI identifier. & Normalized source declaration or inferred candidate; generated presentation identity. & Recomputed or matched by the implemented name rules; not universal entity resolution. \\
+Source ($S$) & File path, line anchor, language, code context. & Captured by extraction; package manifest identifies the frozen software. & Re-read for the selected source scope. \\
+Formula ($F$) & Declared/supported expression, formal formula, token annotations. & Source metadata or supported calculation pattern; MATE prepares presentation. & Reconstructed for the dossier; fidelity requires separate checking. \\
+Business context ($B$) & Description, objective, unit, input and reporting-source fields. & Explicit source/KB metadata or template-derived text, with optional authoring outside this evaluation. & Prepared from current available inputs; no general persistence guarantee is asserted. \\
+Review ($R$) & Owner assignment, conflicts, technical notes, rule metadata, status. & Configured metadata and rule evaluation; human interpretation remains distinct. & Recomputed signals; communication controls do not persist resolution. \\
+Publication ($P$) & Dossier, formula perspectives, source/context and portfolio links. & Templates and generated HTML over the prepared record. & Regenerated output, not an independent evidentiary source. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Review signals and bounded governance}
+\label{sec:technical-review-workflow}
+
+The reviewer can inspect a dossier, locate its source, and distinguish formula conflicts, technical markers, ownership conditions, and rule-mapped alarms. The interface can prepare review text and an email draft; it does not persist an acknowledged or resolved workflow state. The artifact does not establish general equivalence between arbitrary code and natural-language requirements.
+
+\begin{figure*}[!t]
+  \centering
+  \safeincludegraphics[width=\textwidth]{figs/fig_dev_review_workflow.pdf}
+  \caption{Evidence-driven review: distinct signals retain their reasons and evidence. Communication actions support review without constituting a persisted resolution state.}
+  \label{fig:dev-review}
+\end{figure*}
+
+The application tests exercise five configured rule mappings associated with Saudi PDPL, NCA ECC, GDPR, and the AICPA Trust Services Criteria \citep{SDAIAPDPL,NCAECC,EU2016GDPR,AICPATSC}. Two additional test functions within the same application-test count exercise two bounded ISO~22400 templates using three conflict inputs and two clean input examples \citep{ISO22400}. These verify selected review behaviors, not exhaustive control coverage or compliance certification. Broader governance effectiveness is outside this paper's scope.
+
+\subsection{Worked example: Ethylene Production Yield}
+\label{sec:worked-example}
+
+The archived demonstration file \path{control_no_conflict_yield.py} and its generated \path{ethylene_production_yield.html} dossier provide an inspectable end-to-end example. This is a curated demonstration already in the frozen artifact, not a new industrial accuracy experiment. Listing~\ref{lst:yield-source} reproduces the relevant declaration and calculation; other metadata comments are omitted for space.
+
+\begin{lstlisting}[float,language=Python,basicstyle=\ttfamily\scriptsize,caption={Selected lines from the archived Ethylene Production Yield example. Other metadata comments are omitted.},label={lst:yield-source}]
+# KPI: Ethylene Production Yield
+# Formula: Ethylene Yield % = (Ethylene Produced (tons) / Feedstock Input (tons)) * 100
+# Unit: %
+# Accountable Owner: Operations Data Owner
+
+def calculate_ethylene_yield_pct(ethylene_produced_tons: float, feedstock_input_tons: float) -> float:
+    if feedstock_input_tons <= 0:
+        return 0.0
+    return (ethylene_produced_tons / feedstock_input_tons) * 100.0
+\end{lstlisting}
+
+\textbf{Candidate and provenance.} The explicit comment provides the display name; neighboring formula and business metadata satisfy the promotion path. The archived dossier records the source filename, line anchor 1, Python language, and comment-based definition pattern. This anchor refers to the declaration, while the calculation remains visible in the captured source context.
+
+\textbf{Mathematical presentation.} The displayed equation is
+\begin{equation}
+\text{Ethylene Production Yield}
+  =\frac{\text{Ethylene Produced}}{\text{Feedstock Input}}\times100.
+\end{equation}
+The published labels identify the numerator and denominator in tons and the scale as $\times100$. The annotated view binds the business token \emph{Ethylene Produced} to \texttt{VARIABLE: ethylene\_produced\_tons} and exposes \texttt{OPERATOR: /} in the developer perspective. These strings are present in the archived HTML and checked by the focused MATE test. The non-positive-input guard remains visible in the source; the displayed ratio alone is not a complete encoding of exceptional behavior.
+
+\textbf{Business context and review.} The source declares the description, objective, input units, reporting source, usage, and accountable owner. The generated page carries these fields and displays \emph{Validated} with \emph{Operations Data Owner}. Here \emph{Validated} is the artifact's status for the configured checks, not an independent certification. Optional AI-assisted authoring was not needed to generate this record.
+
+\textbf{Contrast with a conflict example.} The same sample project includes Gross Margin Percentage: its declared formula is $(\mathrm{Revenue}-\mathrm{Cost})/\mathrm{Revenue}\times100$, while the source return expression computes $(\mathrm{Revenue}/\mathrm{Cost})\times100$. Because the declared expression contains subtraction while the executable evidence does not, the implemented operator-family check contributes a mismatch signal and the archived dossier displays \emph{Needs Review}. This illustrates why rendered mathematics and executable evidence must remain distinguishable; it does not establish a general semantic-equivalence detector. The interface captures in Figures~\ref{fig:bluebook-actual} and~\ref{fig:bluebook-detail} show the corresponding presentation concepts.
+
+\subsection{Interactive Bluebook and actual interface}
+
+The \bluebook{} presents linked perspectives over the record: developers inspect source and tokens; analysts inspect meaning, formula, and units; reviewers inspect ownership and signals. Figure~\ref{fig:bridge} relates these views to the literate-programming foundation. The boundary-object interpretation is a design rationale \citep{StarGriesemer1989}; this technical paper does not test collaborative outcomes.
+
+\begin{figure*}[!t]
+  \centering
+  \safeincludegraphics[width=\textwidth]{figs/fig39_literate_programming_bridge.pdf}
+  \caption{Literate programming motivates a shared KPI record whose published views retain the connection between implementation and explanation.}
+  \label{fig:bridge}
+\end{figure*}
+
+\begin{figure*}[!t]
+  \centering
+  \safeincludegraphics[width=\textwidth]{figs/fig_dashboard_dossier.pdf}
+  \caption{Actual LEAP interface captures supplied with the research archive: (a) the KPI Intelligence Workspace dashboard; (b) the Gross Margin Percentage dossier header and review state. Displayed counts and confidence scores represent interface state and are not extraction-accuracy measurements; interface terms such as ``certified'' or ``governed'' do not by themselves establish external certification.}
+  \label{fig:bluebook-actual}
+\end{figure*}
+
+\begin{figure*}[!t]
+  \centering
+  \begin{subfigure}{0.85\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/fig06a_formula_panel.png}
+    \caption{Formula and linked perspectives}
+    \label{fig:bluebook-detail-formula}
+  \end{subfigure}\par
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/fig06b_provenance_panel.png}
+    \caption{Source provenance}
+    \label{fig:bluebook-detail-provenance}
+  \end{subfigure}
+  \caption{Details from the Gross Margin Percentage dossier: (a) declared formal formula and linked business/developer token perspectives; (b) provenance fields linking the dossier to \texttt{conflict\_formula\_margin.py}. The annotated strip is a token-oriented perspective and does not encode operator precedence; the formal formula above it is the grouping-preserving mathematical expression. The formula remains visible when the dossier requires review, preserving the distinction between declared mathematical meaning and executable evidence.}
+  \label{fig:bluebook-detail}
+\end{figure*}
+
+% ============================================================
+
+\section{Evaluation Method}
+
+\subsection{Evidence design and artifact identity}
+
+The evaluation separates architectural demonstration, repository discovery, prepared-record behavior, mathematical presentation, and archived runtime observations. Table~\ref{tab:studies} states which evidence answers each research question. A passing test supports only the behaviors it invokes and the assertions it checks; the archive does not contain an independently adjudicated KPI or formula gold set.
+
+\begin{table*}[!t]
+\centering
+\caption{Technical evidence streams and their interpretation.}
+\label{tab:studies}
+\begin{tabularx}{\textwidth}{p{0.21\textwidth}p{0.20\textwidth}Xp{0.08\textwidth}}
+\toprule
+\textbf{Evidence stream} & \textbf{Scope} & \textbf{Observable or demonstrated behavior} & \textbf{RQ} \\
+\midrule
+Architecture and worked example & Frozen source and archived generated dossier & Source, declared context, mathematical tokens, and review state linked within a record. & RQ1 \\
+Application verification & 18 functions & Routes/assets, focused candidate promotion, MATE assertions, and bounded rule cases. & RQ2 \\
+Prepared-record scenarios & 38 curated fixtures & Details, review status, expected signal text, and rule/alarm metadata for prepared inputs. & RQ2 \\
+Generation and page checks & 28 dossiers; 32 HTML pages; 6 routes & Successful publication, page-validation output, and route availability. & RQ2 \\
+RR-004, summarized by RR-005 & Four archived 62-record runs & Selected input counts, output counts, and wall time for one curated scope. & RQ3 \\
+RR-006 & One broad repository run & Inventory, selected implementation scope, output count, and wall time. & RQ3 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The frozen research-artifact snapshot derives from commit \texttt{f3b7b1d7af61}; the full identity and journal-specific changes are recorded in \path{software/SOFTWARE_SNAPSHOT.md}. The SHA-256 manifest identifies the evaluated files. QA-003 records the frozen-snapshot application tests, scenario checks, sample-project build, generated-page validation, and route checks. A separate historical-fixture audit traces the 38-fixture suite to commit \texttt{9c1f1d81d989} and confirms that all 38 fixture blobs are byte-identical at the frozen research baseline. Earlier QA states remain separate rather than being added to the test count.
+
+All reported verification uses optional AI-assisted authoring disabled. Survey aggregates, meeting observations, and AI-quality data are not evidence streams for this paper. The architectural demonstration does not assert a formal proof or independent user validation of the design.
+
+\subsection{Application and generated-output checks}
+
+Application tests invoke different layers. Route and static-asset tests check the control plane and served pages. Candidate-promotion tests call the repository-discovery entry point on temporary positive or excluded examples. MATE tests assert specified normalized LaTeX and selected generated-HTML attributes. Rule tests evaluate configured conflict inputs and clean controls. The frozen sources contain 18 application-test functions and one suite-level test of the 38 scenarios. These account for the 19 checks in the archived pytest report. The two ISO-template functions are included within the application-test layer, not an additional independent study; the suite-level check is not an additional scenario.
+
+\begin{table*}[!t]
+\centering
+\caption{Mapping from major method branches to existing focused application checks. Function names identify the executable checks in the frozen package; counts are not accuracy observations.}
+\label{tab:test-map}
+\begin{tabularx}{\textwidth}{p{0.19\textwidth}p{0.34\textwidth}X}
+\toprule
+\textbf{Method branch} & \textbf{Representative frozen test functions} & \textbf{What is asserted} \\
+\midrule
+Repository discovery / promotion & \path{test_candidate_promotion_gate_quarantines_helper_and_register_noise}; \path{test_candidate_promotion_gate_promotes_explicit_formula_kpi} & Bounded negative and positive promotion behavior on temporary repository inputs. \\
+MATE normalization / publication & \path{test_mate_preserves_explicit_latex_and_formula_annotations}; \path{test_mate_generated_dossier_contains_annotated_formula_lineage} & Selected LaTeX normalization, annotation attributes, and generated-page mathematical lineage. \\
+Rule routing / review signals & Five compliance-alarm tests plus \path{test_review_queue_signal_separation} & Rule identity/metadata for configured cases and separation of review reasons. \\
+ISO template checks & \path{test_iso_22400_yield_rule_detection_and_clean_control}; \path{test_iso_22400_asset_utilization_rule_detection_and_clean_control} & Three conflict inputs and two clean inputs across two narrow templates. \\
+Publication / availability & Route, committed-page, static-asset, and workspace-asset tests & Page/asset availability and control-plane response, not semantic correctness. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The archived generation check produced 28 dossiers and 32 HTML pages. Generated-HTML validation and six representative route checks are separate checks of publication and availability. Neither an HTTP success code nor a warning-free documentation build demonstrates the semantic correctness of every displayed statement.
+
+\subsection{Controlled prepared-record scenarios}
+\label{sec:scenario-fixtures}
+
+The 38 scenario files are curated, source-shaped examples with embedded expected-result headers: 22 Python, 15 SQL, and one ABAP fixture. Table~\ref{tab:scenario-fixtures} groups their numbered files by intended test purpose. These groups are a transparent inventory of the fixture suite, not classes sampled from an enterprise population. The expectations are treated as development-time acceptance criteria; the archive does not establish independent authorship or adjudication of their text.
+
+An audit of archived Git provenance first locates the fixtures, their expected-result headers, and the harness together at commit \texttt{9c1f1d81d989} on 15 July 2026. All 38 fixture files remain byte-identical at research baseline \texttt{f3b7b1d7af61}. A processed inventory dated 14 July reports 38/38 passing, but no contemporaneous raw execution transcript, environment receipt, or separately versioned pre-execution oracle was located. The suite is therefore reused as historical prepared-record acceptance evidence, not represented as a newly designed or independently adjudicated experiment. The accompanying historical-fixture audit records the full commit identities, comparison results, and source paths. The supplied QA-004 execution summary reports that \texttt{python data/validation/test\_scenario\_fixtures.py} completed on 21 September 2026 with exit status~0 and 38/38 passing. This review distribution preserves that summary as a reported-run record, not as the original stdout, stderr, or environment receipt. The available QA-003 archive and the historical inventory remain the packaged verification sources; no later rerun authenticates the historical execution date or supplies an independent oracle.
+
+\begin{table}[!t]
+\centering
+\caption{Scenario inventory by file-number group. Counts sum to 38; groups describe fixture intent, not independent measurement strata.}
+\label{tab:scenario-fixtures}
+\begin{tabularx}{\columnwidth}{p{0.17\columnwidth}Xr}
+\toprule
+\textbf{Files} & \textbf{Intended scenario group} & \textbf{Count} \\
+\midrule
+01--03 & Clean Python, SQL, and ABAP examples & 3 \\
+04--08 & Formula/source conflict or absent-evidence cases & 5 \\
+09--12 & Technical markers and suspicious fallback & 4 \\
+13--17 & Rule-mapped positive cases & 5 \\
+18--22 & Corresponding clean rule controls & 5 \\
+23--28 & Combined signals, review/owner conditions, clean status & 6 \\
+29--38 & Formula-shaped examples and presentation inputs & 10 \\
+\midrule
+\multicolumn{2}{l}{Total} & 38 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+For each fixture, the harness reads the expected header, parses its KPI name, and constructs a record containing the filename, full fixture context, language hint, and a fixed input confidence of 90.0. It calls \texttt{generate\_kpi\_details} and \texttt{attach\_governance}. It then checks derived status and Review Queue membership, expected rule identifiers and metadata, non-empty alarm evidence and recommended action, clean-control absence of alarms, and specified signal text. A fixture passes when this assertion set reports no mismatch.
+
+This harness does not call the repository-discovery entry point or candidate-promotion gate. Its 38 passing results therefore concern downstream behavior on prepared records; repository discovery is covered separately by application tests and archived generation records. Although the header parser reads an expected-formula field, the harness does not directly compare that field with a generated formula. Exact normalization and selected annotation attributes are checked by the separate MATE application tests. The ten formula-shaped scenarios must not be counted as ten independent formula-equality validations.
+
+For example, the restricted-execution fixture expects an NCA-linked signal, while its clean counterpart expects no such alarm. Formula-conflict and TODO examples check whether the configured review reasons are surfaced. These are demonstrations of configured behavioral conformance, not estimates of general detection sensitivity or false-positive rate.
+
+\subsection{Archived runtime observations}
+
+RR-004 preserves four executions of a curated workload with 65 selected files and 527 analyzed lines. RR-005 is their derived repeatability summary, not another set of runs. RR-006 records one broad local-repository traversal with a different inventory and curation scope. We report the counts and instrumented wall times associated with each archive and do not combine the two scopes into a scaling experiment.
+
+The measures are output-record count, selected source size, and total wall time. For the four repeated runs, we report the arithmetic mean and sample standard deviation. Complete hardware, warm-up, and cache metadata are not archived, so comparisons to other tools or environments are outside the evidence. Internal confidence scores are not used as accuracy statistics.
+
+% ============================================================
+
+\section{Results}
+% ============================================================
+
+\subsection{RQ1: Source-linked KPI knowledge construction}
+
+The architecture operationalizes literate coupling through the record components in Table~\ref{tab:record} and the implemented selection procedure in Listing~\ref{lst:extraction-procedure}. The Ethylene Production Yield example links a declared KPI, local calculation, annotated expression, source anchor, business metadata, and a generated dossier. The contrasting Gross Margin example shows why a declared mathematical view and a conflicting return expression remain separately inspectable. Together, these demonstrate the record-construction mechanism in the frozen artifact; they do not establish how frequently that mechanism succeeds on an independently labeled corpus.
+
+
+\subsection{RQ2: Behavior demonstrated by the verification layers}
+\label{sec:scenario-results}
+
+QA-003 reports 19 passing regression checks and a passing execution of the 38 prepared-record scenarios. The supplied sources define 18 application-test functions and one suite-level scenario test; these are distinct counting units from the 38 fixture inputs. The archived July inventory and QA-003 involve the same fixture suite; their scenario counts are not added. The sample-project build produced 28 dossiers and 32 HTML pages; generated-page validation reported zero warnings and errors, and six representative routes returned HTTP 200. Table~\ref{tab:frozen-verification} retains the counting units and separates test functions, scenarios, and generated outputs.
+
+\begin{table}[!t]
+\centering
+\caption{Archived frozen-artifact verification; layers are not additive estimates of extraction accuracy.}
+\label{tab:frozen-verification}
+\small
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}X r >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Verification layer} & \textbf{Count} & \textbf{Outcome} \\
+\midrule
+Regression checks & 19 & Passed: 18 application functions and one suite-level check \\
+Prepared-record scenarios & 38 & Historical inventory and QA-003 report passing \\
+Generated KPI dossiers & 28 & Build completed \\
+Generated HTML pages & 32 & No warnings/errors \\
+Representative routes & 6 & HTTP 200 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The focused MATE assertions confirm the specified normalization and selected business/developer annotations. The scenario suite confirms expected status, signals, and rule metadata for its prepared inputs. Two application-test functions exercise two ISO templates using three conflict inputs and two clean input examples. These results support the behavior of those layers and their configured cases, not exhaustive language, formula, or standards coverage.
+
+
+\subsection{RQ3: Execution observations at two input scopes}
+
+Four archived runs with AI-assisted authoring disabled used the same curated input scope: 65 selected source files, 527 analyzed lines, and 62 generated KPI records. Their wall times were 0.93, 1.14, 0.95, and 1.16 seconds (Table~\ref{tab:runtime-repeat}). The minimum was 0.93 seconds, the maximum 1.16 seconds, the arithmetic mean 1.045 seconds, and the sample standard deviation 0.122 seconds. Hardware, cache, and warm-up metadata are incomplete, so these values describe the archived environment and are not presented as a portable benchmark.
+
+\begin{table}[!t]
+\centering
+\caption{Repeated executions in RR-004; RR-005 summarizes these same four runs.}
+\label{tab:runtime-repeat}
+\resizebox{\columnwidth}{!}{\begin{tabular}{lrrrr}
+\toprule
+\textbf{Run} & \textbf{Selected files} & \textbf{Lines} & \textbf{Records} & \textbf{Wall time (s)}\\
+\midrule
+RR-004-A & 65 & 527 & 62 & 0.93\\
+RR-004-B & 65 & 527 & 62 & 1.14\\
+RR-004-C & 65 & 527 & 62 & 0.95\\
+RR-004-D & 65 & 527 & 62 & 1.16\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+A separate broad local-repository run inventoried 4,488 workspace items, including 4,084 files and 404 directories. It retained 454 eligible files, evaluated 195 implementation files and 4,539 implementation lines, and generated 148 dossiers in 2.73 seconds (Table~\ref{tab:runtime-broad}). This run intentionally exercised a heterogeneous repository and therefore includes scan noise that would not belong to a curated production KPI corpus. It is reported as a broader repository execution observation, not as an accuracy result, controlled stress test, or scaling law, and is not normalized against the curated run.
+
+\begin{table}[!t]
+\centering
+\caption{RR-006 broader repository execution observation.}
+\label{tab:runtime-broad}
+\begin{tabular}{lr}
+\toprule
+\textbf{Observed quantity} & \textbf{Value}\\
+\midrule
+Workspace items & 4,488\\
+Files / directories & 4,084 / 404\\
+Eligible files & 454\\
+Implementation files / lines & 195 / 4,539\\
+Generated dossiers & 148\\
+Wall time & 2.73 s\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both runtime records include internal evidence scores used for review routing. Because no calibration study is archived, those scores are not interpreted as correctness probabilities or accuracy percentages.
+
+% ============================================================
+\section{Discussion}
+% ============================================================
+
+\subsection{Literate reconstruction and evidence boundaries}
+
+The principal contribution is the inspectable connection among executable evidence, declared meaning, mathematical presentation, and a published KPI record. Unlike a detached code summary, the record exposes the source and review information needed to question its interpretation. The different verification layers demonstrate specified parts of that construction. Their successful execution does not establish corpus-level extraction accuracy.
+
+Optional AI-assisted authoring remains an extension over an already constructed record. Separating authoring from source analysis and status assignment makes the origin and responsibility of each output clearer. The fixed rules make the configured procedure inspectable, subject to the documented order-dependent selection. A repeatable implementation can still contain a systematic error, so repeatability and correctness remain separate properties.
+
+\subsection{Interpreting the runtime observations}
+
+The four curated runs demonstrate repeatability of the observed output count and provide a bounded wall-time interval for one archived workload. RR-006 shows that the same implementation can complete a substantially broader local-repository traversal and dossier build. The two records differ in scope, curation, and repository composition; a per-KPI comparison or extrapolated scaling claim would therefore be misleading. A formal performance study requires fixed hardware, cache and warm-up controls, repeated broad runs, and predefined workload strata.
+
+\subsection{Mathematical and governance traceability}
+
+MATE supplies an inspectable representation of formula structure and connects mathematical output to source evidence. The current evidence supports implementation traceability, not a formula-fidelity percentage. Likewise, the governance layer demonstrates specified behavior for five configured rule mappings and two narrow ISO~22400 templates. The contribution is the explicit route from rule metadata and evidence to a review signal, not exhaustive coverage of the named standards.
+
+\subsection{The Bluebook as a boundary object}
+
+The Bluebook presents linked technical, analytical, and governance views over the same recovered record. This makes disagreements more locatable: a reviewer can point to a formula, unit, source span, owner, or evidence gap rather than reconcile disconnected documents. Whether this shared representation improves cross-functional collaboration is intentionally left to a separate human-centered study rather than inferred in this technical paper.
+
+\subsection{Implications for software engineering practice}
+
+The supported evidence suggests three implementation principles:
+
+\begin{enumerate}[leftmargin=*]
+  \item Preserve the distinction between executable evidence, declared metadata, and authored explanation.
+  \item Treat generated explanations, when enabled, as derived and reviewable rather than evidentiary sources.
+  \item Preserve provenance at the granularity the artifact can support: source anchors for captured code evidence, token links for selected mathematical elements, and explicit origin categories for curated, template-derived, or optionally authored fields.
+\end{enumerate}
+
+\subsection{Limitations and threats to validity}
+
+\paragraph{Extraction and formula validity.}
+No completed adjudicated KPI gold set or formula gold set is archived. The paper therefore does not report precision, recall, false-positive rate, formula accuracy, or ablation effects. Controlled fixtures verify expected software behavior but cannot replace independent annotation.
+
+\paragraph{Runtime validity.}
+The curated runtime records lack complete hardware, cache, and warm-up metadata. RR-006 is a single broader repository execution observation and includes repository noise. The timings are reproducibility records for their archived inputs, not general performance guarantees.
+
+\paragraph{External validity.}
+The tested languages, source patterns, and governance rules are bounded by the frozen fixtures and configured mappings. The current selection path retains one candidate per file and filters duplicate names across files; this can omit independent metrics or merge names that refer to different calculations. Captured line anchors and context windows are not whole-program dependency slices. Highly dynamic code, additional dialects, and organization-specific vocabularies require separate validation.
+
+\paragraph{Oracle and presentation validity.}
+Scenario expectations are development artifacts rather than an independently adjudicated oracle. The prepared-record harness does not test repository discovery or directly assert its parsed expected-formula field. Some dossier text and ownership assignments come from templates or defaults; those fields must not be mistaken for independently approved business facts. The interface figures are illustrative captures and are not themselves counted as software-verification outcomes.
+
+\paragraph{Provenance granularity.}
+The artifact preserves record-level source anchors, captured context, selected mathematical token links, and field-family origin categories. It does not persist an independent revision identifier or machine-verifiable provenance edge for every displayed value or sentence. Claims in this paper therefore refer to source-linked records and supported field origins, not universal per-value provenance.
+
+\paragraph{Measurement interpretation.}
+Internal evidence scores rank recovered records for presentation and review routing. They have not been calibrated as probabilities and must not be interpreted as extraction accuracy or confidence intervals.
+
+% ============================================================
+\section{Conclusion}
+
+We presented \tool{}, a literate-programming architecture for reconstructing traceable KPI knowledge from enterprise source artifacts. The contribution is a method and record structure that keep source context, mathematical presentation, business metadata, and review signals connected through an Interactive Bluebook. The worked example and implementation-faithful specification make this transformation inspectable rather than treating generated documentation as an independent source of truth.
+
+The archived verification reports 19 regression checks passing, and the historical archive reports all 38 prepared-record scenarios passing. The packaged QA-003 record also reports the unchanged 38-fixture suite passing; these records are not combined as independent observations. Four archived runs each generated 62 records from the same 65 selected files in 0.93--1.16 seconds; a broader run generated 148 dossiers in 2.73 seconds. These results establish bounded implementation behavior and execution observations. They do not substitute for independent extraction or formula-fidelity measurement.
+
+Future technical evaluation will address adjudicated KPI and formula corpora, multi-KPI-per-file selection, and controlled runtime workloads. Broader governance effectiveness, AI-assisted authoring quality, and cross-functional organizational effects remain separate studies. This paper's focus is the source-to-knowledge architecture and the explicit connection between implementation and explanation.
+
+% ============================================================
+
+\section*{Data and Artifact Availability}
+
+The accompanying review workspace supplies the frozen software, tests, prepared-record fixtures, generated outputs, evidence manifests, manuscript source, historical-fixture audit, and QA-003 verification records. Supplement~S1 identifies the exact method branches, source hashes, worked-example locations, and evidence paths. A separate manuscript-source archive contains the build materials and supplement, not the complete executable artifact; reviewers should receive the review workspace as well as the PDF.
+
+QA-004 is represented here by the supplied execution summary. Its original run directory has not been transferred into this distribution and is not claimed to be included. The package's evidence-status record makes that distinction explicit. No public archival identifier is asserted.
+
+% ============================================================
+
+
+
+% ============================================================
+% REFERENCES
+% ============================================================
+
+\bibliographystyle{cas-model2-names}
+\section*{Funding}
+This research received no specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+\section*{Declaration of competing interest}
+The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of Generative AI and AI-assisted technologies in the writing process}
+During preparation of this work,the author used Elsevier LeapSpace to support literature discovery, manuscript organization, language refinement, and consistency checking. The author reviewed and edited the resulting material and takes full responsibility for the content of the article.
+
+\begin{thebibliography}{99}
+
+
+\bibitem[Aghajani et~al.(2019)Aghajani, Nagy, Vega-M\'arquez, Linares-V\'asquez, Moreno, Bavota, and Lanza]{Aghajani2019}
+E. Aghajani, C. Nagy, O.L. Vega-M\'arquez, M. Linares-V\'asquez, L. Moreno, G. Bavota, M. Lanza,
+\newblock Software documentation issues unveiled,
+\newblock in: 2019 IEEE/ACM 41st International Conference on Software Engineering (ICSE), 2019, pp. 1199--1210.
+\newblock \url{https://doi.org/10.1109/ICSE.2019.00122}.
+
+\bibitem[Alor et~al.(2026)Alor, Khatoonabadi, and Shihab]{Alor2026}
+E. Alor, S. Khatoonabadi, E. Shihab,
+\newblock Evaluating the use of LLMs for documentation to code traceability,
+\newblock ACM Transactions on Software Engineering and Methodology (2026).
+\newblock \url{https://doi.org/10.1145/3819820}.
+
+\bibitem[Fucci et~al.(2022)Fucci, Al\'egroth, and Axelsson]{Fucci2022}
+D. Fucci, E. Al\'egroth, T. Axelsson,
+\newblock When traceability goes awry: An industrial experience report,
+\newblock Journal of Systems and Software 192 (2022) 111389.
+\newblock \url{https://doi.org/10.1016/j.jss.2022.111389}.
+
+\bibitem[Gao(2026)]{Gao2026}
+X. Gao,
+\newblock Executable Code Knowledge: Code as a native, validation-carrying knowledge representation for AI coding agents,
+\newblock arXiv preprint arXiv:2608.16295 (2026).
+\newblock \url{https://arxiv.org/abs/2608.16295}.
+
+\bibitem[International Organization for Standardization(2014)]{ISO22400}
+International Organization for Standardization,
+\newblock ISO 22400-2:2014, Automation systems and integration---Key performance indicators (KPIs) for manufacturing operations management---Part 2: Definitions and descriptions,
+\newblock 2014.
+\newblock \url{https://www.iso.org/standard/54497.html}.
+
+\bibitem[M\"ader and Gotel(2012)]{MaderGotel2012}
+P. M\"ader, O. Gotel,
+\newblock Towards automated traceability maintenance,
+\newblock Journal of Systems and Software 85~(10) (2012) 2205--2227.
+\newblock \url{https://doi.org/10.1016/j.jss.2011.10.023}.
+
+\bibitem[National Cybersecurity Authority(2025)]{NCAECC}
+National Cybersecurity Authority,
+\newblock Essential Cybersecurity Controls (ECC 2-2024),
+\newblock Saudi Arabia, updated 2025.
+\newblock \url{https://nca.gov.sa/en/regulatory-documents/controls-list/ecc/}.
+
+\bibitem[Pimentel et~al.(2019)Pimentel, Murta, Braganholo, and Freire]{Pimentel2019}
+J.F. Pimentel, L. Murta, V. Braganholo, J. Freire,
+\newblock A large-scale study about quality and reproducibility of Jupyter notebooks,
+\newblock in: 2019 IEEE/ACM 16th International Conference on Mining Software Repositories (MSR), 2019, pp. 507--517.
+\newblock \url{https://doi.org/10.1109/MSR.2019.00077}.
+
+\bibitem[Saudi Data \& AI Authority(2026)]{SDAIAPDPL}
+Saudi Data \& AI Authority,
+\newblock Personal Data Protection Law and implementing regulatory resources,
+\newblock Saudi Arabia, accessed September 2026.
+\newblock \url{https://sdaia.gov.sa/en/SDAIA/about/Pages/RegulationsAndPolicies.aspx}.
+
+\bibitem[European Union(2016)]{EU2016GDPR}
+European Union,
+\newblock Regulation (EU) 2016/679 (General Data Protection Regulation),
+\newblock Official Journal of the European Union, 2016.
+\newblock \url{https://eur-lex.europa.eu/eli/reg/2016/679/oj}.
+
+\bibitem[AICPA(2023)]{AICPATSC}
+AICPA \& CIMA,
+\newblock 2017 Trust Services Criteria (with revised points of focus---2022),
+\newblock resource release, 2023.
+\newblock \href{https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022}{AICPA Trust Services Criteria resource}.
+
+\bibitem[Wang et~al.(2023)Wang, Sun, Zhang, Nie, and Huang]{Wang2023}
+L. Wang, C. Sun, C. Zhang, W. Nie, K. Huang,
+\newblock Application of knowledge graph in software engineering field: A systematic literature review,
+\newblock Information and Software Technology 164 (2023) 107327.
+\newblock \url{https://doi.org/10.1016/j.infsof.2023.107327}.
+
+\bibitem[Alation(2026)]{AlationDocs}
+Alation,
+\newblock Alation documentation: Data catalog, discovery, governance, and lineage,
+\newblock Product documentation, accessed July 14, 2026.
+\newblock \url{https://docs.alation.com/}.
+
+\bibitem[Allamanis et~al.(2018)Allamanis, Barr, Devanbu, and Sutton]{Allamanis2018}
+M. Allamanis, E.T. Barr, P. Devanbu, C. Sutton,
+\newblock A survey of machine learning for big code and naturalness,
+\newblock ACM Computing Surveys 51~(4) (2018) 81:1--81:37.
+\newblock \url{https://doi.org/10.1145/3212695}.
+
+\bibitem[Collibra(2026)]{CollibraDocs}
+Collibra,
+\newblock Collibra product documentation: Data catalog, governance, stewardship, and lineage,
+\newblock Product documentation, accessed July 14, 2026.
+\newblock \url{https://productresources.collibra.com/docs/collibra/latest/}.
+
+\bibitem[Eckerson(2011)]{Eckerson2011}
+W.W. Eckerson,
+\newblock Performance Dashboards: Measuring, Monitoring, and Managing Your Business,
+\newblock John Wiley \& Sons, 2011.
+
+\bibitem[Kaplan and Norton(1996)]{Kaplan1996}
+R.S. Kaplan, D.P. Norton,
+\newblock The Balanced Scorecard: Translating Strategy into Action,
+\newblock Harvard Business School Press, 1996.
+
+\bibitem[Knuth(1984)]{Knuth1984}
+D.E. Knuth,
+\newblock Literate programming,
+\newblock The Computer Journal 27~(2) (1984) 97--111.
+\newblock \url{https://doi.org/10.1093/comjnl/27.2.97}.
+
+\bibitem[SAP(2026)]{LeanIXDocs}
+SAP,
+\newblock SAP LeanIX documentation: Enterprise architecture management and application portfolio capabilities,
+\newblock Product documentation, accessed July 14, 2026.
+\newblock \url{https://help.sap.com/docs/leanix}.
+
+\bibitem[Marr(2012)]{Marr2012}
+B. Marr,
+\newblock Key Performance Indicators: The 75 Measures Every Manager Needs to Know,
+\newblock Pearson, 2012.
+
+\bibitem[Palantir Technologies(2026)]{PalantirDocs}
+Palantir Technologies,
+\newblock Foundry documentation: Ontology, data integration, lineage, and code workspaces,
+\newblock Product documentation, accessed July 14, 2026.
+\newblock \url{https://www.palantir.com/docs/foundry/}.
+
+\bibitem[Parmenter(2015)]{Parmenter2015}
+D. Parmenter,
+\newblock Key Performance Indicators: Developing, Implementing, and Using Winning KPIs,
+\newblock John Wiley \& Sons, 2015.
+
+\bibitem[Kluyver et~al.(2016)Kluyver, Ragan-Kelley, P\'erez, Granger, Bussonnier, Frederic, Kelley, Hamrick, Grout, Corlay, Ivanov, Avila, Abdalla, Willing, and Jupyter Development Team]{Kluyver2016}
+T. Kluyver, B. Ragan-Kelley, F. P\'erez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, Jupyter Development Team,
+\newblock Jupyter Notebooks---a publishing format for reproducible computational workflows,
+\newblock in: Positioning and Power in Academic Publishing: Players, Agents and Agendas, IOS Press, 2016, pp. 87--90.
+\newblock \url{https://doi.org/10.3233/978-1-61499-649-1-87}.
+
+\bibitem[Rule et~al.(2018)Rule, Tabard, and Hollan]{Rule2018}
+A. Rule, A. Tabard, J.D. Hollan,
+\newblock Exploration and explanation in computational notebooks,
+\newblock in: Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems, 2018, pp. 1--12.
+\newblock \url{https://doi.org/10.1145/3173574.3173606}.
+
+\bibitem[Sourcegraph(2026)]{SourcegraphDocs}
+Sourcegraph,
+\newblock Sourcegraph documentation: Code search, code navigation, and code intelligence,
+\newblock Product documentation, accessed July 14, 2026.
+\newblock \url{https://sourcegraph.com/docs}.
+
+\bibitem[van Solingen et~al.(2002)van Solingen, Basili, Caldiera, and Rombach]{VanSolingen2002}
+R. van Solingen, V. Basili, G. Caldiera, H.D. Rombach,
+\newblock Goal Question Metric (GQM) approach,
+\newblock in: Encyclopedia of Software Engineering, Wiley, 2002.
+
+\bibitem[Dom\'inguez et~al.(2025)Dom\'inguez, P\'erez, Rubio, and Zapata]{Dominguez2025}
+E. Dom\'inguez, B. P\'erez, A.L. Rubio, M.A. Zapata,
+\newblock A flexible framework to ensure traceability, consistency, and propagation of KPIs evolution,
+\newblock Journal of Software: Evolution and Process 37~(2) (2025) e70004.
+\newblock \url{https://doi.org/10.1002/smr.70004}.
+
+\bibitem[Putrycz and Kark(2008)]{PutryczKark2008}
+E. Putrycz, A.W. Kark,
+\newblock Connecting legacy code, business rules and documentation,
+\newblock in: Rule Representation, Interchange and Reasoning on the Web (RuleML 2008), Lecture Notes in Computer Science 5321, Springer, 2008, pp. 17--30.
+\newblock \url{https://doi.org/10.1007/978-3-540-88808-6_5}.
+
+\bibitem[Carette et~al.(2023)Carette, Smith, and Balaci]{Carette2023}
+J. Carette, S.W. Smith, J. Balaci,
+\newblock Generating software for well-understood domains,
+\newblock in: Eelco Visser Commemorative Symposium (EVCS 2023), OASIcs 109, 2023, pp. 7:1--7:12.
+\newblock \url{https://doi.org/10.4230/OASIcs.EVCS.2023.7}.
+
+\bibitem[N\o rmark(2000)]{Normark2000}
+K. N\o rmark,
+\newblock Elucidative programming,
+\newblock Nordic Journal of Computing 7~(2) (2000) 87--105.
+\newblock \url{https://homes.cs.aau.dk/~normark/elucidative-programming/papers/njc-paper.pdf}.
+
+\bibitem[Kelious et~al.(2026)Kelious, Tahri, and Bardet]{Kelious2026}
+A. Kelious, C. Tahri, E. Bardet,
+\newblock CODENS: Transforming code changes into living, accessible, and queryable documentation,
+\newblock in: Proceedings of the 2026 ACM Symposium on Document Engineering (DocEng '26), ACM, 2026, 4 pages.
+\newblock \url{https://doi.org/10.1145/3820755.3832807}.
+
+\bibitem[De Sanctis et~al.(2022)De Sanctis, Iovino, Rossi, and Wimmer]{DeSanctis2022}
+M. De Sanctis, L. Iovino, M.T. Rossi, M. Wimmer,
+\newblock MIKADO: a smart city KPIs assessment modeling framework,
+\newblock Software and Systems Modeling 21 (2022) 281--309.
+\newblock \url{https://doi.org/10.1007/s10270-021-00907-9}.
+
+\bibitem[Marcus et~al.(2005)Marcus, Maletic, and Sergeyev]{Marcus2005}
+A. Marcus, J.I. Maletic, A. Sergeyev,
+\newblock Recovery of traceability links between software documentation and source code,
+\newblock International Journal of Software Engineering and Knowledge Engineering 15~(5) (2005) 811--836.
+\newblock \url{https://doi.org/10.1142/S0218194005002543}.
+
+\bibitem[Star and Griesemer(1989)]{StarGriesemer1989}
+S.L. Star, J.R. Griesemer,
+\newblock Institutional ecology, `translations' and boundary objects: Amateurs and professionals in Berkeley's Museum of Vertebrate Zoology, 1907--39,
+\newblock Social Studies of Science 19~(3) (1989) 387--420.
+\newblock \href{https://doi.org/10.1177/030631289019003001}{doi:10.1177/030631289019003001}.
+
+
+\bibitem[Moser et~al.(2015)Moser, Pichler, Fleck, and Witlatschil]{Moser2015}
+M. Moser, J. Pichler, G. Fleck, M. Witlatschil,
+\newblock RbG: A documentation generator for scientific and engineering software,
+\newblock in: 2015 IEEE 22nd International Conference on Software Analysis, Evolution, and Reengineering (SANER), IEEE, 2015, pp. 464--468.
+\newblock \url{https://doi.org/10.1109/SANER.2015.7081857}.
+
+\bibitem[Moseler et~al.(2021)Moseler, Lemmer, Baltes, and Diehl]{Moseler2021}
+O. Moseler, F. Lemmer, S. Baltes, S. Diehl,
+\newblock On the diversity and frequency of code related to mathematical formulas in real-world Java projects,
+\newblock Journal of Systems and Software 172 (2021) 110863.
+\newblock \url{https://doi.org/10.1016/j.jss.2020.110863}.
+
+\bibitem[De Sanctis et~al.(2025)De Sanctis, Iovino, and Rossi]{DeSanctis2025Ethics}
+M. De Sanctis, L. Iovino, M.T. Rossi,
+\newblock Ethical risk traceability in smart city KPIs assessment,
+\newblock IET Smart Cities 7 (2025) e70012.
+\newblock \url{https://doi.org/10.1049/smc2.70012}.
+
+
+\bibitem[Mat\'e et~al.(2017)Mat\'e, Trujillo, and Mylopoulos]{Mate2017}
+A. Mat\'e, J. Trujillo, J. Mylopoulos,
+\newblock Specification and derivation of key performance indicators for business analytics: A semantic approach,
+\newblock Data \& Knowledge Engineering 108 (2017) 30--49.
+\newblock \url{https://doi.org/10.1016/j.datak.2016.12.004}.
+
+\bibitem[Rold\'an-Garc\'ia et~al.(2021)Rold\'an-Garc\'ia, Garc\'ia-Nieto, Mat\'e, Trujillo, and Aldana-Montes]{RoldanGarcia2021}
+M. del Mar Rold\'an-Garc\'ia, J. Garc\'ia-Nieto, A. Mat\'e, J. Trujillo, J.F. Aldana-Montes,
+\newblock Ontology-driven approach for KPI meta-modelling, selection and reasoning,
+\newblock International Journal of Information Management 58 (2021) 102018.
+\newblock \url{https://doi.org/10.1016/j.ijinfomgt.2019.10.003}.
+
+\bibitem[Diamantini et~al.(2025)Diamantini, Khan, Potena, and Storti]{Diamantini2025}
+C. Diamantini, T. Khan, D. Potena, E. Storti,
+\newblock Semantic models of performance indicators: A systematic survey,
+\newblock ACM Computing Surveys 57~(8) (2025) 202:1--202:37.
+\newblock \url{https://doi.org/10.1145/3719291}.
+
+\bibitem[P\'erez-Castillo et~al.(2011)P\'erez-Castillo, Garc\'ia Rodr\'iguez de Guzm\'an, and Piattini]{PerezCastillo2011MARBLE}
+R. P\'erez-Castillo, I. Garc\'ia Rodr\'iguez de Guzm\'an, M. Piattini,
+\newblock Business process archeology using MARBLE,
+\newblock Information and Software Technology 53~(10) (2011) 1023--1044.
+\newblock \url{https://doi.org/10.1016/j.infsof.2011.05.006}.
+
+\bibitem[Chittimalli and Bhattacharyya(2019)]{Chittimalli2019SBVR}
+P.K. Chittimalli, A. Bhattacharyya,
+\newblock SBVR-based business rule creation for legacy programs using variable provenance,
+\newblock in: Proceedings of the 12th Innovations on Software Engineering Conference (ISEC '19), ACM, 2019, pp. 16:1--16:11.
+\newblock \url{https://doi.org/10.1145/3299771.3299786}.
+
+\bibitem[Brush et~al.(2016)Brush, Shefchek, and Haendel]{Brush2016SEPIO}
+M.H. Brush, K. Shefchek, M. Haendel,
+\newblock SEPIO: A semantic model for the integration and analysis of scientific evidence,
+\newblock in: Proceedings of the Joint International Conference on Biological Ontology and BioCreative (ICBO-BioCreative 2016), CEUR Workshop Proceedings 1747, 2016.
+\newblock \url{https://ceur-ws.org/Vol-1747/IT605_ICBO2016.pdf}.
+
+\bibitem[Psallidas et~al.(2023)Psallidas, Agrawal, Sugunan, Ibrahim, Karanasos, Camacho-Rodr\'iguez, Floratou, Curino, and Ramakrishnan]{Psallidas2023OneProvenance}
+F. Psallidas, A. Agrawal, C. Sugunan, K. Ibrahim, K. Karanasos, J. Camacho-Rodr\'iguez, A. Floratou, C. Curino, R. Ramakrishnan,
+\newblock OneProvenance: Efficient extraction of dynamic coarse-grained provenance from database query event logs,
+\newblock Proceedings of the VLDB Endowment 16~(12) (2023) 3662--3675.
+\newblock \url{https://doi.org/10.14778/3611540.3611555}.
+
+\bibitem[Sadiq et~al.(2026)Sadiq, Langat, and Neupane]{Sadiq2026ESDPKI}
+M.A. Sadiq, P.K. Langat, A. Neupane,
+\newblock Enterprise spatial data provenance knowledge infrastructure,
+\newblock ISPRS International Journal of Geo-Information 15~(5) (2026) 182.
+\newblock \url{https://doi.org/10.3390/ijgi15050182}.
+
+\bibitem[Akermi et~al.(2026)Akermi, Hadj Taieb, and Ben Aouicha]{Akermi2026PDGP}
+M. Akermi, M.A. Hadj Taieb, M. Ben Aouicha,
+\newblock Artificial intelligence-powered Data Governance Platform: A design science research approach,
+\newblock Engineering Applications of Artificial Intelligence 181 (2026) 115731.
+\newblock \url{https://doi.org/10.1016/j.engappai.2026.115731}.
+
+\end{thebibliography}
+
+\end{document}

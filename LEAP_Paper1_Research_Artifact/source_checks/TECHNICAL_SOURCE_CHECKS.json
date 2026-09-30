@@ -1,0 +1,126 @@
+{
+  "routing": [
+    {
+      "symbol": "_SUPPORTED_EXTS",
+      "line": 152,
+      "end_line": 182,
+      "suffix_count": 21,
+      "mapping": {
+        ".py": "python",
+        ".cs": "csharp",
+        ".vb": "vbnet",
+        ".sql": "sql",
+        ".tsql": "tsql",
+        ".pks": "plsql",
+        ".pkb": "plsql",
+        ".pls": "plsql",
+        ".hdbprocedure": "hana",
+        ".hdbfunction": "hana",
+        ".hdbview": "hana",
+        ".hdbtablefunction": "hana",
+        ".sqlscript": "hana",
+        ".abap": "abap",
+        ".dax": "dax",
+        ".dax.txt": "dax",
+        ".st": "iec_st",
+        ".scl": "iec_st",
+        ".awl": "iec_st",
+        ".txt": "text",
+        ".csv": "csv"
+      }
+    }
+  ],
+  "test_functions": [
+    {
+      "path": "test_app.py",
+      "functions": [
+        {
+          "function": "test_control_plane_routes_are_available",
+          "line": 14
+        },
+        {
+          "function": "test_worker_count_is_reported_only_for_ai_enrichment",
+          "line": 20
+        },
+        {
+          "function": "test_workspace_stats_payload_shape",
+          "line": 27
+        },
+        {
+          "function": "test_committed_bluebook_pages_are_served",
+          "line": 38
+        },
+        {
+          "function": "test_bluebook_static_assets_are_served",
+          "line": 53
+        },
+        {
+          "function": "test_enterprise_workspace_assets_are_present",
+          "line": 66
+        },
+        {
+          "function": "test_compliance_alarms_pdpl_pii",
+          "line": 81
+        },
+        {
+          "function": "test_compliance_alarms_nca_sec",
+          "line": 102
+        },
+        {
+          "function": "test_compliance_alarms_nca_aud",
+          "line": 124
+        },
+        {
+          "function": "test_compliance_alarms_gdpr_proc",
+          "line": 144
+        },
+        {
+          "function": "test_compliance_alarms_soc2_lineage",
+          "line": 164
+        },
+        {
+          "function": "test_review_queue_signal_separation",
+          "line": 184
+        },
+        {
+          "function": "test_candidate_promotion_gate_quarantines_helper_and_register_noise",
+          "line": 243
+        },
+        {
+          "function": "test_candidate_promotion_gate_promotes_explicit_formula_kpi",
+          "line": 279
+        },
+        {
+          "function": "test_mate_preserves_explicit_latex_and_formula_annotations",
+          "line": 298
+        },
+        {
+          "function": "test_mate_generated_dossier_contains_annotated_formula_lineage",
+          "line": 325
+        },
+        {
+          "function": "test_iso_22400_yield_rule_detection_and_clean_control",
+          "line": 337
+        },
+        {
+          "function": "test_iso_22400_asset_utilization_rule_detection_and_clean_control",
+          "line": 378
+        }
+      ],
+      "count": 18,
+      "sha256": "dc520e9285590e16f3ab6a4d182379a382bf0621c8cc549e762a0fa2d7b29e93"
+    },
+    {
+      "path": "data/validation/test_scenario_fixtures.py",
+      "functions": [
+        {
+          "function": "test_all_scenario_fixtures",
+          "line": 149
+        }
+      ],
+      "count": 1,
+      "sha256": "64a44430e41e8664912a38ab6fc9555b430a6716f6ccb21ef234a2765e9f69c5"
+    }
+  ],
+  "interpretation": "Static source inventory. The 38-scenario harness and pytest suite-level function use the same fixture family."
+}

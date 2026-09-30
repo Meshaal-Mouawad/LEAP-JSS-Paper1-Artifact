@@ -1,0 +1,2680 @@
+FILE software/LEAP/bluebook_generator/kpi_extractor.py
+SHA256 c1f0fd72d19e99acb31fc135106838951a650b093a5caca6e488cd8b8d6c0fb7
+LINES 5-98
+5: # Scanner performance knobs
+6: IGNORE_DIRS = {
+7:     ".git",
+8:     ".hg",
+9:     ".svn",
+10:     ".idea",
+11:     ".agents",
+12:     ".codex",
+13:     "node_modules",
+14:     "dist",
+15:     "build",
+16:     "_build",
+17:     "_sources",
+18:     "_static",
+19:     "docs",
+20:     "bluebook_generator",
+21:     "templates",
+22:     "htmlcov",
+23:     "__pycache__",
+24:     "site-packages",
+25:     ".venv",
+26:     "venv",
+27:     "env",
+28:     "virtualenv",
+29:     ".mypy_cache",
+30:     ".pytest_cache",
+31:     ".ruff_cache",
+32:     ".tox",
+33:     "ai_bluebook_generator.egg-info",
+34: }
+35: IGNORE_DIR_SUFFIXES = {
+36:     "_env",
+37:     "-env",
+38:     ".env",
+39:     "_venv",
+40:     "-venv",
+41: }
+42: IGNORE_DIR_PARTS = {
+43:     "site-packages",
+44:     "dist-packages",
+45: }
+46: IGNORE_FILES = {
+47:     "app.py",
+48:     "run_generation.py",
+49:     "setup.py",
+50:     "setup.cfg",
+51:     "pyproject.toml",
+52:     "requirements.txt",
+53:     "README.md",
+54:     "USAGE.md",
+55: }
+56: ALLOWED_EXTS = {
+57:     ".py",
+58:     ".sql",
+59:     ".ps1",
+60:     ".dax",
+61:     ".cs",
+62:     ".vb",
+63:     ".abap",
+64:     ".st",
+65:     ".hdbview",
+66:     ".hdbprocedure",
+67:     ".hdbfunction",
+68:     ".hdbtablefunction",
+69:     ".sqlscript",
+70:     ".tsql",
+71:     ".pks",
+72:     ".pkb",
+73:     ".pls",
+74:     ".txt",
+75:     ".csv",
+76: }
+77: # Extensions to skip entirely (no KPI extraction, not counted)
+78: IGNORE_EXTS = {
+79:     ".png",
+80:     ".jpg",
+81:     ".jpeg",
+82:     ".gif",
+83:     ".bmp",
+84:     ".svg",
+85:     ".ico",
+86:     ".tiff",
+87:     ".webp",
+88:     ".pdf",
+89:     ".doc",
+90:     ".docx",
+91:     ".xls",
+92:     ".xlsx",
+93:     ".zip",
+94:     ".tar",
+95:     ".gz",
+96:     ".7z",
+97: }
+98: MAX_FILE_MB = float(os.environ.get("KPI_MAX_FILE_MB", "2"))  # default 2 MB
+
+LINES 150-182
+150: # ---------- Supported extensions (language hint) ----------
+151: 
+152: _SUPPORTED_EXTS = {
+153:     # Python
+154:     ".py": "python",
+155:     # .NET family
+156:     ".cs": "csharp",
+157:     ".vb": "vbnet",
+158:     # SQL families (ANSI SQL, T-SQL, Oracle/PLSQL, HANA SQLScript)
+159:     ".sql": "sql",
+160:     ".tsql": "tsql",  # T‑SQL specific files
+161:     ".pks": "plsql",
+162:     ".pkb": "plsql",
+163:     ".pls": "plsql",
+164:     # SAP HANA SQLScript artifacts
+165:     ".hdbprocedure": "hana",
+166:     ".hdbfunction": "hana",
+167:     ".hdbview": "hana",
+168:     ".hdbtablefunction": "hana",
+169:     ".sqlscript": "hana",
+170:     # SAP ABAP
+171:     ".abap": "abap",
+172:     # Power BI DAX (text exports)
+173:     ".dax": "dax",
+174:     ".dax.txt": "dax",
+175:     # IEC 61131‑3 Structured Text / PLC textual files
+176:     ".st": "iec_st",
+177:     ".scl": "iec_st",  # Siemens SCL
+178:     ".awl": "iec_st",  # STL/AWL textual
+179:     # Generic text/CSV exports (Excel/BI/SAP dumps)
+180:     ".txt": "text",
+181:     ".csv": "csv",
+182: }
+
+LINES 202-256
+202: def _window(lines: List[str], center: int, before: int = 10, after: int = 20) -> str:
+203:     """Return a small window of text lines around a center line number."""
+204:     start = max(0, center - before)
+205:     end = min(len(lines), center + after + 1)
+206:     return "\n".join(lines[start:end])
+207: 
+208: 
+209: def _expand_forward_statement(
+210:     lines: List[str], start_index: int, back: int = 5, max_forward: int = 200
+211: ) -> str:
+212:     """Return a forward-expanded SQL-ish statement context starting a few lines before start_index.
+213: 
+214:     - Includes up to `back` lines before the start_index for context.
+215:     - Scans forward up to `max_forward` lines or until a likely statement terminator is seen:
+216:       semicolon at low parenthesis depth, a lone GO, or end of file.
+217:     - Works for SQL/T-SQL/PLSQL/HANA snippets where KPI comment precedes a CREATE/SELECT.
+218:     """
+219:     import re as _re
+220: 
+221:     n = len(lines)
+222:     if n == 0:
+223:         return ""
+224: 
+225:     start = max(0, min(start_index, n - 1))
+226:     ctx_start = max(0, start - back)
+227: 
+228:     end = start
+229:     depth = 0
+230:     for j in range(start, min(n, start + max_forward)):
+231:         line = lines[j].rstrip("\n")
+232:         end = j
+233:         # Track parentheses depth to avoid stopping too early inside CAST(...), CASE(...), etc.
+234:         depth += line.count("(") - line.count(")")
+235:         if _re.search(r";\s*$", line) and depth <= 0:
+236:             break
+237:         if _re.match(r"^\s*GO\s*$", line, _re.I):
+238:             break
+239:         if _re.match(
+240:             r"^\s*/\s*$", line
+241:         ):  # Oracle '/' statement separator on its own line
+242:             break
+243: 
+244:     return "\n".join(line.rstrip("\n") for line in lines[ctx_start : end + 1])
+245: 
+246: 
+247: def _normalize_name(raw: str) -> str:
+248:     name = (raw or "").strip()
+249:     if len(name) >= 2 and (
+250:         (name[0], name[-1]) in {("[", "]"), ("(", ")"), ('"', '"'), ("'", "'")}
+251:     ):
+252:         name = name[1:-1].strip()
+253:     else:
+254:         name = name.strip("\"'")
+255:     name = re.sub(r"[_\s]+", " ", name)
+256:     return name
+
+LINES 259-394
+259: BUSINESS_KPI_MARKERS = {
+260:     "availability",
+261:     "capacity",
+262:     "complaint",
+263:     "conversion",
+264:     "cost",
+265:     "covariance",
+266:     "efficiency",
+267:     "emission",
+268:     "emissions",
+269:     "intensity",
+270:     "inventory",
+271:     "kpi",
+272:     "leakage",
+273:     "loss",
+274:     "margin",
+275:     "metric",
+276:     "oee",
+277:     "percentage",
+278:     "profit",
+279:     "purity",
+280:     "rate",
+281:     "ratio",
+282:     "recovery",
+283:     "revenue",
+284:     "score",
+285:     "selectivity",
+286:     "spend",
+287:     "throughput",
+288:     "utilization",
+289:     "variance",
+290:     "yield",
+291: }
+292: 
+293: STRICT_FUNCTION_BLACKLIST = re.compile(
+294:     r"(?ix)"
+295:     r"(^|[_\s-])test([_\s-]|$)|"
+296:     r"(^|[_\s-])mock([_\s-]|$)|"
+297:     r"(^|[_\s-])fixture([_\s-]|$)|"
+298:     r"(^|[_\s-])render([_\s-]|$)|"
+299:     r"(^|[_\s-])visit([_\s-]|$)|"
+300:     r"(^|[_\s-])decorate|decoration|"
+301:     r"(^|[_\s-])wrapper([_\s-]|$)|"
+302:     r"(^|[_\s-])configuration([_\s-]|$)|"
+303:     r"(^|[_\s-])declaration([_\s-]|$)|"
+304:     r"(^|[_\s-])expiration([_\s-]|$)|"
+305:     r"(^|[_\s-])cookie([_\s-]|$)|"
+306:     r"(^|[_\s-])session([_\s-]|$)"
+307: )
+308: 
+309: 
+310: def _is_ignored_dir_name(name: str) -> bool:
+311:     lowered = (name or "").lower()
+312:     return (
+313:         lowered in IGNORE_DIRS
+314:         or lowered.startswith(".")
+315:         or lowered.endswith(".egg-info")
+316:         or lowered in IGNORE_DIR_PARTS
+317:         or any(lowered.endswith(suffix) for suffix in IGNORE_DIR_SUFFIXES)
+318:     )
+319: 
+320: 
+321: def _has_business_marker(text: str) -> bool:
+322:     lowered = (text or "").lower()
+323:     normalized = re.sub(r"[^a-z0-9]+", " ", lowered)
+324:     words = set(normalized.split())
+325:     if words & BUSINESS_KPI_MARKERS:
+326:         return True
+327:     # Preserve common compact naming conventions such as l1_ratio or spendLeakagePct.
+328:     compact = re.sub(r"[^a-z0-9]+", "", lowered)
+329:     return any(marker in compact for marker in BUSINESS_KPI_MARKERS if len(marker) >= 4)
+330: 
+331: 
+332: def _has_formula_with_business_shape(text: str) -> bool:
+333:     source = _strip_string_literals(text or "")
+334:     has_operator = bool(re.search(r"[+\-*/×÷]", source))
+335:     has_aggregate = bool(re.search(r"(?i)\b(SUM|AVG|COUNT|MIN|MAX|mean|average|total)\s*\(", source))
+336:     has_alias_metric = bool(
+337:         re.search(
+338:             r"(?i)\bAS\s+[A-Za-z_][A-Za-z0-9_]*(?:_pct|_percent|_percentage|_ratio|_rate|_yield|_intensity|_score|_variance|_cost|_leakage)\b",
+339:             source,
+340:         )
+341:     )
+342:     return has_operator and (has_aggregate or has_alias_metric or _has_business_marker(source))
+343: 
+344: 
+345: def _has_explicit_formula_marker(text: str) -> bool:
+346:     return bool(
+347:         re.search(
+348:             r"(?im)^\s*(?:#|--|//|/\*|\*|'|REM\b)?\s*(?:business\s+formula|formula|calculation|computes|body\s+computes|body\s+hint)\s*:",
+349:             text or "",
+350:         )
+351:     )
+352: 
+353: 
+354: def _has_explicit_business_metadata(text: str) -> bool:
+355:     return bool(
+356:         re.search(
+357:             r"(?im)^\s*(?:#|--|//|/\*|\*|'|REM\b)?\s*(?:objective|business\s+objective|unit|owner|source\s+system|reporting\s+source|used\s+in|input|inputs)\s*:",
+358:             text or "",
+359:         )
+360:     )
+361: 
+362: 
+363: def _has_executable_calculation(text: str) -> bool:
+364:     source = _strip_string_literals(text or "")
+365:     return bool(
+366:         re.search(r"(?im)\breturn\b[^\n;]*[+\-*/][^\n;]*", source)
+367:         or re.search(r"(?is)\bselect\b.+[+\-*/].+\bas\b", source)
+368:         or re.search(r"(?im)\b(?:SUM|AVG|COUNT|MIN|MAX|NULLIF)\s*\(", source)
+369:         or re.search(r"(?im)\b[A-Za-z_][A-Za-z0-9_]*\s*=\s*[^#\n;]*[+\-*/][^#\n;]*", source)
+370:     )
+371: 
+372: 
+373: def _has_return_arithmetic_calculation(text: str) -> bool:
+374:     source = _strip_string_literals(text or "")
+375:     return bool(re.search(r"(?im)\breturn\b[^\n;]*[+\-*/][^\n;]*", source))
+376: 
+377: 
+378: def _strip_string_literals(text: str) -> str:
+379:     source = text or ""
+380:     source = re.sub(r'"""(?:.|\n)*?"""', '""', source)
+381:     source = re.sub(r"'''(?:.|\n)*?'''", "''", source)
+382:     source = re.sub(r'"(?:\\.|[^"\\])*"', '""', source)
+383:     source = re.sub(r"'(?:\\.|[^'\\])*'", "''", source)
+384:     return source
+385: 
+386: 
+387: def _has_bad_formula_artifact(text: str) -> bool:
+388:     source = text or ""
+389:     return bool(
+390:         re.search(r"(?i)\bN/A\b", source)
+391:         or re.search(r"\b[A-Za-z]+/[A-Za-z_]+(?:/[A-Za-z_]+)?\b", source)
+392:         or re.search(r"\b[0-9a-f]{24,}\b", source)
+393:     )
+394: 
+
+LINES 396-619
+396: def _candidate_review_record(candidate: Dict, reason: str, recommendation: str, file_path: str) -> Dict:
+397:     context = candidate.get("code_context") or ""
+398:     excerpt = "\n".join(context.splitlines()[:16])
+399:     return {
+400:         "candidate_name": candidate.get("name") or "Unnamed candidate",
+401:         "detection_kind": candidate.get("_kind") or candidate.get("detection_kind") or "unspecified",
+402:         "confidence": candidate.get("confidence"),
+403:         "language": candidate.get("language"),
+404:         "file_path": file_path,
+405:         "file_line": candidate.get("file_line") or 1,
+406:         "reason": reason,
+407:         "recommendation": recommendation,
+408:         "code_context_excerpt": excerpt,
+409:     }
+410: 
+411: 
+412: def evaluate_candidate_promotion(
+413:     candidate: Dict,
+414:     full_text: str,
+415:     file_path: str,
+416:     scan_root: str | None = None,
+417: ) -> Tuple[bool, Dict]:
+418:     name = candidate.get("name") or ""
+419:     kind = candidate.get("_kind") or candidate.get("detection_kind") or ""
+420:     context = candidate.get("code_context") or ""
+421:     combined = "\n".join([name, kind, context, os.path.basename(file_path or ""), full_text[:4000]])
+422:     ext = os.path.splitext(file_path or "")[1].lower()
+423:     normalized_path = os.path.normpath(file_path or "")
+424:     normalized_root = os.path.normpath(scan_root or "")
+425:     is_scenario_fixture = (
+426:         "generated_scenario_kpis" in normalized_path.split(os.sep)
+427:         or bool(re.search(r"(?im)^\s*#\s*Expected LEAP Result\s*:", context))
+428:     )
+429:     scanning_scenario_suite = normalized_root.endswith(
+430:         os.path.join("data", "validation", "generated_scenario_kpis")
+431:     )
+432: 
+433:     if is_scenario_fixture and not scanning_scenario_suite:
+434:         return False, _candidate_review_record(
+435:             candidate,
+436:             "Scenario fixture evidence is not promoted during a whole-repository scan.",
+437:             "Scan data/validation/generated_scenario_kpis directly when validating fixture scenarios.",
+438:             file_path,
+439:         )
+440: 
+441:     # 1. Reject clearly invalid, artificial, or non-business names
+442:     invalid_name_patterns = [
+443:         r"(?i)intentionalgoverror",
+444:         r"(?i)data validation",
+445:         r"(?i)test",
+446:         r"(?i)mock",
+447:         r"(?i)debug",
+448:         r"(?i)\bsplit\s+ratio\b",
+449:         r"(?i)\bnormalize\s+kpi\s+name\b",
+450:     ]
+451:     if any(re.search(p, name) for p in invalid_name_patterns):
+452:         return False, _candidate_review_record(
+453:             candidate,
+454:             "Candidate name contains test/mock/debug wording rather than business KPI evidence.",
+455:             "Keep as test artifact or add a clean explicit KPI declaration if this is intentional.",
+456:             file_path,
+457:         )
+458:         
+459:     # Must have a reasonable name length/content (not just 'KPI' or empty)
+460:     if not name or len(name) < 3 or name.lower() == "kpi":
+461:         return False, _candidate_review_record(
+462:             candidate,
+463:             "Candidate name is empty, too short, or generic.",
+464:             "Add an explicit business KPI name near the implementation.",
+465:             file_path,
+466:         )
+467: 
+468:     if "\n" in name or re.search(r"(?i)\b(def|return|select|pass|assert|from|import)\b", name):
+469:         return False, _candidate_review_record(
+470:             candidate,
+471:             "Candidate name appears to include executable code rather than a clean KPI label.",
+472:             "Fix the source annotation so the KPI name is a single business label.",
+473:             file_path,
+474:         )
+475: 
+476:     if len(name) > 120 or re.search(r"[{};]", name):
+477:         return False, _candidate_review_record(
+478:             candidate,
+479:             "Candidate name is too long or contains code delimiters.",
+480:             "Use a concise business KPI label.",
+481:             file_path,
+482:         )
+483: 
+484:     # Explicit KPI annotations are authoritative, but still avoid obvious test/mock wrappers.
+485:     has_explicit_kpi_marker = bool(
+486:         re.search(r"(?im)(?:#|--|//|/\*|\*)\s*KPI(?:\d+)?\s*:", context)
+487:         or re.search(r"(?im)^\s*KPI(?:\d+)?\s*:", context)
+488:         or kind in {"comment", "sql_comment", "dax_measure", "csharp_attribute", "iec_block"}
+489:     )
+490:     has_formula_marker = _has_explicit_formula_marker(context)
+491:     has_business_metadata = _has_explicit_business_metadata(context)
+492:     has_executable_calc = _has_executable_calculation(context)
+493: 
+494:     blacklisted = bool(STRICT_FUNCTION_BLACKLIST.search(name))
+495:     if blacklisted and not has_explicit_kpi_marker:
+496:         return False, _candidate_review_record(
+497:             candidate,
+498:             "Candidate name matches helper/test/configuration wording and lacks explicit KPI evidence.",
+499:             "Leave quarantined unless the source owner adds a KPI declaration and formula.",
+500:             file_path,
+501:         )
+502: 
+503:     weak_inferred_kinds = {
+504:         "logic_fallback",
+505:         "forced_fallback",
+506:         "empty_file_fallback",
+507:         "plsql_return_fallback",
+508:     }
+509:     medium_inferred_kinds = {
+510:         "python_function",
+511:         "method_name",
+512:         "select_alias",
+513:         "create_function",
+514:         "create_view",
+515:         "plsql_function",
+516:         "hana_json",
+517:         "dax_simple",
+518:         "abap_report",
+519:     }
+520: 
+521:     if kind in weak_inferred_kinds:
+522:         return False, _candidate_review_record(
+523:             candidate,
+524:             "Weak fallback extraction detected math-like text but not enough business KPI evidence.",
+525:             "Add explicit KPI and Formula comments if this should become a governed KPI dossier.",
+526:             file_path,
+527:         )
+528: 
+529:     if ext == ".csv":
+530:         if has_explicit_kpi_marker and has_formula_marker and not _has_bad_formula_artifact(context):
+531:             return True, {}
+532:         return False, _candidate_review_record(
+533:             candidate,
+534:             "CSV candidate lacks explicit KPI and Formula evidence or contains register/log-style artifacts.",
+535:             "Keep in Extraction Review unless the CSV is intentionally structured as a KPI evidence file.",
+536:             file_path,
+537:         )
+538: 
+539:     if has_explicit_kpi_marker:
+540:         if has_formula_marker or has_executable_calc or has_business_metadata:
+541:             return True, {}
+542:         return False, _candidate_review_record(
+543:             candidate,
+544:             "Explicit KPI marker found, but no formula, executable calculation, or business metadata was found nearby.",
+545:             "Add Formula, Objective, Unit, Owner, or executable calculation evidence.",
+546:             file_path,
+547:         )
+548: 
+549:     has_business_context = (
+550:         _has_business_marker(name)
+551:         or _has_business_marker(os.path.basename(file_path or ""))
+552:         or _has_business_marker(context)
+553:     )
+554:     has_calculation_structure = _has_formula_with_business_shape(context)
+555:     has_explicit_metric_language = bool(
+556:         re.search(
+557:             r"(?i)\b(formula|metric|performance indicator|business rule|calculation|measure)\b",
+558:             "\n".join([name, kind, context, os.path.basename(file_path or "")]),
+559:         )
+560:     )
+561: 
+562:     if kind in medium_inferred_kinds:
+563:         if kind in {"python_function", "method_name"} and not _has_return_arithmetic_calculation(context):
+564:             return False, _candidate_review_record(
+565:                 candidate,
+566:                 "Inferred Python symbol does not return a local arithmetic KPI calculation.",
+567:                 "Add explicit KPI/Formula metadata or keep this helper function out of governed KPI dossiers.",
+568:                 file_path,
+569:             )
+570:         if has_business_context and has_calculation_structure and has_executable_calc:
+571:             return True, {}
+572:         return False, _candidate_review_record(
+573:             candidate,
+574:             "Inferred candidate did not combine business naming with local executable calculation evidence.",
+575:             "Add explicit KPI/Formula metadata or move this to a governed KPI source artifact.",
+576:             file_path,
+577:         )
+578: 
+579:     if has_business_context and has_calculation_structure:
+580:         return True, {}
+581: 
+582:     if has_explicit_metric_language and has_calculation_structure:
+583:         return True, {}
+584: 
+585:     return False, _candidate_review_record(
+586:         candidate,
+587:         "Candidate did not meet the KPI promotion gate.",
+588:         "Review manually; promote only after source evidence declares a business KPI and calculation path.",
+589:         file_path,
+590:     )
+591: 
+592: 
+593: def _is_valid_kpi_candidate(candidate: Dict, full_text: str, file_path: str) -> bool:
+594:     promoted, _review = evaluate_candidate_promotion(candidate, full_text, file_path)
+595:     return promoted
+596: 
+597: 
+598: def _extract_by_comment_tag(
+599:     lines: List[str], pattern: re.Pattern, language: str
+600: ) -> List[Dict]:
+601:     """Capture `KPI: Name` markers using a language-specific comment pattern."""
+602:     out = []
+603:     for i, line in enumerate(lines):
+604:         m = pattern.search(line)
+605:         if not m:
+606:             continue
+607:         name = _normalize_name(m.group("name"))
+608:         out.append(
+609:             {
+610:                 "name": name,
+611:                 "language": language,
+612:                 "file_line": i + 1,
+613:                 "code_context": _window(lines, i),
+614:                 "_rank": 5,  # explicit KPI comments are stronger than inferred names
+615:                 "_kind": "comment",
+616:             }
+617:         )
+618:     return out
+619: 
+
+LINES 621-1191
+621: def _extract_python(text: str) -> List[Dict]:
+622:     lines = text.splitlines()
+623:     out: List[Dict] = []
+624: 
+625:     # # KPI: Name or # KPI001: Name
+626:     out += _extract_by_comment_tag(
+627:         lines, re.compile(r"#\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "python"
+628:     )
+629: 
+630:     # Functions with KPI-ish names
+631:     for i, line in enumerate(lines):
+632:         m = re.search(r"\bdef\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", line)
+633:         if not m:
+634:             continue
+635:         fn = m.group(1)
+636:         if any(
+637:             k in fn.lower()
+638:             for k in (
+639:                 "kpi",
+640:                 "yield",
+641:                 "percentage",
+642:                 "ratio",
+643:                 "throughput",
+644:                 "oee",
+645:                 "variance",
+646:                 "recovery",
+647:                 "cost",
+648:                 "emission",
+649:             )
+650:         ):
+651:             out.append(
+652:                 {
+653:                     "name": _normalize_name(fn.replace("_", " ")),
+654:                     "language": "python",
+655:                     "file_line": i + 1,
+656:                     "code_context": _window(lines, i),
+657:                     "_rank": 2,  # add rank for function name
+658:                     "_kind": "python_function",
+659:                 }
+660:             )
+661:     return out
+662: 
+663: 
+664: def _extract_csharp_vb(text: str, language: str) -> List[Dict]:
+665:     lines = text.splitlines()
+666:     out: List[Dict] = []
+667: 
+668:     # C# attribute form: [KPI("Name")]
+669:     for i, line in enumerate(lines):
+670:         m = re.search(
+671:             r"\[\s*KPI(?:Attribute)?\s*\(\s*\"(?P<name>[^\"]+)\"\s*\)\s*\]", line, re.I
+672:         )
+673:         if m:
+674:             out.append(
+675:                 {
+676:                     "name": _normalize_name(m.group("name")),
+677:                     "language": language,
+678:                     "file_line": i + 1,
+679:                     "code_context": _window(
+680:                         lines, i, 5, 60
+681:                     ),  # widened after-context for Return
+682:                     "_rank": 3,
+683:                     "_kind": "csharp_attribute",
+684:                 }
+685:             )
+686: 
+687:     # C#: // KPI: Name or // KPI001: Name
+688:     out += _extract_by_comment_tag(
+689:         lines, re.compile(r"//\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), language
+690:     )
+691:     # VB.NET: ' KPI: Name or ' KPI001: Name
+692:     out += _extract_by_comment_tag(
+693:         lines, re.compile(r"'\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), language
+694:     )
+695: 
+696:     # Methods like CalculateXxxKpi(...)
+697:     for i, line in enumerate(lines):
+698:         m = re.search(r"\b(Calculate|Compute)[A-Za-z0-9_]*Kpi\s*\(", line, re.I)
+699:         if m:
+700:             name = _normalize_name(m.group(0).split("(")[0])
+701:             out.append(
+702:                 {
+703:                     "name": name,
+704:                     "language": language,
+705:                     "file_line": i + 1,
+706:                     "code_context": _window(lines, i, 5, 60),
+707:                     "_rank": 2,
+708:                     "_kind": "method_name",
+709:                 }
+710:             )
+711:     return out
+712: 
+713: 
+714: def _extract_sql_like(text: str, dialect: str) -> List[Dict]:
+715:     lines = text.splitlines()
+716:     out: List[Dict] = []
+717: 
+718:     # Normalize potential BOM and EOL noise
+719:     stripped_lines = [ln.lstrip("\ufeff").rstrip("\r\n") for ln in lines]
+720: 
+721:     # 1) Prefer explicit KPI lines:
+722:     comments = []
+723:     # Match "-- KPI: ...", "-- KPI001: ...", or "// KPI001: ..."
+724:     for i, line in enumerate(stripped_lines):
+725:         m = re.search(
+726:             r"^\s*(?:--|//)\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", line, re.I
+727:         )
+728:         if m:
+729:             comments.append((i, _normalize_name(m.group("name"))))
+730:     # Match "/* KPI: ... */" or "/* KPI001: ... */" (inline)
+731:     for i, line in enumerate(stripped_lines):
+732:         m = re.search(r"/\*\s*KPI(?:\d+)?\s*:\s*(?P<name>[^*]+)\*/", line, re.I)
+733:         if m:
+734:             comments.append((i, _normalize_name(m.group("name"))))
+735:     # NEW: also match bare "KPI: ..." or "KPI001: ..." even if not in a comment (safety net)
+736:     if not comments:
+737:         for i, line in enumerate(stripped_lines):
+738:             m = re.search(r"\bKPI(?:\d+)?\s*:\s*(?P<name>.+)$", line, re.I)
+739:             if m:
+740:                 comments.append((i, _normalize_name(m.group("name"))))
+741:                 break
+742: 
+743:     for i, name in comments:
+744:         if dialect.lower() == "plsql":
+745:             code_context = _window(lines, i, before=0, after=160)
+746:         else:
+747:             code_context = _expand_forward_statement(lines, i)
+748:         out.append(
+749:             {
+750:                 "name": name,
+751:                 "language": dialect,
+752:                 "file_line": i + 1,
+753:                 "code_context": code_context,
+754:                 "_rank": 3,
+755:                 "_kind": "sql_comment",
+756:             }
+757:         )
+758: 
+759:     has_comment = len(comments) > 0
+760: 
+761:     # 2) Fallbacks if no comment matched:
+762:     if not has_comment:
+763:         # 2a) CREATE FUNCTION <any_name> (be tolerant; not only kpi_*)
+764:         for i, line in enumerate(stripped_lines):
+765:             m = re.search(
+766:                 r"\bcreate\s+(?:or\s+replace\s+)?function\s+(?P<fn>[A-Za-z0-9_\.$]+)",
+767:                 line,
+768:                 re.I,
+769:             )
+770:             if m:
+771:                 fn_name = _normalize_name(m.group("fn"))
+772:                 out.append(
+773:                     {
+774:                         "name": fn_name,
+775:                         "language": dialect,
+776:                         "file_line": i + 1,
+777:                         "code_context": _expand_forward_statement(lines, i),
+778:                         "_rank": 2,
+779:                         "_kind": "create_function",
+780:                     }
+781:                 )
+782:                 # Keep scanning; multiple functions are possible
+783: 
+784:         # 2b) CREATE VIEW view_kpi_* AS ...
+785:         for i, line in enumerate(stripped_lines):
+786:             m = re.search(
+787:                 r"\bcreate\s+view\s+([A-Za-z0-9_\.]*kpi[A-Za-z0-9_\.]*)\b", line, re.I
+788:             )
+789:             if m:
+790:                 out.append(
+791:                     {
+792:                         "name": _normalize_name(m.group(1)),
+793:                         "language": dialect,
+794:                         "file_line": i + 1,
+795:                         "code_context": _window(lines, i, 5, 120),
+796:                         "_rank": 2,
+797:                         "_kind": "create_view",
+798:                     }
+799:                 )
+800: 
+801:         # 2c) SELECT ... expr AS alias. Accept explicit KPI/measure aliases and
+802:         # common enterprise metric suffixes used in committee/demo suites.
+803:         for i, line in enumerate(stripped_lines):
+804:             m = re.search(
+805:                 r"\bas\s+(?P<alias>[A-Za-z_][A-Za-z0-9_]*)\b", line, re.I
+806:             )
+807:             if m and re.search(
+808:                 r"(?i)(?:^kpi_|^measure_|_kpi$|_pct$|_percent$|_percentage$|_ratio$|_rate$|_yield$|_intensity$|_score$|_variance$|_cost$|_leakage$)",
+809:                 m.group("alias"),
+810:             ):
+811:                 out.append(
+812:                     {
+813:                         "name": _normalize_name(m.group("alias")),
+814:                         "language": dialect,
+815:                         "file_line": i + 1,
+816:                         "code_context": _window(lines, i, 3, 80),
+817:                         "_rank": 2,
+818:                         "_kind": "select_alias",
+819:                     }
+820:                 )
+821: 
+822:         # 2d) LAST-RESORT (PL/SQL only): if we see a math RETURN, emit one KPI using the file name
+823:         if dialect.lower() in {"plsql"} and not out:
+824:             # Look for a mathy RETURN in the whole text
+825:             if re.search(r"(?is)\breturn\b.+[*/+-].+", text):
+826:                 base_name = "PLSQL KPI"
+827:                 # Derive a human-ish name from the file if available
+828:                 try:
+829:                     import os as _os
+830: 
+831:                     base_name = (
+832:                         _normalize_name(
+833:                             _os.path.splitext(
+834:                                 _os.path.basename(__file__ if False else "")
+835:                             )[0]
+836:                         )
+837:                         or "PLSQL KPI"
+838:                     )
+839:                 except Exception:
+840:                     pass
+841:                 # Use a wide context: the whole file, so formula extractor can grab the RETURN expression
+842:                 out.append(
+843:                     {
+844:                         "name": base_name,
+845:                         "language": dialect,
+846:                         "file_line": 1,
+847:                         "code_context": text,
+848:                         "_rank": 1,
+849:                         "_kind": "plsql_return_fallback",
+850:                     }
+851:                 )
+852: 
+853:     return out
+854: 
+855: 
+856: def _extract_hana(text: str) -> List[Dict]:
+857:     """
+858:     SAP HANA SQLScript artifacts often embed SQLScript with comments like -- or /* ... */.
+859:     Handle both SQL-like content and JSON-style .hdbview definitions.
+860:     """
+861:     # 1) Try SQL-like first
+862:     out = _extract_sql_like(text, "hana")
+863:     if out:
+864:         return out
+865: 
+866:     # 2) JSON-style .hdbview fallback
+867:     try:
+868:         import json
+869: 
+870:         obj = json.loads(text)
+871:         vd = obj.get("viewDefinition") or {}
+872:         cols = vd.get("columns") or []
+873:         best = None
+874:         for c in cols:
+875:             name = (c.get("name") or "").strip()
+876:             expr = (c.get("expression") or "").strip()
+877:             if not name or not expr:
+878:                 continue
+879:             score = 1
+880:             if "kpi" in name.lower():
+881:                 score += 2
+882:             if any(ch in expr for ch in "*/+-"):
+883:                 score += 1
+884:             best = max(
+885:                 [best, (score, name, expr)] if best else [(score, name, expr)],
+886:                 key=lambda t: t[0],
+887:             )
+888:         if best:
+889:             _, name, expr = best
+890:             code = f"SELECT {expr} AS {name}"
+891:             return [
+892:                 {
+893:                     "name": _normalize_name(name),
+894:                     "language": "hana",
+895:                     "file_line": 1,
+896:                     "code_context": code,
+897:                     "_rank": 2,
+898:                     "_kind": "hana_json",
+899:                 }
+900:             ]
+901:     except Exception:
+902:         pass
+903: 
+904:     return []
+905: 
+906: 
+907: def _extract_tsql(text: str) -> List[Dict]:
+908:     """T‑SQL specific files (.tsql) → reuse SQL-like extraction with label 'tsql'."""
+909:     return _extract_sql_like(text, "tsql")
+910: 
+911: 
+912: def _extract_plsql(text: str) -> List[Dict]:
+913:     """PL/SQL files (.pks/.pkb/.pls) → reuse SQL-like extraction with label 'plsql'."""
+914:     out = _extract_sql_like(text, "plsql")
+915:     if out:
+916:         return out
+917:     # Fallback for .pks package spec: capture FUNCTION signatures
+918:     lines = text.splitlines()
+919:     for i, line in enumerate(lines):
+920:         m = re.search(r"\bFUNCTION\s+([A-Za-z0-9_\.$]+)", line, re.I)
+921:         if m:
+922:             fn = _normalize_name(m.group(1))
+923:             return [
+924:                 {
+925:                     "name": fn,
+926:                     "language": "plsql",
+927:                     "file_line": i + 1,
+928:                     "code_context": _window(lines, i),
+929:                     "_rank": 2,
+930:                     "_kind": "plsql_function",
+931:                 }
+932:             ]
+933:     return out
+934: 
+935: 
+936: def _extract_dax(text: str) -> List[Dict]:
+937:     """Power BI DAX code."""
+938:     lines = text.splitlines()
+939:     out: List[Dict] = []
+940:     seen_names = set()
+941: 
+942:     # DEFINE MEASURE 'Table'[Measure] = ...
+943:     for i, line in enumerate(lines):
+944:         m = re.search(
+945:             r"\bDEFINE\s+MEASURE\s+[^\[]*\[(?P<name>[^\]]+)\]\s*=", line, re.I
+946:         )
+947:         if m:
+948:             name = _normalize_name(m.group("name"))
+949:             seen_names.add(name.lower())
+950:             out.append(
+951:                 {
+952:                     "name": name,
+953:                     "language": "dax",
+954:                     "file_line": i + 1,
+955:                     "code_context": _window(lines, i),
+956:                     "_rank": 3,
+957:                     "_kind": "dax_measure",
+958:                 }
+959:             )
+960: 
+961:     # Simple measure lines: Name = Expression
+962:     for i, line in enumerate(lines):
+963:         if re.match(r"\s*(VAR|RETURN|EVALUATE)\b", line, re.I):
+964:             continue
+965:         m = re.search(r"(?P<name>[A-Za-z0-9 _\[\]\.]+?)\s*=\s*.+", line)
+966:         if m:
+967:             name = _normalize_name(m.group("name"))
+968:             if name.lower() not in seen_names and len(name.strip()) > 2:
+969:                 seen_names.add(name.lower())
+970:                 out.append(
+971:                     {
+972:                         "name": name,
+973:                         "language": "dax",
+974:                         "file_line": i + 1,
+975:                         "code_context": _window(lines, i),
+976:                         "_rank": 2,
+977:                         "_kind": "dax_simple",
+978:                     }
+979:                 )
+980: 
+981:     # -- KPI: Name (only add if not already captured as a measure)
+982:     for i, line in enumerate(lines):
+983:         m = re.search(r"--\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", line, re.I)
+984:         if m:
+985:             name = _normalize_name(m.group("name"))
+986:             if name.lower() not in seen_names:
+987:                 out.append(
+988:                     {
+989:                         "name": name,
+990:                         "language": "dax",
+991:                         "file_line": i + 1,
+992:                         "code_context": _window(lines, i),
+993:                         "_rank": 3,
+994:                         "_kind": "dax_comment",
+995:                     }
+996:                 )
+997:     return out
+998: 
+999: 
+1000: def _extract_abap(text: str) -> List[Dict]:
+1001:     lines = text.splitlines()
+1002:     out: List[Dict] = []
+1003: 
+1004:     # "* KPI: Name" or "* KPI001: Name"
+1005:     out += _extract_by_comment_tag(
+1006:         lines, re.compile(r"\*\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "abap"
+1007:     )
+1008: 
+1009:     # REPORT ... KPI ...
+1010:     for i, line in enumerate(lines):
+1011:         if re.search(r"\bREPORT\b.*\bKPI\b", line, re.I):
+1012:             out.append(
+1013:                 {
+1014:                     "name": _normalize_name(line),
+1015:                     "language": "abap",
+1016:                     "file_line": i + 1,
+1017:                     "code_context": _window(lines, i),
+1018:                     "_rank": 2,
+1019:                     "_kind": "abap_report",
+1020:                 }
+1021:             )
+1022:     return out
+1023: 
+1024: 
+1025: def _extract_iec_st(text: str) -> List[Dict]:
+1026:     """
+1027:     IEC 61131‑3 Structured Text and PLC textual code.
+1028:     Comment styles: // line comment, (* block comment *), and sometimes {**}.
+1029:     We rely primarily on explicit 'KPI:' tags in comments.
+1030:     """
+1031:     lines = text.splitlines()
+1032:     out: List[Dict] = []
+1033: 
+1034:     # // KPI: Name or // KPI001: Name
+1035:     out += _extract_by_comment_tag(
+1036:         lines, re.compile(r"//\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "iec_st"
+1037:     )
+1038: 
+1039:     # (* KPI: Name *) or (* KPI001: Name *)
+1040:     for i, line in enumerate(lines):
+1041:         m = re.search(r"\(\*\s*KPI(?:\d+)?\s*:\s*(?P<name>[^*]+)\*\)", line, re.I)
+1042:         if m:
+1043:             out.append(
+1044:                 {
+1045:                     "name": _normalize_name(m.group("name")),
+1046:                     "language": "iec_st",
+1047:                     "file_line": i + 1,
+1048:                     "code_context": _window(lines, i),
+1049:                     "_rank": 3,
+1050:                     "_kind": "iec_block",
+1051:                 }
+1052:             )
+1053: 
+1054:     # {** KPI: Name **} or {** KPI001: Name **}
+1055:     for i, line in enumerate(lines):
+1056:         m = re.search(r"\{\*+\s*KPI(?:\d+)?\s*:\s*(?P<name>[^*]+)\*+\}", line, re.I)
+1057:         if m:
+1058:             out.append(
+1059:                 {
+1060:                     "name": _normalize_name(m.group("name")),
+1061:                     "language": "iec_st",
+1062:                     "file_line": i + 1,
+1063:                     "code_context": _window(lines, i),
+1064:                     "_rank": 3,
+1065:                     "_kind": "iec_brace",
+1066:                 }
+1067:             )
+1068: 
+1069:     return out
+1070: 
+1071: 
+1072: 
+1073: def _extract_logic_heuristics(text: str) -> List[Dict]:
+1074:     out = []
+1075:     lines = text.splitlines()
+1076:     # Detect patterns like: yield_pct = (...) / (...)
+1077:     # Or return (a+b) / c
+1078:     # This is a fallback, so confidence will be low.
+1079:     pattern = re.compile(r'(?i)(?:[a-z_][a-z0-9_]*\s*[:=]\s*|return\s+)(?P<expr>[^;\n]+[\+\-\*/][^;\n]+)')
+1080:     for i, line in enumerate(lines):
+1081:         m = pattern.search(line)
+1082:         if m:
+1083:             expr = m.group('expr').strip()
+1084:             out.append({
+1085:                 'name': 'Inferred Logic KPI',
+1086:                 'language': 'generic',
+1087:                 'file_line': i + 1,
+1088:                 'code_context': 'Inferred logic: ' + expr,
+1089:                 '_rank': 0,
+1090:                 '_kind': 'logic_fallback',
+1091:             })
+1092:     return out
+1093: 
+1094: def _extract_generic(text: str) -> List[Dict]:
+1095:     """Fallback extractor for miscellaneous text files."""
+1096:     lines = text.splitlines()
+1097:     out: List[Dict] = []
+1098:     # Support common comment styles in mixed text
+1099:     out += _extract_by_comment_tag(
+1100:         lines, re.compile(r"#\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "generic"
+1101:     )
+1102:     out += _extract_by_comment_tag(
+1103:         lines, re.compile(r"//\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "generic"
+1104:     )
+1105:     out += _extract_by_comment_tag(
+1106:         lines, re.compile(r"--\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "generic"
+1107:     )
+1108:     out += _extract_by_comment_tag(
+1109:         lines, re.compile(r"^\s*\*\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I), "generic"
+1110:     )  # ABAP-style
+1111:     # Also allow bare lines: "KPI: ..." or "KPI001: ..." with no comment marker
+1112:     bare_pat = re.compile(r"^\s*KPI(?:\d+)?\s*:\s*(?P<name>.+)$", re.I)
+1113:     for i, line in enumerate(lines):
+1114:         # C/SQL block comments
+1115:         m = re.search(r"/\*\s*KPI(?:\d+)?\s*:\s*(?P<name>[^*]+)\*/", line, re.I)
+1116:         if m:
+1117:             out.append(
+1118:                 {
+1119:                     "name": _normalize_name(m.group("name")),
+1120:                     "language": "generic",
+1121:                     "file_line": i + 1,
+1122:                     "code_context": _window(lines, i),
+1123:                     "_rank": 3,
+1124:                     "_kind": "generic_block",
+1125:                 }
+1126:             )
+1127:             continue
+1128:         # IEC ST block comments: (* KPI: ... *)
+1129:         m_st = re.search(r"\(\*\s*KPI(?:\d+)?\s*:\s*(?P<name>[^*]+)\*\)", line, re.I)
+1130:         if m_st:
+1131:             out.append(
+1132:                 {
+1133:                     "name": _normalize_name(m_st.group("name")),
+1134:                     "language": "generic",
+1135:                     "file_line": i + 1,
+1136:                     "code_context": _window(lines, i),
+1137:                     "_rank": 3,
+1138:                     "_kind": "generic_iec",
+1139:                 }
+1140:             )
+1141:             continue
+1142:         mb = bare_pat.search(line)
+1143:         if mb:
+1144:             out.append(
+1145:                 {
+1146:                     "name": _normalize_name(mb.group("name")),
+1147:                     "language": "generic",
+1148:                     "file_line": i + 1,
+1149:                     "code_context": _window(lines, i),
+1150:                     "_rank": 2,
+1151:                     "_kind": "generic_bare",
+1152:                 }
+1153:             )
+1154:     return out
+1155: 
+1156: 
+1157: # ---------- Dispatcher ----------
+1158: 
+1159: 
+1160: def _detect_language_by_extension(path_lower: str) -> str:
+1161:     """Map file extension to a language."""
+1162:     for ext, lang in _SUPPORTED_EXTS.items():
+1163:         if path_lower.endswith(ext):
+1164:             return lang
+1165:     return "generic"
+1166: 
+1167: 
+1168: def _extract_from_text(text: str, language_hint: str) -> List[Dict]:
+1169:     lang = language_hint
+1170:     if lang == "python":
+1171:         return _extract_python(text)
+1172:     if lang in ("csharp", "vbnet"):
+1173:         return _extract_csharp_vb(text, lang)
+1174:     if lang in ("sql",):
+1175:         return _extract_sql_like(text, "sql")
+1176:     if lang == "tsql":
+1177:         return _extract_tsql(text)
+1178:     if lang == "plsql":
+1179:         return _extract_plsql(text)
+1180:     if lang == "hana":
+1181:         return _extract_hana(text)
+1182:     if lang == "dax":
+1183:         return _extract_dax(text)
+1184:     if lang == "abap":
+1185:         return _extract_abap(text)
+1186:     if lang == "iec_st":
+1187:         return _extract_iec_st(text)
+1188:     return _extract_generic(text)
+1189: 
+1190: 
+1191: # ---------- Public API ----------
+
+LINES 1194-1449
+1194: def find_kpis_in_directory(root_path: str, include_stats: bool = False):
+1195:     """
+1196:     Walk a directory tree and extract KPI candidates across multiple languages.
+1197: 
+1198:     Returns:
+1199:         List[Dict] by default. If include_stats=True, returns (kpis, stats).
+1200:     """
+1201:     results: List[Dict] = []
+1202:     seen_kpi_names = set()
+1203:     stats = _empty_scan_stats()
+1204: 
+1205:     def done():
+1206:         return (results, stats) if include_stats else results
+1207: 
+1208:     if not root_path:
+1209:         return done()
+1210: 
+1211:     try:
+1212:         base = os.path.expanduser(root_path)
+1213:         if not os.path.isabs(base):
+1214:             base = os.path.abspath(base)
+1215:         if not os.path.isdir(base):
+1216:             return done()
+1217:     except Exception:
+1218:         return done()
+1219: 
+1220:     stats.update(_count_filesystem_inventory(base))
+1221: 
+1222:     for dirpath, dirnames, filenames in os.walk(base):
+1223:         # prune directories in-place
+1224:         before_dirs = list(dirnames)
+1225:         dirnames[:] = [
+1226:             d
+1227:             for d in dirnames
+1228:             if not _is_ignored_dir_name(d)
+1229:         ]
+1230:         stats["ignored_dirs"] += len(before_dirs) - len(dirnames)
+1231:         stats["files_after_directory_exclusions"] += len(filenames)
+1232: 
+1233:         for fn in filenames:
+1234:             ext = os.path.splitext(fn)[1].lower()
+1235:             path = os.path.join(dirpath, fn)
+1236: 
+1237:             if fn in IGNORE_FILES or fn.startswith("."):
+1238:                 stats["ignored_files"] += 1
+1239:                 continue
+1240: 
+1241:             # --- Skip image and binary files entirely ---
+1242:             if ext in IGNORE_EXTS:
+1243:                 stats["skipped_binary_files"] += 1
+1244:                 continue
+1245: 
+1246:             # Extension filter. Set KPI_SCAN_ALL=1 only when deliberately testing
+1247:             # unknown text-like extensions; by default, avoid project/build noise.
+1248:             _scan_all_env = os.environ.get("KPI_SCAN_ALL")
+1249:             scan_all = (
+1250:                 False
+1251:                 if _scan_all_env is None
+1252:                 else (_scan_all_env in {"1", "true", "True"})
+1253:             )
+1254:             if ALLOWED_EXTS and (ext not in ALLOWED_EXTS) and not scan_all:
+1255:                 stats["unsupported_files"] += 1
+1256:                 continue
+1257: 
+1258:             stats["files_scanned"] += 1
+1259: 
+1260:             # Count analyzed source/data lines only after extension filtering.
+1261:             try:
+1262:                 with open(path, "r", encoding="utf-8", errors="ignore") as f:
+1263:                     stats["lines_analyzed"] += sum(1 for _ in f)
+1264:             except Exception:
+1265:                 pass
+1266: 
+1267:             # size filter
+1268:             try:
+1269:                 if os.path.getsize(path) > MAX_FILE_MB * 1024 * 1024:
+1270:                     stats["oversized_files"] += 1
+1271:                     continue
+1272:             except OSError:
+1273:                 continue
+1274: 
+1275:             # Detect language
+1276:             p_lower = path.lower()
+1277:             lang = _detect_language_by_extension(p_lower)
+1278: 
+1279:             # Read file safely
+1280:             text = _read_text_file_safe(path)
+1281:             if not text:
+1282:                 stats["empty_or_unreadable_files"] += 1
+1283:                 continue
+1284:             else:
+1285:                 # Extract KPIs for this file; if extension was not allowed but KPI_SCAN_ALL is on,
+1286:                 # still attempt generic extraction as a fallback
+1287:                 try:
+1288:                     if (ALLOWED_EXTS and ext not in ALLOWED_EXTS) and scan_all:
+1289:                         file_kpis = _extract_generic(text) or []
+1290:                     else:
+1291:                         file_kpis = _extract_from_text(text, lang) or []
+1292:                         # Fallback: if language-specific extractor finds nothing, try generic patterns
+1293:                         if not file_kpis:
+1294:                             file_kpis = _extract_generic(text) or []
+1295:                 except Exception:
+1296:                     file_kpis = []
+1297: 
+1298:                 # Attach file path and accumulate
+1299:                 for k in file_kpis:
+1300:                     k["file_path"] = path
+1301:                     # Try to extract an explicit formula from comments if helper available
+1302:                     if _extract_formula_from_comments:
+1303:                         try:
+1304:                             formula = _extract_formula_from_comments(text.splitlines())
+1305:                             if formula:
+1306:                                 k["formula"] = formula
+1307:                         except Exception:
+1308:                             pass
+1309: 
+1310:                 if not file_kpis:
+1311:                     # Logic-based fallback: if no KPIs were found, scan the text for
+1312:                     # explicit mathematical expressions or return statements.
+1313:                     try:
+1314:                         # Detect mathematical patterns: division, arithmetic, or return expressions
+1315:                         math_patterns = [
+1316:                             r'[\w\s]+\s*[:=]\s*.*[\+\-\*/].*',      # Assignment with arithmetic
+1317:                             r'return\s+.*[\+\-\*/].*',             # Return with arithmetic
+1318:                             r'SELECT\s+.*[\+\-\*/].*[\s\w]*FROM',   # SQL computed column
+1319:                             r'(\w+)\s*/\s*(\w+)'                    # Division/Ratio
+1320:                         ]
+1321:                         has_logic = any(re.search(p, text, re.I | re.S) for p in math_patterns)
+1322:                         
+1323:                         if has_logic:
+1324:                             base_name = os.path.basename(path)
+1325:                             name_stem = os.path.splitext(base_name)[0]
+1326:                             synth_name = _normalize_name(name_stem)
+1327:                             ctx = text
+1328:                             if len(ctx) > 8000:
+1329:                                 ctx = ctx[:4000] + "\n...\n" + ctx[-4000:]
+1330:                             file_kpis = [
+1331:                                 {
+1332:                                     "name": synth_name or "KPI",
+1333:                                     "language": lang,
+1334:                                     "file_line": 1,
+1335:                                     "code_context": ctx,
+1336:                                     "_rank": 0,
+1337:                                     "_kind": "logic_fallback",
+1338:                                 }
+1339:                             ]
+1340:                     except Exception:
+1341:                         pass
+1342:                     if not file_kpis:
+1343:                         # Optional compatibility mode for synthetic demo sets where
+1344:                         # every source file should become a page. Disabled by default
+1345:                         # because it turns ordinary project files into false KPIs.
+1346:                         if os.environ.get("KPI_FORCE_FILE_FALLBACK") in {
+1347:                             "1",
+1348:                             "true",
+1349:                             "True",
+1350:                         }:
+1351:                             try:
+1352:                                 base_name = os.path.basename(path)
+1353:                                 name_stem = os.path.splitext(base_name)[0]
+1354:                                 synth_name = _normalize_name(name_stem)
+1355:                                 ctx = text
+1356:                                 if len(ctx) > 8000:
+1357:                                     ctx = ctx[:4000] + "\n...\n" + ctx[-4000:]
+1358:                                 file_kpis = [
+1359:                                     {
+1360:                                         "name": synth_name or "KPI",
+1361:                                         "language": lang,
+1362:                                         "file_line": 1,
+1363:                                         "code_context": ctx,
+1364:                                         "_rank": -1,
+1365:                                         "_kind": "forced_fallback",
+1366:                                     }
+1367:                                 ]
+1368:                             except Exception:
+1369:                                 pass
+1370:                         if not file_kpis:
+1371:                             continue
+1372: 
+1373:             for k in file_kpis:
+1374:                 k["file_path"] = k.get("file_path") or path
+1375:                 try:
+1376:                     file_line = int(k.get("file_line") or 1)
+1377:                 except (TypeError, ValueError):
+1378:                     file_line = 1
+1379:                 k["file_line"] = max(1, file_line)
+1380:             # Promotion gate: keep strong KPI evidence for dossiers and route
+1381:             # weak KPI-like candidates to Extraction Review instead of silently
+1382:             # generating executive dossiers from helper code, logs, or registers.
+1383:             before_filter_count = len(file_kpis)
+1384:             promoted_kpis = []
+1385:             for k in file_kpis:
+1386:                 promoted, review_record = evaluate_candidate_promotion(k, text, path, base)
+1387:                 if promoted:
+1388:                     promoted_kpis.append(k)
+1389:                 elif review_record:
+1390:                     stats["candidate_review"].append(review_record)
+1391:             file_kpis = promoted_kpis
+1392: 
+1393:             # Deduplicate by name
+1394:             seen_names = set()
+1395:             deduplicated_kpis = []
+1396:             for k in file_kpis:
+1397:                 n = k.get("name") or "Unknown"
+1398:                 if n not in seen_names:
+1399:                     seen_names.add(n)
+1400:                     deduplicated_kpis.append(k)
+1401:             file_kpis = deduplicated_kpis
+1402: 
+1403:             stats["filtered_non_kpi_candidates"] += before_filter_count - len(file_kpis)
+1404:             if not file_kpis:
+1405:                 continue
+1406: 
+1407:             # Pick a single best KPI per file
+1408:             def rank(item: Dict) -> Tuple[int, int]:
+1409:                 r = int(item.get("_rank", 0))
+1410:                 n = item.get("name") or ""
+1411:                 human = (
+1412:                     1 if re.search(r"[ ()\[\]]", n) else 0
+1413:                 )  # prefer names with spaces/paren/brackets
+1414:                 return (r, human)
+1415: 
+1416:             best = max(file_kpis, key=rank)
+1417: 
+1418:             # Compute confidence based on rank and kind
+1419:             def compute_confidence(item: Dict) -> int:
+1420:                 r = int(item.get("_rank", 0))
+1421:                 kind = item.get("_kind", "")
+1422:                 base = {3: 95, 2: 85, 1: 75, 0: 60, -1: 50}
+1423:                 conf = base.get(r, 70)
+1424:                 # Boost for explicit comment tags
+1425:                 if kind in (
+1426:                     "comment",
+1427:                     "sql_comment",
+1428:                     "dax_measure",
+1429:                     "csharp_attribute",
+1430:                     "iec_block",
+1431:                 ):
+1432:                     conf = max(conf, 90)
+1433:                 # Penalize fallbacks
+1434:                 if kind in ("empty_file_fallback", "forced_fallback"):
+1435:                     conf = min(conf, 55)
+1436:                 return conf
+1437: 
+1438:             best["confidence"] = compute_confidence(best)
+1439:             best["detection_kind"] = best.get("_kind", "unspecified")
+1440: 
+1441:             # Strip internal helper fields
+1442:             best.pop("_rank", None)
+1443:             best.pop("_kind", None)
+1444: 
+1445:             if best.get("name") not in seen_kpi_names:
+1446:                 results.append(best)
+1447:                 seen_kpi_names.add(best.get("name"))
+1448: 
+1449:     return done()
+
+FILE software/LEAP/bluebook_generator/parser.py
+SHA256 13f011bb47b6e08fa54024b84d97b564a7e796d4d7168710b0549359be3ec429
+LINES 1-12
+1: from pathlib import Path  # Add this line at the top
+2: 
+3: 
+4: def extract_formula_from_comments(code_lines):
+5:     """
+6:     Look for lines containing 'Formula:' and return the formula string.
+7:     """
+8:     for line in code_lines:
+9:         if "Formula:" in line:
+10:             # Extract everything after 'Formula:'
+11:             return line.split("Formula:", 1)[1].strip()
+12:     return None
+
+FILE software/LEAP/bluebook_generator/main.py
+SHA256 e4a26797c6c7dccb49603745720e4dce7b85bd27e2c2c86f8292183b4b2188c5
+LINES 250-320
+250: def _looks_like_latex_formula(value: str) -> bool:
+251:     if not isinstance(value, str):
+252:         return False
+253:     return bool(
+254:         re.search(
+255:             r"\\(?:frac|Frac|mathrm|Mathrm|text|Text|operatorname|Operatorname|sum|Sum|times|Times)\b",
+256:             value,
+257:         )
+258:     )
+259: 
+260: 
+261: def _normalize_latex_formula(value: str) -> str:
+262:     """
+263:     Preserve explicit source-provided LaTeX as MathJax input.
+264: 
+265:     LEAP also has a code-expression renderer that turns source expressions like
+266:     `operatingHours / numberOfFailures` into LaTeX. Explicit formulas such as
+267:     `\\mathrm{MTBF} = \\frac{...}{...}` must not go through that renderer:
+268:     tokenization would treat LaTeX commands as business words and corrupt them
+269:     into `\\Mathrm`, `\\Frac`, escaped braces, or `\\text{...}` blocks.
+270:     """
+271:     if not isinstance(value, str):
+272:         value = "" if value is None else str(value)
+273:     latex = _sanitize_text(value)
+274:     latex = latex.strip().strip("$")
+275: 
+276:     def normalize_command(match: re.Match) -> str:
+277:         command = match.group(1)
+278:         canonical = LATEX_COMMAND_NORMALIZATIONS.get(command.lower())
+279:         return "\\" + (canonical or command)
+280: 
+281:     latex = re.sub(r"\\([A-Za-z]+)\b", normalize_command, latex)
+282:     
+283:     # Handle specific LaTeX escape sequences that represent business-label punctuation.
+284:     # Keep these as readable label separators; raw underscores inside \mathrm{}
+285:     # are invalid because MathJax treats "_" as subscript syntax.
+286:     latex = re.sub(r"\\text\s*\{-\}", "-", latex)
+287:     # Replace \% with nothing (remove percent from business labels)
+288:     latex = re.sub(r"\\%", "", latex)
+289:     
+290:     # Normalize business labels inside \text{} blocks before conversion
+291:     # This handles cases like \text{-} where hyphens need normalization
+292:     def normalize_text_content(match: re.Match) -> str:
+293:         content = match.group(1)
+294:         # Apply business label normalization to the content
+295:         content = _normalize_business_label_in_latex(content)
+296:         return r"\text{" + content + "}"
+297:     
+298:     latex = re.sub(r"\\text\s*\{([^{}]+)\}", normalize_text_content, latex)
+299:     
+300:     # Now convert \text{} to \mathrm{} via _math_label
+301:     latex = re.sub(
+302:         r"\\text\s*\{([^{}]+)\}",
+303:         lambda m: _math_label(m.group(1)),
+304:         latex,
+305:     )
+306:     
+307:     # Also normalize business labels inside existing \mathrm{} blocks
+308:     # This handles cases where source already has \mathrm{} wrapping
+309:     def normalize_mathrm_content(match: re.Match) -> str:
+310:         content = match.group(1)
+311:         # Remove nested \mathrm{} if present (from \text{} conversion)
+312:         content = re.sub(r"\\mathrm\s*\{([^{}]+)\}", r"\1", content)
+313:         # Apply business label normalization to the content
+314:         content = _normalize_business_label_in_latex(content)
+315:         return r"\mathrm{" + content.replace(" ", r"\,") + "}"
+316:     
+317:     latex = re.sub(r"\\mathrm\s*\{([^{}]+)\}", normalize_mathrm_content, latex)
+318:     
+319:     latex = re.sub(r"\s+", " ", latex).strip()
+320:     return latex
+
+LINES 506-558
+506: def _extract_function_block(code_context: str, anchor_line_number: int):
+507:     import ast
+508: 
+509:     lines = code_context.splitlines()
+510:     if not lines or anchor_line_number <= 0 or anchor_line_number > len(lines):
+511:         return code_context, 0
+512:     try:
+513:         tree = ast.parse(code_context)
+514:         for node in tree.body:
+515:             if isinstance(node, ast.FunctionDef):
+516:                 start = node.lineno
+517:                 end = getattr(node, "end_lineno", None)
+518:                 if end is None:
+519:                     last = node.body[-1]
+520:                     end = getattr(last, "end_lineno", getattr(last, "lineno", start))
+521:                 if start <= anchor_line_number <= end:
+522:                     return "\n".join(lines[start - 1 : end]), start - 1
+523:     except Exception:
+524:         pass
+525:     anchor_idx = anchor_line_number - 1
+526:     start_idx = -1
+527:     for i in range(anchor_idx, -1, -1):
+528:         if lines[i].lstrip().startswith("def "):
+529:             start_idx = i
+530:             break
+531:     if start_idx == -1:
+532:         for i in range(anchor_idx, len(lines)):
+533:             if lines[i].lstrip().startswith("def "):
+534:                 start_idx = i
+535:                 break
+536:     if start_idx == -1:
+537:         return code_context, 0
+538:     def_indent = len(lines[start_idx]) - len(lines[start_idx].lstrip())
+539:     end_idx = len(lines)
+540:     for j in range(start_idx + 1, len(lines)):
+541:         raw = lines[j]
+542:         stripped = raw.strip()
+543:         indent = len(raw) - len(raw.lstrip())
+544:         if not stripped:
+545:             continue
+546:         if raw.lstrip().startswith("def ") and indent <= def_indent:
+547:             end_idx = j
+548:             break
+549:         if indent < def_indent:
+550:             end_idx = j
+551:             break
+552:         if indent == 0 and (
+553:             stripped.startswith("#") or stripped.startswith("if __name__")
+554:         ):
+555:             end_idx = j
+556:             break
+557:     scoped = "\n".join(lines[start_idx:end_idx])
+558:     return scoped, start_idx
+
+LINES 561-805
+561: def generate_formula_from_code(code_context: str) -> dict:
+562:     """
+563:     Programmatically generate a MathJax block from code context.
+564:     Supports:
+565:     - DAX: DEFINE MEASURE 'T'[Name] = ... RETURN <expr> | Name = <expr>
+566:     - SQL/T-SQL/HANA: SELECT <expr> AS <alias> (multi-line, CAST/CASE supported)
+567:     - C#/VB/PLSQL/ABAP: return <expr>; or <var> = <expr>;
+568:     - IEC 61131-3 ST: <var> := <expr>;
+569:     - Generic fallback: pick the most math-like expression (percent or division) anywhere in the block.
+570:     """
+571:     formula_data = {
+572:         "formula_html": _missing_formula_html(),
+573:         "formula_expression": "",
+574:         "formula_result_name": "",
+575:     }
+576: 
+577:     ctx = code_context
+578: 
+579:     # 0) Helpers
+580: 
+581:     def latex_escape(s: str) -> str:
+582:         repl = [
+583:             ("\\", r"\\"),
+584:             ("{", r"\{"),
+585:             ("}", r"\}"),
+586:             ("_", r"\_"),
+587:             ("^", r"\^"),
+588:             ("~", r"\~"),
+589:         ]
+590:         out = s
+591:         for a, b in repl:
+592:             out = out.replace(a, b)
+593:         return out
+594: 
+595:     def sanitize_token(t: str) -> str:
+596:         t = t.strip()
+597:         t = re.sub(r"^[{}\[\];,\s]+|[{}\[\];,\s]+$", "", t)
+598:         t = re.sub(r"^\s*#\s*", "Number of ", t)
+599:         t = re.sub(r"^\s*%\s*", "Percent ", t)
+600:         t = re.sub(r"^\s*\$\s*", "Dollar ", t)
+601:         t = t.replace("#", " Number ")
+602:         t = t.replace("$", " Dollar ")
+603:         t = re.sub(r"%\s*([A-Za-z])", r"Percent \1", t)
+604:         t = re.sub(r"\s+%", "", t)
+605:         t = t.replace("%", " Percent ")
+606:         t = t.replace("&", " and ")
+607:         t = re.sub(r"[:\.]+", " ", t)
+608:         t = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", t)
+609:         t = t.replace("_", " ")
+610:         t = re.sub(r"(?i)(maintenance)to(operating)", r"\1 to \2", t)
+611:         t = re.sub(r"(?i)(cost)ratio", r"\1 ratio", t)
+612:         t = re.sub(r"(?i)(feedstock)throughput", r"\1 throughput", t)
+613:         t = re.sub(r"(?i)(error)rate", r"\1 rate", t)
+614:         t = re.sub(r"(?i)(extraction)rate", r"\1 rate", t)
+615:         t = re.sub(r"\s+", " ", t).strip()
+616:         t = latex_escape(t)
+617:         title = t.title()
+618:         title = re.sub(r"\bOee\b", "OEE", title)
+619:         title = re.sub(r"\bNps\b", "NPS", title)
+620:         title = re.sub(r"\bKpi\b", "KPI", title)
+621:         title = re.sub(r"\bHse\b", "HSE", title)
+622:         return title
+623: 
+624:     def L(v: str) -> str:
+625:         return _math_label(v)
+626: 
+627:     def strip_inline_comments(line: str) -> str:
+628:         cleaned = line
+629:         cleaned = re.split(r"--", cleaned, maxsplit=1)[0]
+630:         cleaned = re.split(r"//", cleaned, maxsplit=1)[0]
+631:         cleaned = re.split(r"\(\*", cleaned, maxsplit=1)[0]
+632:         cleaned = re.split(r"(?<!:)\s'", cleaned, maxsplit=1)[0]
+633:         cleaned = re.split(r"#", cleaned, maxsplit=1)[0]
+634:         return cleaned.rstrip(" ;\t")
+635: 
+636:     def unwrap_sql_expr(expr: str) -> str:
+637:         e = expr.strip()
+638:         m = re.search(r"(?is)\bCAST\s*\(\s*(?P<inner>.+?)\s+AS\s+[^\)]+\)", e)
+639:         if m:
+640:             e = m.group("inner").strip()
+641:         m = re.search(r"(?is)\bCOALESCE\s*\(\s*(?P<inner>.+?)\s*,\s*.+?\)", e)
+642:         if m:
+643:             e = m.group("inner").strip()
+644:         e = re.sub(r"(?is)\bNULLIF\s*\(\s*(.+?)\s*,\s*.+?\)", r"\1", e)
+645:         e = re.sub(r"[;{}]+$", "", e).strip()
+646:         return strip_wrapping_parentheses(e)
+647: 
+648:     def normalize_sql_guards(expr: str) -> str:
+649:         e = str(expr or "")
+650:         previous = None
+651:         while previous != e:
+652:             previous = e
+653:             e = re.sub(
+654:                 r"(?is)\bNULLIF\s*\(\s*(?P<inner>[^,()]+(?:\([^()]*\))?)\s*,\s*0(?:\.0)?\s*\)",
+655:                 r"\g<inner>",
+656:                 e,
+657:             )
+658:             e = re.sub(
+659:                 r"(?is)\bCOALESCE\s*\(\s*(?P<inner>[^,()]+(?:\([^()]*\))?)\s*,\s*[^()]+?\)",
+660:                 r"\g<inner>",
+661:                 e,
+662:             )
+663:         return e
+664: 
+665:     def is_invalid_formula_candidate(expr: str) -> bool:
+666:         e = str(expr or "").strip()
+667:         if not e:
+668:             return True
+669:         if e == "/" or re.fullmatch(r"/+\s*", e):
+670:             return True
+671:         if re.fullmatch(r"[+\-*/×÷();,\s]+", e):
+672:             return True
+673:         if e.lower() in {"nullif", "cast", "case", "end"}:
+674:             return True
+675:         return False
+676: 
+677:     def strip_wrapping_parentheses(expr: str) -> str:
+678:         e = expr.strip()
+679:         while e.startswith("(") and e.endswith(")"):
+680:             depth = 0
+681:             wraps_entire_expr = True
+682:             for idx, ch in enumerate(e):
+683:                 if ch == "(":
+684:                     depth += 1
+685:                 elif ch == ")":
+686:                     depth -= 1
+687:                     if depth == 0 and idx != len(e) - 1:
+688:                         wraps_entire_expr = False
+689:                         break
+690:             if not wraps_entire_expr:
+691:                 break
+692:             e = e[1:-1].strip()
+693:         return e
+694: 
+695:     def balance_parentheses(expr: str) -> str:
+696:         e = expr.strip()
+697:         while e.count(")") > e.count("(") and ")" in e:
+698:             e = e[: e.rfind(")")] + e[e.rfind(")") + 1 :]
+699:         while e.count("(") > e.count(")") and "(" in e:
+700:             e = e[: e.find("(")] + e[e.find("(") + 1 :]
+701:         return e.strip()
+702: 
+703:     def normalize_expression(expr: str) -> str:
+704:         e = expr.strip()
+705:         assignment_parts = re.split(r"(?<![<>!])=(?!=)", e)
+706:         if len(assignment_parts) > 1 and is_math_like(assignment_parts[-1]):
+707:             e = assignment_parts[-1].strip()
+708:         e = e.replace("×", "*").replace("÷", "/")
+709:         e = re.sub(r"(?i)\bdivided\s+by\b", "/", e)
+710:         e = re.sub(r"(?i)\bmultiplied\s+by\b", "*", e)
+711:         e = re.sub(r"(?i)\bminus\b", "-", e)
+712:         e = re.sub(r"(?i)\bplus\b", "+", e)
+713:         e = re.sub(r"(?i)\s+based\s+on\b.*$", "", e)
+714:         e = normalize_sql_guards(e)
+715:         e = balance_parentheses(e)
+716:         return e
+717: 
+718:     def split_top_level_operator(expr: str, operators: set[str]) -> tuple[str, str, str] | None:
+719:         depth = 0
+720:         for idx in range(len(expr) - 1, -1, -1):
+721:             ch = expr[idx]
+722:             if ch == "(":
+723:                 depth = max(depth - 1, 0)
+724:             elif ch == ")":
+725:                 depth += 1
+726:             elif ch in operators and depth == 0:
+727:                 if ch in {"+", "-"} and idx == 0:
+728:                     continue
+729:                 lhs = expr[:idx].strip()
+730:                 rhs = expr[idx + 1 :].strip()
+731:                 if lhs and rhs:
+732:                     return lhs, ch, rhs
+733:         return None
+734: 
+735:     def split_top_level_division(expr: str) -> tuple[str, str] | None:
+736:         split = split_top_level_operator(expr, {"/"})
+737:         if split:
+738:             return split[0], split[2]
+739:         return None
+740: 
+741:     def split_top_level_product(expr: str) -> list[str]:
+742:         parts = []
+743:         depth = 0
+744:         start = 0
+745:         for idx, ch in enumerate(expr):
+746:             if ch == "(":
+747:                 depth += 1
+748:             elif ch == ")":
+749:                 depth = max(depth - 1, 0)
+750:             elif ch == "*" and depth == 0:
+751:                 part = expr[start:idx].strip()
+752:                 if part:
+753:                     parts.append(part)
+754:                 start = idx + 1
+755:         tail = expr[start:].strip()
+756:         if tail:
+757:             parts.append(tail)
+758:         return parts
+759: 
+760:     def clean_operand(value: str) -> str:
+761:         v = strip_wrapping_parentheses(normalize_expression(value))
+762:         v = unwrap_sql_expr(v)
+763:         v = re.sub(r"(?is)\bNULLIF\s*\(\s*(?P<inner>.+?)\s*,\s*0(?:\.0)?\s*\)", r"\g<inner>", v)
+764:         v = re.sub(r"(?is)\bCOALESCE\s*\(\s*(?P<inner>.+?)\s*,\s*.+?\)", r"\g<inner>", v)
+765:         v = re.sub(
+766:             r"(?is)\b(?:SUM|AVG|MIN|MAX)\s*\(\s*(?P<inner>.+?)\s*\)",
+767:             r"\g<inner>",
+768:             v,
+769:         )
+770:         v = re.sub(r"(?is)\bCOUNT\s*\(\s*\*\s*\)", "Count", v)
+771:         v = re.sub(r"(?is)\bCAST\s*\(\s*(?P<inner>.+?)\s+AS\s+.+?\)", r"\g<inner>", v)
+772:         v = re.sub(r"(?is)\bDATEDIFF\s*\(.+?\)", "Date Difference", v)
+773:         v = strip_wrapping_parentheses(v)
+774:         return v.strip()
+775: 
+776:     def is_math_like(expr: str) -> bool:
+777:         return bool(expr) and (
+778:             any(op in expr for op in ("+", "-", "*", "/", "%", "×", "÷"))
+779:             or bool(
+780:                 re.search(
+781:                     r"(?i)\b(?:minus|plus|divided\s+by|multiplied\s+by)\b",
+782:                     expr,
+783:                 )
+784:             )
+785:         )
+786: 
+787:     def is_weak_expr(expr: str) -> bool:
+788:         e = clean_operand(expr).strip()
+789:         if is_invalid_formula_candidate(e):
+790:             return True
+791:         if re.fullmatch(r"\d+(?:\.\d+)?", e):
+792:             return True
+793:         if re.search(r"(?i)\bplaceholder\b", e):
+794:             return True
+795:         if e.lower() in {"number", "return number"}:
+796:             return True
+797:         if e.lower() in {"nullif", "cast"}:
+798:             return True
+799:         return False
+800: 
+801:     def is_numeric_literal(value: str) -> bool:
+802:         return bool(re.fullmatch(r"\d+(?:\.\d+)?", value.strip()))
+803: 
+804:     def to_business_label(var_name: str) -> str:
+805:         if re.fullmatch(r"\d+(?:\.\d+)?", var_name.strip()):
+
+LINES 1431-1510
+1431: def create_rst_file(
+1432:     kpi_data: dict,
+1433:     details: dict,
+1434:     template: jinja2.Template,
+1435:     ai_time_seconds: float | None = None,
+1436: ):
+1437:     from html import escape
+1438:     import time
+1439: 
+1440:     render_start = time.perf_counter()
+1441:     kpi_line_in_context = 0
+1442:     context_lines = (kpi_data.get("code_context") or "").split("\n")
+1443:     kpi_name = kpi_data.get("name") or ""
+1444:     kpi_display_name = kpi_data.get("display_name") or _business_display_name(kpi_name)
+1445:     kpi_data["display_name"] = kpi_display_name
+1446:     kpi_data["raw_name"] = kpi_data.get("raw_name") or kpi_name
+1447:     kpi_data["name_was_normalized"] = bool(kpi_name and kpi_display_name != kpi_name)
+1448:     for i, line in enumerate(context_lines):
+1449:         if (
+1450:             f"# KPI: {kpi_name}" in line
+1451:             or f"-- KPI: {kpi_name}" in line
+1452:             or f"' KPI: {kpi_name}" in line
+1453:             or f"/* KPI: {kpi_name}" in line
+1454:         ):
+1455:             kpi_line_in_context = i + 1
+1456:             break
+1457:     kpi_data["context_line_number"] = kpi_line_in_context
+1458:     file_path = kpi_data.get("file_path") or ""
+1459:     try:
+1460:         source_line_number = int(
+1461:             kpi_data.get("file_line") or kpi_data.get("context_line_number") or 1
+1462:         )
+1463:     except (TypeError, ValueError):
+1464:         source_line_number = 1
+1465:     if source_line_number < 1:
+1466:         source_line_number = 1
+1467:     kpi_data["source_line_number"] = source_line_number
+1468: 
+1469:     file_path = kpi_data.get("file_path")
+1470:     full_code = None
+1471:     if file_path:
+1472:         p = Path(file_path)
+1473:         if not p.is_absolute():
+1474:             p = (ROOT_DIR / p).resolve()
+1475:         else:
+1476:             p = p.resolve()
+1477:         if p.exists() and p.is_file():
+1478:             try:
+1479:                 full_code = p.read_text(encoding="utf-8", errors="ignore")
+1480:             except Exception:
+1481:                 pass
+1482: 
+1483:     if full_code is not None:
+1484:         raw_code = full_code
+1485:         anchor_line = source_line_number
+1486:     else:
+1487:         raw_code = kpi_data.get("code_context") or ""
+1488:         anchor_line = kpi_line_in_context
+1489: 
+1490:     _, ext = os.path.splitext(str(file_path).lower())
+1491:     if ext == ".py":
+1492:         scoped_context, start_idx = _extract_function_block(
+1493:             raw_code, anchor_line
+1494:         )
+1495:         kpi_data["code_context"] = scoped_context
+1496:         if anchor_line > 0:
+1497:             rel = anchor_line - start_idx
+1498:             kpi_data["context_line_number"] = rel if rel > 0 else 0
+1499:         else:
+1500:             kpi_data["context_line_number"] = 0
+1501:         programmatic_formula = generate_formula_from_code(scoped_context)
+1502:     else:
+1503:         kpi_data["code_context"] = raw_code
+1504:         programmatic_formula = generate_formula_from_code(raw_code)
+1505:     # Committee artifacts retain portable evidence references, not machine-local IDE URLs.
+1506:     kpi_data["has_source_link"] = False
+1507:     kpi_data["vscode_url"] = ""
+1508:     kpi_data["pycharm_url"] = ""
+1509:     if file_path:
+1510:         try:
+
+LINES 1584-1770
+1584:     # PHASE 1: Add governance status (Validated/Needs Review/Flagged)
+1585:     conflicts = governance.setdefault("conflicts", [])
+1586:     audit_notes = governance.setdefault("audit_notes", [])
+1587:     compliance_alarms = kpi_data.setdefault("compliance_alarms", [])
+1588:     formula_desc = (
+1589:         details.get("formula_description")
+1590:         or details.get("business_formula")
+1591:         or ""
+1592:     )
+1593:     has_formula_declared = formula_desc and not any(
+1594:         m in formula_desc.upper()
+1595:         for m in ("UNDETERMINED", "NOT DECLARED", "NO EXPLICIT", "OWNER CONFIRMATION",
+1596:                   "CERTIFIED FORMULA STATEMENT NOT DECLARED")
+1597:     )
+1598:     if conflicts or audit_notes or compliance_alarms:
+1599:         kpi_data["governance_status"] = "Needs Review"
+1600:         kpi_data["governance_status_display"] = "Needs Review"
+1601:     elif kpi_data["governance_accountable"]:
+1602:         kpi_data["governance_status"] = "Validated"
+1603:         kpi_data["governance_status_display"] = "Validated"
+1604:     else:
+1605:         kpi_data["governance_status"] = "Needs Review"
+1606:         kpi_data["governance_status_display"] = "Needs Review"
+1607:     domain = re.sub(
+1608:         r"\s*(Data Owner|Owner|Team|Department)\s*$",
+1609:         "",
+1610:         kpi_data["governance_accountable"],
+1611:         flags=re.I,
+1612:     ).strip()
+1613:     kpi_data["governance_domain_display"] = domain or "Enterprise KPI"
+1614:     # Context and programmatic formula were loaded/computed early at the start of the function
+1615:     formula_description_raw = details.get("formula_description", "") or ""
+1616: 
+1617:     def _looks_like_formula(text: str) -> bool:
+1618:         if not isinstance(text, str):
+1619:             return False
+1620:         s = text.strip()
+1621:         if not s:
+1622:             return False
+1623:         if "derived directly from the code" in s.lower():
+1624:             return False
+1625:         return any(op in s for op in ("/", "*", "×", "÷", "+", "-")) or bool(
+1626:             re.search(
+1627:                 r"(?i)\b(?:minus|plus|divided\s+by|multiplied\s+by|sum\s+of|count\s+of)\b",
+1628:                 s,
+1629:             )
+1630:         )
+1631: 
+1632:     def _formula_html_quality(formula_html: str) -> int:
+1633:         s = formula_html or ""
+1634:         if not s or "See code context" in s:
+1635:             return 0
+1636:         score = 2
+1637:         weak_bits = (
+1638:             "Placeholder",
+1639:             "= 0.0",
+1640:             "Nullif",
+1641:             "\\text{Count}",
+1642:             "\\text{Cast}",
+1643:             "\\text{Date Difference}",
+1644:             "\\text{Number}",
+1645:             "\\text{Return}",
+1646:         )
+1647:         if any(bit in s for bit in weak_bits):
+1648:             score -= 1
+1649:         if "\\frac" in s or "\\times" in s:
+1650:             score += 1
+1651:         return score
+1652: 
+1653:     formula_mismatch = False
+1654:     formula_mismatch_reason = ""
+1655:     if _looks_like_formula(formula_description_raw):
+1656:         formula_from_description = generate_formula_from_code(
+1657:             f"{kpi_name or 'Result'} = {formula_description_raw}"
+1658:         )
+1659:         description_quality = _formula_html_quality(formula_from_description.get("formula_html", ""))
+1660:         programmatic_quality = _formula_html_quality((programmatic_formula or {}).get("formula_html", ""))
+1661:         description_ops = set(re.findall(r"[+\-*/×÷]", formula_description_raw))
+1662:         programmatic_html = (programmatic_formula or {}).get("formula_html", "")
+1663:         programmatic_ops = set()
+1664:         if "\\frac" in programmatic_html:
+1665:             programmatic_ops.add("/")
+1666:         if "\\times" in programmatic_html:
+1667:             programmatic_ops.add("*")
+1668:         if " - " in programmatic_html:
+1669:             programmatic_ops.add("-")
+1670:         if " + " in programmatic_html:
+1671:             programmatic_ops.add("+")
+1672:         source_operator_lines = []
+1673:         for raw_line in (kpi_data.get("code_context") or "").splitlines():
+1674:             source_line = raw_line.strip()
+1675:             if not source_line:
+1676:                 continue
+1677:             if source_line.startswith(("--", "#", "//", "'", "*")):
+1678:                 # Completely skip all comment lines to avoid business formula/comment operator pollution
+1679:                 continue
+1680:             # Remove function/arrow type symbols to avoid false operator detection
+1681:             source_line = source_line.replace("->", " ").replace("=>", " ")
+1682:             source_operator_lines.append(source_line)
+1683:         source_ops = set(re.findall(r"[+\-*/×÷]", "\n".join(source_operator_lines)))
+1684:         source_ops_normalized = set()
+1685:         if {"÷", "/"} & source_ops:
+1686:             source_ops_normalized.add("/")
+1687:         if {"×", "*"} & source_ops:
+1688:             source_ops_normalized.add("*")
+1689:         if "-" in source_ops:
+1690:             source_ops_normalized.add("-")
+1691:         if "+" in source_ops:
+1692:             source_ops_normalized.add("+")
+1693:         evidence_ops = programmatic_ops | source_ops_normalized
+1694:         clear_business_formula = description_quality > 0 and bool(description_ops)
+1695:         desc_has_pm = bool({"-", "+"} & description_ops)
+1696:         desc_has_div = bool({"/", "÷"} & description_ops)
+1697:         desc_has_mul = bool({"*", "×"} & description_ops)
+1698:         ev_has_pm = bool({"-", "+"} & evidence_ops)
+1699:         ev_has_div = bool({"/", "÷"} & evidence_ops)
+1700:         ev_has_mul = bool({"*", "×"} & evidence_ops)
+1701:         formula_mismatch = clear_business_formula and (
+1702:             (desc_has_pm and not ev_has_pm) or
+1703:             (desc_has_div and not ev_has_div) or
+1704:             (desc_has_mul and not ev_has_mul)
+1705:         )
+1706:         if formula_mismatch:
+1707:             # Provide an ISO-22400 aligned conflict signal and clear administrative phrasing.
+1708:             formula_mismatch_reason = (
+1709:                 "The operational logic defined by business documentation does not align "
+1710:                 "with the certified implementation path."
+1711:             )
+1712:             # Add to governance conflicts
+1713:             formula_conflict = {
+1714:                 "reason": "ISO Compliance & Governance Conflict: " + formula_mismatch_reason,
+1715:                 "severity": "High",
+1716:                 "type": "formula_mismatch"
+1717:             }
+1718:             governance = kpi_data.setdefault("governance", {})
+1719:             existing_conflicts = governance.setdefault("conflicts", [])
+1720:             if formula_conflict not in existing_conflicts:
+1721:                 existing_conflicts.append(formula_conflict)
+1722:             kpi_data["governance_status"] = "Needs Review"
+1723:             kpi_data["governance_status_display"] = "Needs Review"
+1724:         try:
+1725:             # Some callers build kpi_data earlier; ensure the key exists for templates.
+1726:             kpi_data["governance_conflict"] = bool(formula_mismatch)
+1727:         except Exception:
+1728:             pass
+1729:         if description_quality >= programmatic_quality or formula_mismatch:
+1730:             programmatic_formula = formula_from_description
+1731:     # If a governance/formula mismatch was detected, label it explicitly as an
+1732:     # ISO compliance conflict in the human-readable reason so the UI can show a
+1733:     # clear administrative warning.
+1734:     if formula_mismatch:
+1735:         formula_mismatch_reason = "ISO Compliance & Governance Conflict: " + formula_mismatch_reason
+1736: 
+1737:     # Variable to store LaTeX formula HTML if detected
+1738:     latex_formula_html = None
+1739: 
+1740:     # Check for explicit LaTeX formula in kpi_data before processing programmatic formula
+1741:     explicit_formula = str(kpi_data.get("formula") or "").strip()
+1742:     if explicit_formula and _looks_like_latex_formula(explicit_formula):
+1743:         # Extract the KPI name from comments to use as the normalized LHS
+1744:         explicit_kpi_name = None
+1745:         kpi_match = re.search(
+1746:             r"(?im)^\s*(?:--|#|//|/\*+|\*)\s*KPI\s*:?\s*(?P<name>.+?)\s*(?:\*/)?\s*$",
+1747:             kpi_data.get("code_context") or "",
+1748:         )
+1749:         if kpi_match:
+1750:             explicit_kpi_name = kpi_match.group("name").strip()
+1751:         
+1752:         # If we have a KPI name, normalize it and replace the LHS in the explicit formula
+1753:         if explicit_kpi_name:
+1754:             # Replace the LHS in the explicit formula with the normalized version
+1755:             # Match \mathrm{...} at the start before = and replace it
+1756:             def replace_lhs(match: re.Match) -> str:
+1757:                 return _math_label(explicit_kpi_name) + " ="
+1758:             explicit_formula = re.sub(r"^(\\mathrm\s*\{[^{}]+\})\s*=", replace_lhs, explicit_formula)
+1759:         
+1760:         explicit_formula = _normalize_latex_formula(explicit_formula)
+1761:         kpi_data["formula"] = explicit_formula
+1762:         latex_formula = _latex_formula_html(explicit_formula)
+1763:         latex_formula_html = latex_formula["formula_html"]
+1764:         programmatic_formula = latex_formula
+1765: 
+1766:     final_details = {
+1767:         "description_html": format_text_as_html_list(_executive_text(details.get("description", ""), "objective")),
+1768:         "objective_html": format_text_as_html_list(_executive_text(details.get("objective", ""), "objective")),
+1769:         "formula_description": escape(_executive_text(formula_description_raw, "formula")),
+1770:         "used_in_kpis_html": format_text_as_html_list(_executive_text(details.get("used_in_kpis", ""), "usage")),
+
+LINES 2228-2372
+2228:     def _formula_rhs_for_annotation(expression: str) -> str:
+2229:         """
+2230:         Annotation nodes explain operands and operators, so they should use the
+2231:         calculation expression only. Human-certified formulas often include a
+2232:         publication title on the left side, e.g.
+2233:         "Ethylene Yield % = (Ethylene Produced / Feedstock) * 100". Keeping the
+2234:         left side inside the token stream makes it render as a fake operand.
+2235:         """
+2236:         text = str(expression or "").strip()
+2237:         if not text:
+2238:             return ""
+2239:         if _looks_like_latex_formula(text):
+2240:             return text
+2241:         depth = 0
+2242:         for idx, ch in enumerate(text):
+2243:             if ch == "(":
+2244:                 depth += 1
+2245:             elif ch == ")":
+2246:                 depth = max(depth - 1, 0)
+2247:             elif ch == "=" and depth == 0:
+2248:                 rhs = text[idx + 1 :].strip()
+2249:                 lhs = text[:idx].strip()
+2250:                 if rhs and lhs and re.search(r"[+\-*/×÷]|\b(?:divided|multiplied|minus|plus)\b", rhs, re.I):
+2251:                     return rhs
+2252:         return text
+2253: 
+2254:     def _strip_annotation_units(expression: str) -> str:
+2255:         """
+2256:         Unit parentheticals describe operands, but they are not standalone
+2257:         operands in the annotated equation. Keep grouped math intact and remove
+2258:         only common unit labels such as "(tons)" or "(hours)".
+2259:         """
+2260:         unit_terms = (
+2261:             r"%|percent|percentage|tons?|tonnes?|kg|kilograms?|m3|kg/m3|"
+2262:             r"hours?|hrs?|days?|c|°c|celsius|usd|\$|dollars?|units?"
+2263:         )
+2264:         return re.sub(rf"\s*\(\s*(?:{unit_terms})\s*\)", "", str(expression or ""), flags=re.I)
+2265: 
+2266:     def _tokenize_formula_expression(expression: str) -> list[str]:
+2267:         expression = _strip_annotation_units(_formula_rhs_for_annotation(expression))
+2268:         expression = re.sub(
+2269:             r"(?is)\b(?:SUM|AVG|MIN|MAX)\s*\(\s*([^()]+?)\s*\)",
+2270:             r"\1",
+2271:             expression or "",
+2272:         )
+2273:         expression = re.sub(
+2274:             r"(?is)\bNULLIF\s*\(\s*([^,()]+?)\s*,\s*0(?:\.0)?\s*\)",
+2275:             r"\1",
+2276:             expression,
+2277:         )
+2278:         expression = re.sub(r"(?is)\breturn\b\s+", "", expression)
+2279:         expression = re.sub(r"(?is)\bAS\s+[A-Za-z_][A-Za-z0-9_]*\b.*$", "", expression)
+2280:         expression = re.sub(r"[;,]+$", "", expression.strip())
+2281:         return [
+2282:             re.sub(r"^[,\s]+|[,\s]+$", "", part.strip())
+2283:             for part in re.split(r"(\+|-|\*|/|×|÷|\(|\))", expression)
+2284:             if part and part.strip() and re.sub(r"^[,\s]+|[,\s]+$", "", part.strip())
+2285:         ]
+2286: 
+2287:     def _formula_node_html(
+2288:         business_label: str,
+2289:         developer_label: str,
+2290:         symbol: str,
+2291:         extra_class: str = "",
+2292:     ) -> str:
+2293:         token = _formula_node_token(business_label, developer_label, symbol, extra_class)
+2294:         return (
+2295:             f'<div class="leap-formula-node{escape(token["extra_class"], quote=True)}">'
+2296:             f'<span class="leap-math-lbl{" long-line" if token["long_label"] else ""}" '
+2297:             f'data-biz="{escape(token["business_label"], quote=True)}" '
+2298:             f'data-dev="{escape(token["developer_mapping"], quote=True)}">{escape(token["business_label"])}</span>'
+2299:             '<div class="leap-math-pointer"></div>'
+2300:             f'<span class="leap-math-render">{escape(token["math_symbol"])}</span>'
+2301:             "</div>"
+2302:         )
+2303: 
+2304:     def _formula_node_token(
+2305:         business_label: str,
+2306:         developer_label: str,
+2307:         symbol: str,
+2308:         extra_class: str = "",
+2309:     ) -> dict:
+2310:         business_label = _shorten_label(business_label, 56)
+2311:         developer_label = _shorten_label(developer_label, 56)
+2312:         symbol = _shorten_label(symbol, 24)
+2313:         return {
+2314:             "business_label": business_label,
+2315:             "developer_mapping": developer_label,
+2316:             "math_symbol": symbol,
+2317:             # Compatibility aliases for any downstream code that has not migrated.
+2318:             "developer_label": developer_label,
+2319:             "symbol": symbol,
+2320:             "extra_class": extra_class,
+2321:             "is_operator": "operator-node" in extra_class,
+2322:             "long_label": len(business_label) > 22 or len(developer_label) > 22,
+2323:         }
+2324: 
+2325:     def _formula_tokens_from_expression(expression: str, prefer_source_labels: bool = False) -> list[dict]:
+2326:         parts = _tokenize_formula_expression(expression)
+2327:         tokens: list[dict] = []
+2328:         idx = 0
+2329:         while idx < len(parts):
+2330:             part = parts[idx]
+2331:             if part in {"(", ")"}:
+2332:                 idx += 1
+2333:                 continue
+2334:             if part in {"+", "-", "/", "÷"}:
+2335:                 business, developer, symbol = _operator_label(part)
+2336:                 tokens.append(_formula_node_token(business, developer, symbol, " operator-node"))
+2337:                 idx += 1
+2338:                 continue
+2339:             if part in {"*", "×"}:
+2340:                 next_part = parts[idx + 1] if idx + 1 < len(parts) else ""
+2341:                 if re.fullmatch(r"\d+(?:\.\d+)?", next_part):
+2342:                     tokens.append(
+2343:                         _formula_node_token(
+2344:                             "Normalized Annual Days" if next_part == "365" else f"Scaled by {next_part}",
+2345:                             f"LITERAL: * {next_part}",
+2346:                             f"× {next_part}",
+2347:                             " operator-node",
+2348:                         )
+2349:                     )
+2350:                     idx += 2
+2351:                     continue
+2352:                 business, developer, symbol = _operator_label(part)
+2353:                 tokens.append(_formula_node_token(business, developer, symbol, " operator-node"))
+2354:                 idx += 1
+2355:                 continue
+2356:             if re.fullmatch(r"\d+(?:\.\d+)?", part):
+2357:                 tokens.append(_formula_node_token(part, f"LITERAL: {part}", part))
+2358:                 idx += 1
+2359:                 continue
+2360:             if prefer_source_labels:
+2361:                 business_label = _business_label_for_code_token(part)
+2362:                 mapping_kind = "VARIABLE" if (kpi_data.get("language") or "").lower() == "python" else "COLUMN"
+2363:                 developer_label = f"{mapping_kind}: {part}"
+2364:                 symbol = _math_symbol_for_token(part)
+2365:             else:
+2366:                 developer_tokens = _developer_tokens_from_source()
+2367:                 business_label = part
+2368:                 developer_label = _developer_label_for(part, developer_tokens)
+2369:                 symbol = _math_symbol_for_token(part)
+2370:             tokens.append(_formula_node_token(business_label, developer_label, symbol))
+2371:             idx += 1
+2372:         return tokens
+
+LINES 2631-2690
+2631:     governance_confidence_text = str(kpi_data.get("governance_confidence") or "").strip().lower()
+2632:     manual_override_approved = (
+2633:         str(details.get("_override_status") or "").strip().upper()
+2634:         == "APPROVED_BY_BUSINESS"
+2635:     )
+2636:     try:
+2637:         numeric_confidence = float(kpi_data.get("confidence", 0) or 0)
+2638:     except (TypeError, ValueError):
+2639:         numeric_confidence = 0.0
+2640: 
+2641:     governance_payload = kpi_data.get("governance", {})
+2642:     has_any_conflict = bool(governance_payload.get("conflicts"))
+2643:     has_any_audit_note = bool(governance_payload.get("audit_notes"))
+2644:     has_any_compliance_alarm = bool(kpi_data.get("compliance_alarms"))
+2645:     if formula_mismatch or has_any_conflict or has_any_audit_note or has_any_compliance_alarm:
+2646:         review_state_label = "Needs Review"
+2647:         review_state_class = "state-needs-review"
+2648:         review_action_label = "Review Evidence Signals"
+2649:         if formula_mismatch:
+2650:             review_state_reason = formula_mismatch_reason
+2651:             review_action_label = "Review Logic Mismatch"
+2652:         elif has_any_conflict:
+2653:             first_c = governance_payload["conflicts"][0]
+2654:             review_state_reason = first_c.get("reason", "ISO Compliance & Governance Conflict detected.")
+2655:             review_action_label = "Review Governance Conflict"
+2656:         elif has_any_compliance_alarm:
+2657:             first_alarm = kpi_data["compliance_alarms"][0]
+2658:             review_state_reason = first_alarm.get("message", "Compliance alarm detected. Review required.")
+2659:             review_action_label = "Review Compliance Alarm"
+2660:         else:
+2661:             first_note = governance_payload["audit_notes"][0]
+2662:             if isinstance(first_note, dict):
+2663:                 review_state_reason = first_note.get("reason", "Owner confirmation required.")
+2664:             else:
+2665:                 review_state_reason = str(first_note)
+2666:             review_action_label = "Review Owner Confirmation"
+2667:     elif manual_override_approved:
+2668:         review_state_label = "Validated"
+2669:         review_state_class = "state-validated"
+2670:         review_action_label = "Review Approved Override"
+2671:         review_state_reason = (
+2672:             "This KPI uses a business-approved override from the LEAP AXIS sign-off ledger. "
+2673:             "The saved definition is applied before dossier rendering."
+2674:         )
+2675:     elif numeric_confidence < 75:
+2676:         review_state_label = "Needs Review"
+2677:         review_state_class = "state-needs-review"
+2678:         review_action_label = "Review Definition Evidence"
+2679:         review_state_reason = (
+2680:             "This governed metric requires owner confirmation because its confidence score does not yet meet certification criteria."
+2681:         )
+2682:     else:
+2683:         review_state_label = "Validated"
+2684:         review_state_class = "state-validated"
+2685:         review_action_label = "Review Certified Definition"
+2686:         review_state_reason = (
+2687:             "LEAP mapped the business definition, formula lineage, and governance metadata into a validated KPI dossier."
+2688:         )
+2689: 
+2690:     final_details.update(
+
+LINES 2752-2805
+2752:     formula_html = final_details.get("formula_html") or ""
+2753:     formula_is_specific = bool(formula_html) and (
+2754:         "See code context" not in formula_html
+2755:     )
+2756:     filled_total = filled + (1 if formula_is_specific else 0)
+2757:     possible_total = len(fields_to_check) + 1
+2758:     extraction_rate_pct = round(100.0 * filled_total / possible_total, 1)
+2759:     error_rate_pct = round(100.0 - extraction_rate_pct, 1)
+2760:     validation_date_display = time.strftime("%Y-%m-%d")
+2761:     final_details["extraction_rate_pct"] = extraction_rate_pct
+2762:     final_details["error_rate_pct"] = error_rate_pct
+2763:     final_details["validation_date_display"] = validation_date_display
+2764:     kpi_data["extraction_rate_pct"] = extraction_rate_pct
+2765:     kpi_data["validation_date_display"] = validation_date_display
+2766: 
+2767:     def _fmt_seconds(s: float) -> str:
+2768:         s = max(0.0, float(s))
+2769:         if s < 60:
+2770:             return f"{s:.1f}s"
+2771:         m = int(s // 60)
+2772:         r = int(round(s - m * 60))
+2773:         return f"{m}m {r}s"
+2774: 
+2775:     render_time_seconds = time.perf_counter() - render_start
+2776:     total_kpi_time_seconds = (ai_time_seconds or 0.0) + render_time_seconds
+2777:     final_details["ai_time_seconds"] = round(ai_time_seconds or 0.0, 3)
+2778:     final_details["render_time_seconds"] = round(render_time_seconds, 3)
+2779:     final_details["total_kpi_time_seconds"] = round(total_kpi_time_seconds, 3)
+2780:     final_details["generation_time_display"] = validation_date_display
+2781:     explicit_formula = kpi_data.get("formula")
+2782:     if explicit_formula:
+2783:         # Check for LaTeX syntax (backslashes, keywords)
+2784:         if _looks_like_latex_formula(str(explicit_formula)):
+2785:             formula_res = _latex_formula_html(str(explicit_formula))
+2786:             if _formula_html_quality(formula_res.get("formula_html", "")) > _formula_html_quality(final_details.get("formula_html", "")):
+2787:                 final_details["formula_html"] = formula_res.get("formula_html")
+2788:                 final_details["formula_expression"] = formula_res.get("formula_expression", "")
+2789:         else:
+2790:             # Parse it using generate_formula_from_code
+2791:             formula_res = generate_formula_from_code(str(explicit_formula))
+2792:             if (
+2793:                 formula_res
+2794:                 and "See code context" not in formula_res.get("formula_html", "")
+2795:                 and _formula_html_quality(formula_res.get("formula_html", "")) > _formula_html_quality(final_details.get("formula_html", ""))
+2796:             ):
+2797:                 final_details["formula_html"] = formula_res.get("formula_html")
+2798:                 final_details["formula_expression"] = formula_res.get("formula_expression", "")
+2799:             elif "See code context" in (final_details.get("formula_html") or ""):
+2800:                 escaped_formula = str(explicit_formula).replace("%", r"\%")
+2801:                 final_details["formula_html"] = f'<div class="math-equation">\\[ {escaped_formula} \\]</div>'
+2802:                 governance = kpi_data.setdefault("governance", {})
+2803:                 existing_notes = governance.setdefault("audit_notes", [])
+2804:                 fallback_note = "Formula pipeline fell back to safe mode for review."
+2805:                 if fallback_note not in existing_notes:
+
+FILE software/LEAP/test_app.py
+SHA256 dc520e9285590e16f3ab6a4d182379a382bf0621c8cc549e762a0fa2d7b29e93
+LINES 243-404
+243: def test_candidate_promotion_gate_quarantines_helper_and_register_noise(tmp_path):
+244:     from bluebook_generator.kpi_extractor import find_kpis_in_directory
+245: 
+246:     helper = tmp_path / "governance_patch.py"
+247:     helper.write_text(
+248:         'def _normalize_kpi_name(name):\n'
+249:         '    """Normalize KPI names for deterministic ISO template matching."""\n'
+250:         '    text = (name or "").lower()\n'
+251:         '    text = text.replace("_", " ")\n'
+252:         '    return text\n',
+253:         encoding="utf-8",
+254:     )
+255:     meeting_log = tmp_path / "meeting_duration_log.csv"
+256:     meeting_log.write_text(
+257:         "Meeting No,Timezone,Duration Hours\n"
+258:         "1,Asia/Riyadh UTC+3,1.0\n",
+259:         encoding="utf-8",
+260:     )
+261:     checksum = tmp_path / "SOURCE_PACKAGE_CHECKSUMS.csv"
+262:     checksum.write_text(
+263:         "Source_File,SHA256,Role,Legacy_ID\n"
+264:         "jss_evidence.zip,fb55123ef9b644eaeb08e2b6fa8fa60e727f2c3f0ef2451d25ae5b6d766ce8e3,Original package,N/A\n",
+265:         encoding="utf-8",
+266:     )
+267: 
+268:     kpis, stats = find_kpis_in_directory(str(tmp_path), include_stats=True)
+269:     promoted_names = {k["name"].lower() for k in kpis}
+270:     review_names = {r["candidate_name"].lower() for r in stats["candidate_review"]}
+271: 
+272:     assert "normalize kpi name" not in promoted_names
+273:     assert "meeting duration log" not in promoted_names
+274:     assert "source package checksums" not in promoted_names
+275:     assert "meeting duration log" in review_names
+276:     assert "source package checksums" in review_names
+277: 
+278: 
+279: def test_candidate_promotion_gate_promotes_explicit_formula_kpi(tmp_path):
+280:     from bluebook_generator.kpi_extractor import find_kpis_in_directory
+281: 
+282:     source = tmp_path / "yield_rate.sql"
+283:     source.write_text(
+284:         "-- KPI: Yield Rate\n"
+285:         "-- Formula: good_output / total_input\n"
+286:         "-- Objective: Track production yield.\n"
+287:         "SELECT good_output / NULLIF(total_input, 0) AS yield_rate FROM production_summary;\n",
+288:         encoding="utf-8",
+289:     )
+290: 
+291:     kpis, stats = find_kpis_in_directory(str(tmp_path), include_stats=True)
+292:     promoted_names = {k["name"].lower() for k in kpis}
+293: 
+294:     assert "yield rate" in promoted_names
+295:     assert not stats["candidate_review"]
+296: 
+297: 
+298: def test_mate_preserves_explicit_latex_and_formula_annotations():
+299:     from bluebook_generator.main import (
+300:         _latex_formula_html,
+301:         _looks_like_latex_formula,
+302:         _normalize_latex_formula,
+303:     )
+304: 
+305:     source = (
+306:         r"\mathrm{Yield Rate} = "
+307:         r"\frac{\text{good_output_mass}}{\text{raw_input_mass}} \times 100"
+308:     )
+309:     assert _looks_like_latex_formula(source)
+310: 
+311:     normalized = _normalize_latex_formula(source)
+312:     assert normalized == (
+313:         r"\mathrm{Yield\,Rate} = "
+314:         r"\frac{\mathrm{good\,output\,mass}}{\mathrm{raw\,input\,mass}} \times 100"
+315:     )
+316: 
+317:     rendered = _latex_formula_html(source)
+318:     assert rendered["formula_expression"] == normalized
+319:     assert '<div class="math-equation">' in rendered["formula_html"]
+320:     assert "Numerator:</i> good output mass" in rendered["formula_html"]
+321:     assert "Denominator:</i> raw input mass" in rendered["formula_html"]
+322:     assert "Scale:</i> ×100" in rendered["formula_html"]
+323: 
+324: 
+325: def test_mate_generated_dossier_contains_annotated_formula_lineage():
+326:     page = Path("docs/_build/ethylene_production_yield.html")
+327:     html = page.read_text(encoding="utf-8")
+328: 
+329:     assert '<div class="math-equation">' in html
+330:     assert "Annotated Formula" in html
+331:     assert "leap-annotated-equation" in html
+332:     assert 'data-biz="Ethylene Produced"' in html
+333:     assert 'data-dev="VARIABLE: ethylene_produced_tons"' in html
+334:     assert 'data-dev="OPERATOR: /"' in html
+335: 
+336: 
+337: def test_iso_22400_yield_rule_detection_and_clean_control():
+338:     from governance_patch import (
+339:         _load_iso_framework,
+340:         detect_yield_operator_conflict,
+341:         detect_yield_variable_conflict,
+342:     )
+343: 
+344:     framework = _load_iso_framework()
+345:     assert framework["iso_standard_reference"] == "ISO-22400-2:2014"
+346:     assert (
+347:         framework["universal_metric_templates"]["yield_efficiency"]["iso_id"]
+348:         == "ISO-22400-RE-1"
+349:     )
+350: 
+351:     operator_conflict = detect_yield_operator_conflict({
+352:         "name": "Yield Rate",
+353:         "code_context": (
+354:             "SELECT good_output_mass + raw_input_mass AS yield_rate FROM production"
+355:         ),
+356:     })
+357:     assert operator_conflict["rule_id"] == "ISO-22400-RE-1"
+358:     assert operator_conflict["framework"] == "ISO-22400-2:2014"
+359: 
+360:     variable_conflict = detect_yield_variable_conflict({
+361:         "name": "Yield Rate",
+362:         "code_context": (
+363:             "SELECT scrap_mass / raw_input_mass AS yield_rate FROM production"
+364:         ),
+365:     })
+366:     assert variable_conflict["rule_id"] == "ISO-22400-RE-1"
+367: 
+368:     clean = {
+369:         "name": "Yield Rate",
+370:         "code_context": (
+371:             "SELECT good_output_mass / raw_input_mass AS yield_rate FROM production"
+372:         ),
+373:     }
+374:     assert detect_yield_operator_conflict(clean) is None
+375:     assert detect_yield_variable_conflict(clean) is None
+376: 
+377: 
+378: def test_iso_22400_asset_utilization_rule_detection_and_clean_control():
+379:     from governance_patch import _load_iso_framework, detect_asset_utilization_conflict
+380: 
+381:     framework = _load_iso_framework()
+382:     assert (
+383:         framework["universal_metric_templates"]["asset_utilization"]["iso_id"]
+384:         == "ISO-22400-UE-2"
+385:     )
+386: 
+387:     conflict = detect_asset_utilization_conflict({
+388:         "name": "Asset Utilization",
+389:         "code_context": (
+390:             "SELECT maintenance_down_time / planned_operation_time "
+391:             "AS asset_utilization FROM operations"
+392:         ),
+393:     })
+394:     assert conflict["rule_id"] == "ISO-22400-UE-2"
+395:     assert conflict["framework"] == "ISO-22400-2:2014"
+396: 
+397:     clean = detect_asset_utilization_conflict({
+398:         "name": "Asset Utilization",
+399:         "code_context": (
+400:             "SELECT actual_production_time / planned_operation_time "
+401:             "AS asset_utilization FROM operations"
+402:         ),
+403:     })
+404:     assert clean is None
+
+FILE software/LEAP/data/validation/test_scenario_fixtures.py
+SHA256 64a44430e41e8664912a38ab6fc9555b430a6716f6ccb21ef234a2765e9f69c5
+LINES 58-146
+58: def parse_expected_header(file_path: Path) -> Dict[str, Any]:
+59:     with open(file_path, "r", encoding="utf-8") as f:
+60:         content = f.read()
+61: 
+62:     expected = {
+63:         "status": "Validated",
+64:         "review_queue": "No",
+65:         "signals": [],
+66:         "rules": [],
+67:         "formula": ""
+68:     }
+69: 
+70:     # Find Expected LEAP Result block
+71:     header_match = re.search(r"(?is)Expected LEAP Result:\s*\n(.*?)(?:\n\n|\n[^\s#\-\*\/']|$)", content)
+72:     if header_match:
+73:         block = header_match.group(1)
+74:         for line in block.splitlines():
+75:             line = re.sub(r"^[\s#\-\*\/']+", "", line).strip()
+76:             if not line or ":" not in line:
+77:                 continue
+78:             key, val = line.split(":", 1)
+79:             key = key.strip().lower()
+80:             val = val.strip()
+81:             if "status" in key:
+82:                 expected["status"] = val
+83:             elif "review queue" in key:
+84:                 expected["review_queue"] = val
+85:             elif "signal" in key:
+86:                 expected["signals"] = [s.strip() for s in val.split(",") if s.strip() and s.strip().lower() != "none"]
+87:             elif "rule" in key:
+88:                 expected["rules"] = [r.strip() for r in val.split(",") if r.strip() and r.strip().lower() != "none"]
+89:             elif "formula" in key:
+90:                 expected["formula"] = val
+91: 
+92:     return expected
+93: 
+94: 
+95: def evaluate_fixture(file_path: Path) -> Dict[str, Any]:
+96:     with open(file_path, "r", encoding="utf-8") as f:
+97:         content = f.read()
+98: 
+99:     ext = file_path.suffix.lower()
+100: 
+101:     # Parse KPI display name
+102:     kpi_name_match = re.search(r"(?i)(?:KPI|kpi)\s*:\s*(.+)$", content, re.M)
+103:     kpi_name = kpi_name_match.group(1).strip() if kpi_name_match else file_path.stem
+104: 
+105:     language = _SUPPORTED_EXTS.get(ext, "unknown")
+106: 
+107:     kpi_data = {
+108:         "name": kpi_name,
+109:         "file_path": str(file_path),
+110:         "code_context": content,
+111:         "language": language,
+112:         "confidence": 90.0,
+113:     }
+114: 
+115:     # Get details
+116:     details = generate_kpi_details(kpi_name, content)
+117:     kpi_data["details"] = details
+118: 
+119:     # Attach governance
+120:     root_dir = Path(".")
+121:     docs_dir = Path("docs")
+122:     attach_governance([kpi_data], root_dir, docs_dir)
+123: 
+124:     governance = kpi_data.get("governance", {})
+125:     conflicts = governance.get("conflicts", [])
+126:     audit_notes = governance.get("audit_notes", [])
+127:     compliance_alarms = kpi_data.get("compliance_alarms", [])
+128:     accountable = governance.get("accountable") or ""
+129: 
+130:     if conflicts or audit_notes or compliance_alarms:
+131:         status = "Needs Review"
+132:     elif accountable:
+133:         status = "Validated"
+134:     else:
+135:         status = "Needs Review"
+136: 
+137:     review_queue = "Yes" if (conflicts or audit_notes or compliance_alarms) else "No"
+138: 
+139:     return {
+140:         "kpi_data": kpi_data,
+141:         "status": status,
+142:         "review_queue": review_queue,
+143:         "conflicts": conflicts,
+144:         "audit_notes": audit_notes,
+145:         "compliance_alarms": compliance_alarms,
+146:     }
+
+LINES 149-254
+149: def test_all_scenario_fixtures():
+150:     fixtures_dir = Path(__file__).parent / "generated_scenario_kpis"
+151:     if not fixtures_dir.exists():
+152:         raise FileNotFoundError(f"Fixtures directory not found: {fixtures_dir}")
+153: 
+154:     fixture_files = sorted([f for f in fixtures_dir.iterdir() if f.is_file() and f.suffix in _SUPPORTED_EXTS])
+155: 
+156:     failures = []
+157:     results = []
+158: 
+159:     print("\n========================================================")
+160:     print("      LEAP SCENARIO FIXTURES ACCEPTANCE TEST            ")
+161:     print("========================================================\n")
+162: 
+163:     for file_path in fixture_files:
+164:         expected = parse_expected_header(file_path)
+165:         actual = evaluate_fixture(file_path)
+166: 
+167:         file_failures = []
+168: 
+169:         # 1. Verify Status
+170:         if actual["status"] != expected["status"]:
+171:             file_failures.append(f"Status mismatch: expected '{expected['status']}', got '{actual['status']}'")
+172: 
+173:         # 2. Verify Review Queue
+174:         if actual["review_queue"] != expected["review_queue"]:
+175:             file_failures.append(f"Review Queue mismatch: expected '{expected['review_queue']}', got '{actual['review_queue']}'")
+176: 
+177:         # 3. Verify Compliance Rules by canonical rule identity, not old prose labels.
+178:         actual_alarms_by_rule = {
+179:             alarm.get("rule_id"): alarm for alarm in actual["compliance_alarms"]
+180:         }
+181:         actual_rule_ids = list(actual_alarms_by_rule)
+182:         for rule_id in expected["rules"]:
+183:             alarm = actual_alarms_by_rule.get(rule_id)
+184:             if alarm is None:
+185:                 file_failures.append(f"Missing expected compliance alarm: '{rule_id}'")
+186:                 continue
+187: 
+188:             expected_metadata = EXPECTED_COMPLIANCE_METADATA.get(rule_id, {})
+189:             for field, expected_value in expected_metadata.items():
+190:                 actual_value = alarm.get(field, "")
+191:                 if field == "message":
+192:                     if expected_value.lower() not in str(actual_value).lower():
+193:                         file_failures.append(
+194:                             f"Compliance alarm '{rule_id}' message mismatch: expected to contain "
+195:                             f"'{expected_value}', got '{actual_value}'"
+196:                         )
+197:                 elif actual_value != expected_value:
+198:                     file_failures.append(
+199:                         f"Compliance alarm '{rule_id}' {field} mismatch: expected "
+200:                         f"'{expected_value}', got '{actual_value}'"
+201:                     )
+202: 
+203:             if alarm.get("status") != "REVIEW_REQUIRED":
+204:                 file_failures.append(
+205:                     f"Compliance alarm '{rule_id}' status mismatch: expected "
+206:                     f"'REVIEW_REQUIRED', got '{alarm.get('status')}'"
+207:                 )
+208:             if not alarm.get("recommended_action"):
+209:                 file_failures.append(f"Compliance alarm '{rule_id}' missing recommended_action")
+210:             if not alarm.get("evidence"):
+211:                 file_failures.append(f"Compliance alarm '{rule_id}' missing evidence")
+212:         
+213:         # Verify negative control (clean) compliance fixtures have no alarms
+214:         if not expected["rules"] and actual["compliance_alarms"]:
+215:             file_failures.append(f"Unexpected compliance alarm(s) triggered: {[a['rule_id'] for a in actual['compliance_alarms']]}")
+216: 
+217:         # 4. Verify Expected Signals
+218:         all_actual_reasons = (
+219:             [c["reason"] for c in actual["conflicts"]]
+220:             + [n["reason"] if isinstance(n, dict) else str(n) for n in actual["audit_notes"]]
+221:             + [a["message"] for a in actual["compliance_alarms"]]
+222:         )
+223:         for signal in expected["signals"]:
+224:             # The generated scenario fixtures used old generic labels such as
+225:             # "Compliance Conflict". Compliance validation is now rule-based
+226:             # above so NCA/GDPR/PDPL/SOC2 cannot be mistaken for a generic ISO
+227:             # message.
+228:             if expected["rules"] and signal.lower() in LEGACY_COMPLIANCE_SIGNAL_LABELS:
+229:                 continue
+230:             found = any(signal.lower() in reason.lower() for reason in all_actual_reasons)
+231:             if not found:
+232:                 file_failures.append(f"Missing expected signal: '{signal}'")
+233: 
+234:         status_str = "PASS" if not file_failures else "FAIL"
+235:         results.append({
+236:             "filename": file_path.name,
+237:             "status": status_str,
+238:             "expected_status": expected["status"],
+239:             "actual_status": actual["status"],
+240:             "failures": file_failures
+241:         })
+242: 
+243:         if file_failures:
+244:             failures.append((file_path.name, file_failures))
+245: 
+246:     # Print summary table
+247:     print(f"{'Filename':<40} | {'Status':<6} | {'Expected':<12} | {'Actual':<12}")
+248:     print("-" * 80)
+249:     for r in results:
+250:         print(f"{r['filename']:<40} | {r['status']:<6} | {r['expected_status']:<12} | {r['actual_status']:<12}")
+251: 
+252:     if failures:
+253:         print("\n========================================================")
+254:         print("                  FAILURE DETAILS                       ")

@@ -1,0 +1,22 @@
+name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+VKXYNH+STIXGeneral-Regular           Type 1            Custom           yes yes yes      8  0
+PKIIZB+STIXGeneral-Bold              Type 1            Custom           yes yes yes      9  0
+VKXYNH+STIXGeneral-Regular           Type 1            Custom           yes yes yes     10  0
+XFMLVQ+STIXGeneral-Italic            Type 1            Custom           yes yes yes     21  0
+LGAWHI+STIXMath-Regular              Type 1            Builtin          yes yes yes     22  0
+IRZOLO+Inconsolatazi4-Regular        Type 1            Custom           yes yes yes     24  0
+MYHUEB+SFSS0900                      Type 1            Custom           yes yes yes     25  0
+TODGBF+SFSX0900                      Type 1            Custom           yes yes yes    152  0
+ZILJLN+STIXMath-Italic               Type 1            Builtin          yes yes yes    183  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    185  0
+AAAAAA+DejaVuSans                    TrueType          WinAnsi          yes yes yes    186  0
+VFVBHT+STIXMathExtensions-Regular    Type 1            Builtin          yes yes yes    215  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    241  0
+AAAAAA+DejaVuSans                    TrueType          WinAnsi          yes yes yes    242  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    268  0
+AAAAAA+DejaVuSans                    TrueType          WinAnsi          yes yes yes    269  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    287  0
+AAAAAA+DejaVuSans                    TrueType          WinAnsi          yes yes yes    288  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    302  0
+AAAAAA+DejaVuSans-Bold               TrueType          WinAnsi          yes yes yes    314  0

@@ -1,0 +1,16 @@
+{
+  "version": "Paper 1 / Sprint 7",
+  "pdf_pages": 16,
+  "manuscript_pages_excluding_highlights": 15,
+  "figures": 6,
+  "software_files_unchanged": 307,
+  "original_raw_files_unchanged": 35,
+  "all_software_and_raw_matches": true,
+  "scenario_rerun": "38/38 passed in isolated copy",
+  "application_tests": "19 passed in archived QA-003; not rerun here (Flask absent)",
+  "archive_verification_groups": 7,
+  "manuscript_submission_byte_match": true,
+  "all_pdf_fonts_embedded": true,
+  "unresolved_citations_or_references": false,
+  "journal_submission_performed": false
+}

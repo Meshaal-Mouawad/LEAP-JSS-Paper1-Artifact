@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEAP KPI Intelligence Workspace</title>
+  <link rel="stylesheet" href="/bluebook/_static/leap/ECDS_TOKENS.css">
+  <link rel="stylesheet" href="/bluebook/_static/custom.css">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('leap-theme') || 'light-teal';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body class="leap-doc-body control-plane-body">
+  <a class="leap-skip-link" href="#leap-main-content">Skip to workspace content</a>
+  <div class="leap-workspace">
+    <aside class="leap-sidebar-nav">
+      <nav class="leap-nav-rail-inner">
+        <div class="leap-nav-section">
+          <div class="leap-nav-section-title">Workspace</div>
+          <a href="/" class="leap-nav-item active" data-tab-target="overview" data-nav-key="main">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Main
+          </a>
+        </div>
+        <div class="leap-nav-section">
+          <div class="leap-nav-section-title">KPI Portfolio</div>
+          <a href="#" class="leap-nav-item" data-tab-target="directory">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Discovery Workspace
+          </a>
+          <a href="/bluebook/discovery_report.html" target="_blank" class="leap-nav-item">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> KPI Discovery
+          </a>
+          <a href="/bluebook/index.html" target="_blank" class="leap-nav-item">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></span> Enterprise KPIs
+          </a>
+        </div>
+        <div class="leap-nav-section">
+          <div class="leap-nav-section-title">Governance</div>
+          <a href="#" class="leap-nav-item" data-tab-target="raci">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> RACI
+          </a>
+          <a href="/bluebook/discovery_report.html#governance-summary" target="_blank" class="leap-nav-item">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg></span> Governance State
+          </a>
+        </div>
+        <div class="leap-nav-section">
+          <div class="leap-nav-section-title">Utilities</div>
+          <a href="#" class="leap-nav-item" data-tab-target="analytics">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span> Analytics
+          </a>
+          <a href="/bluebook/search.html" target="_blank" class="leap-nav-item">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Search
+          </a>
+          <a href="/bluebook/genindex.html" target="_blank" class="leap-nav-item">
+            <span class="leap-nav-icon"><svg class="leap-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Index
+          </a>
+        </div>
+        <div class="leap-nav-status-card">
+          <span>Workspace Mode</span>
+          <strong>Offline Governance</strong>
+          <small>Deterministic KPI engine</small>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="leap-workspace-main">
+      <header class="leap-topbar">
+        <div class="leap-topbar-inner">
+          <div class="leap-topbar-left">
+            <div class="leap-brand">
+              <a class="leap-brand-home" href="/" aria-label="Open LEAP main page">
+                <div class="leap-brand-mark">
+                  <img src="/bluebook/_static/leap-axis-logo.svg" alt="LEAP AXIS">
+                </div>
+              </a>
+            </div>
+            <div class="leap-workspace-title">KPI Intelligence Workspace</div>
+          </div>
+          <div class="control-plane-topbar-actions">
+            <span class="leap-clock" data-leap-clock>--</span>
+             <select id="theme-selector" class="select leap-theme-select" data-leap-theme-select onchange="setTheme(this.value)" aria-label="Theme">
+              <option value="light-teal">Light Teal</option>
+              <option value="dark">Dark</option>
+              <option value="classic">Classic</option>
+            </select>
+            <a href="/bluebook/index.html" target="_blank" class="sidebar-btn btn-secondary">Open Workspace</a>
+            <a href="/bluebook/discovery_report.html" target="_blank" class="sidebar-btn btn-secondary">Discovery</a>
+            <a href="/bluebook/raci_directory.html" target="_blank" class="sidebar-btn btn-secondary">Directory</a>
+            <button type="button" id="btn-purge-workspace" onclick="triggerCleanSlatePurge()" class="sidebar-btn btn-primary">New Workspace</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="leap-doc-main" id="leap-main-content">
+        <section class="control-plane-command-header">
+          <div>
+            <span class="micro-label">Enterprise Control Plane</span>
+            <h1>KPI Intelligence Workspace</h1>
+            <p>Prepare governed KPI dossiers, open the certified catalog, and review ownership from one offline workspace.</p>
+          </div>
+        </section>
+
+        <div class="leap-metric-grid control-plane-metric-row">
+          <div class="card leap-metric-card">
+            <span class="leap-card-label">Enterprise KPIs</span>
+            <div id="kpi-count" class="leap-card-value">0</div>
+          </div>
+          <div class="card leap-metric-card">
+            <span class="leap-card-label">Validated KPIs</span>
+            <div id="source-count" class="leap-card-value">--</div>
+          </div>
+          <div class="card leap-metric-card">
+            <span class="leap-card-label">Average Confidence</span>
+            <div id="confidence-count" class="leap-card-value">--</div>
+          </div>
+          <div class="card leap-metric-card">
+            <span class="leap-card-label">Workspace</span>
+            <div id="build-state" class="leap-card-value">Idle</div>
+          </div>
+          <div class="card leap-metric-card">
+            <span class="leap-card-label">Runtime</span>
+            <div class="leap-card-value">Local</div>
+          </div>
+        </div>
+
+        <div id="tab-overview" class="tab-content">
+          <div class="control-plane-overview-stack">
+            <div class="control-plane-grid">
+               <div class="control-plane-card control-plane-launch-card">
+                 <h2>KPI Workspace Launchpad</h2>
+                 <form id="generator-form" class="control-plane-form">
+                   <input type="text" name="path" id="path" required class="control-plane-input" placeholder="/Users/name/project">
+                   <div class="control-plane-actions">
+                     <button type="submit" id="submit-btn" class="sidebar-btn btn-primary">Prepare Workspace</button>
+                     <button type="button" class="sidebar-btn btn-secondary" onclick="document.getElementById('path').focus()">Set Workspace Path</button>
+                   </div>
+                 </form>
+                  <div class="leap-input-ecosystem" aria-label="Recognized LEAP evidence inputs and enterprise ecosystems">
+                    <div class="leap-ecosystem-heading">Integration Surface</div>
+
+                    <div class="leap-ecosystem-group">
+                      <span class="leap-ecosystem-label">Recognized Code Evidence</span>
+                      <div class="leap-ecosystem-badges">
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Py" data-tone="code" title="Python" aria-label="Python"><img src="/bluebook/_static/leap/integration-icons/python.svg" alt="" aria-hidden="true"><span>Python</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="SQL" data-tone="data" title="SQL" aria-label="SQL"><img src="/bluebook/_static/leap/integration-icons/postgresql.svg" alt="" aria-hidden="true"><span>SQL</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="T" data-tone="data" title="T-SQL" aria-label="T-SQL"><img src="/bluebook/_static/leap/integration-icons/microsoftsqlserver.svg" alt="" aria-hidden="true"><span>T-SQL</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="PL" data-tone="data" title="PL/SQL" aria-label="PL/SQL"><img src="/bluebook/_static/leap/integration-icons/sqldeveloper.svg" alt="" aria-hidden="true"><span>PL/SQL</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="HA" data-tone="data" title="HANA" aria-label="HANA"><img src="/bluebook/_static/leap/integration-icons/hana.svg" alt="" aria-hidden="true"><span>HANA</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Dx" data-tone="analytics" title="DAX" aria-label="DAX"><img src="/bluebook/_static/leap/integration-icons/dax.svg" alt="" aria-hidden="true"><span>DAX</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="AB" data-tone="code" title="ABAP" aria-label="ABAP"><img src="/bluebook/_static/leap/integration-icons/abap.svg" alt="" aria-hidden="true"><span>ABAP</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="C#" data-tone="code" title="C#" aria-label="C#"><img src="/bluebook/_static/leap/integration-icons/csharp.svg" alt="" aria-hidden="true"><span>C#</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="VB" data-tone="code" title="VB.NET" aria-label="VB.NET"><img src="/bluebook/_static/leap/integration-icons/visualbasic.svg" alt="" aria-hidden="true"><span>VB.NET</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="ST" data-tone="ops" title="IEC-ST" aria-label="IEC-ST"><img src="/bluebook/_static/leap/integration-icons/iec-st.svg" alt="" aria-hidden="true"><span>IEC-ST</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="CSV" data-tone="file" title="CSV" aria-label="CSV"><img src="/bluebook/_static/leap/integration-icons/csv.svg" alt="" aria-hidden="true"><span>CSV</span></span>
+                      </div>
+                    </div>
+
+                    <div class="leap-ecosystem-group">
+                      <span class="leap-ecosystem-label">Enterprise Evidence Ecosystems</span>
+                      <div class="leap-ecosystem-badges">
+                        <span class="leap-ecosystem-badge has-icon" data-mark="GL" data-tone="dev" title="GitLab" aria-label="GitLab"><img src="/bluebook/_static/leap/integration-icons/gitlab.svg" alt="" aria-hidden="true"><span>GitLab</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="BB" data-tone="dev" title="Bitbucket" aria-label="Bitbucket"><img src="/bluebook/_static/leap/integration-icons/bitbucket.svg" alt="" aria-hidden="true"><span>Bitbucket</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Az" data-tone="dev" title="Azure DevOps" aria-label="Azure DevOps"><img src="/bluebook/_static/leap/integration-icons/azuredevops.svg" alt="" aria-hidden="true"><span>Azure DevOps</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Jk" data-tone="dev" title="Jenkins" aria-label="Jenkins"><img src="/bluebook/_static/leap/integration-icons/jenkins.svg" alt="" aria-hidden="true"><span>Jenkins</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Db" data-tone="data" title="Databricks" aria-label="Databricks"><img src="/bluebook/_static/leap/integration-icons/databricks.svg" alt="" aria-hidden="true"><span>Databricks</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="S3" data-tone="data" title="Amazon S3" aria-label="Amazon S3"><img src="/bluebook/_static/leap/integration-icons/aws.svg" alt="" aria-hidden="true"><span>Amazon S3</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="BI" data-tone="analytics" title="Power BI" aria-label="Power BI"><img src="/bluebook/_static/leap/integration-icons/power-bi.svg" alt="" aria-hidden="true"><span>Power BI</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Tb" data-tone="analytics" title="Tableau" aria-label="Tableau"><img src="/bluebook/_static/leap/integration-icons/tableau.svg" alt="" aria-hidden="true"><span>Tableau</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="SAP" data-tone="enterprise" title="SAP" aria-label="SAP"><img src="/bluebook/_static/leap/integration-icons/sap.svg" alt="" aria-hidden="true"><span>SAP</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Or" data-tone="enterprise" title="Oracle" aria-label="Oracle"><img src="/bluebook/_static/leap/integration-icons/oracle.svg" alt="" aria-hidden="true"><span>Oracle</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="MS" data-tone="enterprise" title="Microsoft" aria-label="Microsoft"><img src="/bluebook/_static/leap/integration-icons/microsoft.svg" alt="" aria-hidden="true"><span>Microsoft</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="D365" data-tone="enterprise" title="Dynamics 365" aria-label="Dynamics 365"><img src="/bluebook/_static/leap/integration-icons/dynamics-365.svg" alt="" aria-hidden="true"><span>Dynamics 365</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Wd" data-tone="enterprise" title="Workday" aria-label="Workday"><img src="/bluebook/_static/leap/integration-icons/workday.svg" alt="" aria-hidden="true"><span>Workday</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="SF" data-tone="enterprise" title="Salesforce" aria-label="Salesforce"><img src="/bluebook/_static/leap/integration-icons/salesforce.svg" alt="" aria-hidden="true"><span>Salesforce</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Ji" data-tone="workflow" title="Jira" aria-label="Jira"><img src="/bluebook/_static/leap/integration-icons/jira.svg" alt="" aria-hidden="true"><span>Jira</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Cf" data-tone="workflow" title="Confluence" aria-label="Confluence"><img src="/bluebook/_static/leap/integration-icons/confluence.svg" alt="" aria-hidden="true"><span>Confluence</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Sl" data-tone="workflow" title="Slack" aria-label="Slack"><img src="/bluebook/_static/leap/integration-icons/slack.svg" alt="" aria-hidden="true"><span>Slack</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="Tm" data-tone="workflow" title="Microsoft Teams" aria-label="Microsoft Teams"><img src="/bluebook/_static/leap/integration-icons/microsoft-teams.svg" alt="" aria-hidden="true"><span>Microsoft Teams</span></span>
+                        <span class="leap-ecosystem-badge has-icon" data-mark="SN" data-tone="workflow" title="ServiceNow" aria-label="ServiceNow"><img src="/bluebook/_static/leap/integration-icons/servicenow.svg" alt="" aria-hidden="true"><span>ServiceNow</span></span>
+                      </div>
+                    </div>
+
+                    <div class="leap-ecosystem-disclaimer">
+                      * Compatible source evidence formats for structural parsing and audit mapping. All trademarks remain property of their respective owners. No official endorsement, integration, or partnership is implied.
+                    </div>
+                  </div>
+               </div>
+                <div class="control-plane-card control-plane-terminal-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h2 style="margin: 0;">Execution Terminal</h2>
+                    <button type="button" id="terminal-toggle-btn" class="terminal-toggle-btn" onclick="toggleTerminal()">+</button>
+                  </div>
+                  <div class="control-plane-terminal" id="log-container">
+                    <div id="log"><div class="control-plane-log-line">Ready to start.</div></div>
+                  </div>
+                </div>
+            </div>
+            <section class="control-plane-card control-plane-actions-panel">
+              <h2>Workspace Actions</h2>
+              <div class="control-plane-action-grid" aria-label="Workspace actions">
+                <a href="/bluebook/index.html" target="_blank" class="control-plane-action-tile control-plane-action-primary">
+                  <strong>Open KPI Workspace</strong>
+                  <span>Portfolio dashboard</span>
+                </a>
+                <a href="/bluebook/discovery_report.html" target="_blank" class="control-plane-action-tile">
+                  <strong>Open Discovery Workspace</strong>
+                  <span>Readiness and KPI inventory</span>
+                </a>
+                <a href="/bluebook/raci_directory.html" target="_blank" class="control-plane-action-tile">
+                  <strong>Open RACI Directory</strong>
+                  <span>Governance ownership</span>
+                </a>
+                <button type="button" class="control-plane-action-tile" onclick="openDiagnosticScan('deep')">
+                  <strong>View Directory Scope</strong>
+                  <span>Workspace coverage preview</span>
+                </button>
+                <button type="button" class="control-plane-action-tile" onclick="openDiagnosticScan('quick')">
+                  <strong>Review KPI Portfolio</strong>
+                  <span>Current metric inventory</span>
+                </button>
+                 <button type="button" class="control-plane-action-tile" onclick="triggerCleanSlatePurge()">
+                   <strong>Reset Workspace</strong>
+                   <span>Clear compiled files</span>
+                 </button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div id="tab-directory" class="tab-content hide">
+          <div class="control-plane-grid">
+            <section class="control-plane-card">
+              <h2>KPI Portfolio</h2>
+              <div class="control-plane-list">
+                <a class="control-plane-list-item" href="/bluebook/index.html" target="_blank">
+                  <strong>Enterprise KPI Workspace</strong>
+                  <span>Open the KPI portfolio dashboard</span>
+                </a>
+                <a class="control-plane-list-item" href="/bluebook/discovery_report.html" target="_blank">
+                  <strong>KPI Discovery Workspace</strong>
+                  <span>Review portfolio readiness and metric domains</span>
+                </a>
+                <a class="control-plane-list-item" href="/bluebook/search.html" target="_blank">
+                  <strong>Workspace Search</strong>
+                  <span>Search KPI dossier terms</span>
+                </a>
+                <a class="control-plane-list-item" href="/bluebook/genindex.html" target="_blank">
+                  <strong>Workspace Index</strong>
+                  <span>Open KPI reference index</span>
+                </a>
+              </div>
+            </section>
+            <section class="control-plane-card">
+              <h2>Portfolio State</h2>
+              <div class="control-plane-list">
+                <div class="control-plane-list-item">
+                  <strong>Governed KPIs</strong>
+                  <span id="directory-kpi-count">Prepare a workspace to update</span>
+                </div>
+                <div class="control-plane-list-item">
+                  <strong>Average Confidence</strong>
+                  <span id="directory-confidence">Prepare a workspace to update</span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div id="tab-raci" class="tab-content hide">
+          <div class="control-plane-grid">
+            <section class="control-plane-card">
+              <h2>Governance Directory</h2>
+              <div class="control-plane-list">
+                <a class="control-plane-list-item" href="/bluebook/raci_directory.html" target="_blank">
+                  <strong>RACI Directory</strong>
+                  <span>Open accountable ownership by KPI</span>
+                </a>
+                <a class="control-plane-list-item" href="/bluebook/discovery_report.html#governance-summary" target="_blank">
+                  <strong>Governance State</strong>
+                  <span>Review validation and ownership coverage</span>
+                </a>
+              </div>
+            </section>
+            <section class="control-plane-card">
+              <h2>Workspace Policy</h2>
+              <div class="control-plane-list">
+                <div class="control-plane-list-item">
+                  <strong>Mode</strong>
+                  <span>Offline deterministic AST engine</span>
+                </div>
+                <div class="control-plane-list-item">
+                  <strong>Authority</strong>
+                  <span>Local rules and governance overrides</span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div id="tab-analytics" class="tab-content hide">
+          <div class="control-plane-grid">
+            <section class="control-plane-card">
+              <h2>Workspace Analytics</h2>
+              <div class="control-plane-list">
+                <div class="control-plane-list-item">
+                  <strong>Files Evaluated</strong>
+                  <span id="analytics-files">Prepare a workspace to update</span>
+                </div>
+                <div class="control-plane-list-item">
+                  <strong>Build State</strong>
+                  <span id="analytics-state">Idle</span>
+                </div>
+              </div>
+            </section>
+            <section class="control-plane-card">
+              <h2>Operational Links</h2>
+              <div class="control-plane-list">
+                <a class="control-plane-list-item" href="/bluebook/search.html" target="_blank">
+                  <strong>Search</strong>
+                  <span>Find metric definitions across the workspace</span>
+                </a>
+                <a class="control-plane-list-item" href="/bluebook/genindex.html" target="_blank">
+                  <strong>Index</strong>
+                  <span>Open KPI reference index</span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+      
+      <footer class="leap-footer compact-enterprise-footer">
+        <div class="compact-footer-inner">
+          <div class="compact-footer-brand">
+            <strong>LEAP AXIS KPI Intelligence Workspace</strong>
+            <span>AI: Offline Mode · Deterministic AST Engine</span>
+          </div>
+          <div class="compact-footer-links">
+            <a href="/bluebook/index.html" target="_blank">Workspace</a>
+            <a href="/bluebook/discovery_report.html" target="_blank">Discovery</a>
+            <a href="/bluebook/raci_directory.html" target="_blank">RACI</a>
+          </div>
+          <div class="compact-footer-certifications">
+            <span>SDAIA PDPL</span>
+            <span>NCA ECC</span>
+            <span>ISO 22400</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('generator-form');
+    const logEl = document.getElementById('log');
+    const submitBtn = document.getElementById('submit-btn');
+    const buildState = document.getElementById('build-state');
+    const kpiCount = document.getElementById('kpi-count');
+    const sourceCount = document.getElementById('source-count');
+    const confidenceCount = document.getElementById('confidence-count');
+    const directoryKpiCount = document.getElementById('directory-kpi-count');
+    const directoryConfidence = document.getElementById('directory-confidence');
+    const analyticsFiles = document.getElementById('analytics-files');
+    const analyticsState = document.getElementById('analytics-state');
+    let intervalId;
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('leap-theme', theme);
+    }
+    const savedTheme = localStorage.getItem('leap-theme') || 'light-teal';
+    setTheme(savedTheme);
+    document.getElementById('theme-selector').value = savedTheme;
+    document.querySelectorAll('[data-leap-theme-select]').forEach(select => {
+      select.value = savedTheme;
+      select.addEventListener('change', () => setTheme(select.value));
+    });
+
+    function updateLeapClock() {
+      const now = new Date();
+      let zone = '';
+      try {
+        zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      } catch (err) {
+        zone = '';
+      }
+      const dateText = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const timeText = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+      document.querySelectorAll('[data-leap-clock]').forEach(clock => {
+        clock.textContent = zone ? `${dateText} · ${timeText} · ${zone}` : `${dateText} · ${timeText}`;
+      });
+    }
+    updateLeapClock();
+    window.setInterval(updateLeapClock, 60000);
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hide'));
+      const target = document.getElementById('tab-' + tabName);
+      if (!target) return;
+      target.classList.remove('hide');
+      document.querySelectorAll('[data-tab-target]').forEach(el => {
+        el.classList.toggle('active', el.dataset.tabTarget === tabName);
+      });
+    }
+    document.querySelectorAll('[data-tab-target]').forEach(el => el.addEventListener('click', e => {
+        e.preventDefault();
+        switchTab(el.dataset.tabTarget);
+    }));
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function classifyLogLine(line) {
+      const lower = line.toLowerCase();
+      if (lower.includes('successful') || lower.includes('ready') || lower.includes('enterprise kpis')) return 'log-line-success';
+      if (lower.includes('preparing') || lower.includes('prepared') || lower.includes('updated')) return 'log-line-action';
+      if (lower.includes('warning') || lower.includes('ignored')) return 'log-line-warning';
+      if (lower.includes('error') || lower.includes('failed') || lower.includes('traceback')) return 'log-line-error';
+      return '';
+    }
+
+    function renderLog(text) {
+      const lines = (text || '').split('\n');
+      logEl.innerHTML = lines.map(line => {
+        const kind = classifyLogLine(line);
+        return `<div class="control-plane-log-line ${kind}">${escapeHtml(line)}</div>`;
+      }).join('');
+      const container = document.getElementById('log-container');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function setBuildState(state) {
+      buildState.textContent = state;
+      if (analyticsState) analyticsState.textContent = state;
+    }
+
+    function getWorkspacePath() {
+      return (document.getElementById('path').value || '').trim();
+    }
+
+    function openDiagnosticScan(kind) {
+      const workspacePath = getWorkspacePath();
+      if (!workspacePath) {
+        document.getElementById('path').focus();
+        renderLog('Enter a workspace path before opening directory diagnostics.');
+        return;
+      }
+      const endpoint = kind === 'deep' ? '/debug-scan-deep' : '/debug-scan';
+      window.open(`${endpoint}?path=${encodeURIComponent(workspacePath)}`, '_blank');
+    }
+
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+        if (stats.total_kpis !== undefined) {
+          kpiCount.textContent = stats.total_kpis;
+          if (directoryKpiCount) directoryKpiCount.textContent = stats.total_kpis;
+        }
+        if (stats.validated_kpis !== undefined) {
+          sourceCount.textContent = stats.validated_kpis;
+          if (analyticsFiles) analyticsFiles.textContent = `${stats.validated_kpis} governed`;
+        } else if (stats.total_files !== undefined) {
+          sourceCount.textContent = stats.total_files;
+          if (analyticsFiles) analyticsFiles.textContent = stats.total_files;
+        }
+        if (stats.avg_confidence !== undefined) {
+          confidenceCount.textContent = stats.avg_confidence;
+          if (directoryConfidence) directoryConfidence.textContent = stats.avg_confidence;
+        }
+        if (stats.workspace_state !== undefined && buildState.textContent === 'Idle') {
+          setBuildState(stats.workspace_state);
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function triggerCleanSlatePurge() {
+      if (!confirm('Are you sure you want to clear the current workspace artifacts?')) return;
+      const purgeBtn = document.getElementById('btn-purge-workspace');
+      purgeBtn.disabled = true;
+      ensureTerminalExpanded();
+      renderLog('Clearing previous workspace artifacts...');
+      try {
+        const response = await fetch('/api/workspace/purge', { method: 'POST' });
+        const payload = await response.json().catch(() => ({}));
+        if (response.ok) {
+          kpiCount.textContent = '0';
+          sourceCount.textContent = '--';
+          confidenceCount.textContent = '--';
+          if (directoryKpiCount) directoryKpiCount.textContent = 'Prepare a workspace to update';
+          if (directoryConfidence) directoryConfidence.textContent = 'Prepare a workspace to update';
+          if (analyticsFiles) analyticsFiles.textContent = 'Prepare a workspace to update';
+          setBuildState('Idle');
+          renderLog(payload.message || 'Workspace reset.');
+        } else {
+          renderLog(payload.error || 'Workspace reset failed.');
+        }
+      } catch (err) {
+        renderLog('Workspace reset failed: ' + err.message);
+      } finally {
+        purgeBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+       e.preventDefault();
+       const formData = new FormData(form);
+       submitBtn.disabled = true;
+       submitBtn.textContent = 'Preparing...';
+       setBuildState('Running');
+       ensureTerminalExpanded();
+       renderLog('Starting workspace preparation...');
+       const response = await fetch('/start', { method: 'POST', body: formData });
+      if (response.ok) {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(async () => {
+           const res = await fetch('/status');
+           const data = await res.json();
+           renderLog(data.output);
+           if (!data.running) {
+             clearInterval(intervalId);
+             submitBtn.disabled = false;
+             submitBtn.textContent = 'Prepare Workspace';
+             setBuildState((data.output || '').includes('Workspace build successful') ? 'Built' : 'Idle');
+             fetchStats();
+           }
+        }, 1000);
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Prepare Workspace';
+        setBuildState('Idle');
+        renderLog('Workspace preparation failed to start.');
+      }
+    });
+    function toggleTerminal() {
+      const term = document.getElementById('log-container');
+      const btn = document.getElementById('terminal-toggle-btn');
+      const isExpanded = term.classList.toggle('expanded');
+      btn.textContent = isExpanded ? '−' : '+';
+    }
+    function ensureTerminalExpanded() {
+      const term = document.getElementById('log-container');
+      const btn = document.getElementById('terminal-toggle-btn');
+      if (!term.classList.contains('expanded')) {
+        term.classList.add('expanded');
+        btn.textContent = '−';
+      }
+    }
+
+    fetchStats();
+  </script>
+</body>
+</html>

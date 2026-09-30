@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=62", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-bluebook-generator"
+version = "0.1.0"
+description = "AI-Powered KPI Extractor & Interactive Bluebook Generator"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Your Name", email = "you@example.com" }
+]
+license = { text = "Proprietary" }
+dependencies = [
+  "click>=8.1.7",
+  "Jinja2>=3.1.0",
+  "openai>=1.40.0",
+  "python-dotenv>=1.0.1",
+  "Sphinx==8.2.3",
+  "sphinx-rtd-theme>=1.3.0",
+  "Flask>=3.0.0",
+  "numpy>=1.26.0",
+  "pandas>=2.1.0",
+]
+
+[project.urls]
+Homepage = "https://example.com"
+Repository = "https://example.com/repo"
+
+[project.scripts]
+bluebook = "bluebook_generator.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bluebook_generator*"]
+exclude = ["docs*", "project digrams stracture*", ".idea*"]
